@@ -16,10 +16,10 @@ export function ContactPanel() {
       <section>
         <SectionLabel>Email</SectionLabel>
         <a
-          href="mailto:mo.yassin@network.io"
+          href="mailto:mohammad.yassin@network.io"
           className="mt-3 block font-mono text-sm text-primary hover:underline"
         >
-          mo.yassin@network.io
+          mohammad.yassin@network.io
         </a>
       </section>
 

@@ -8,9 +8,9 @@ import * as THREE from "three"
 
 // Content data matching the reference
 const SECTIONS: Record<string, { ey: string; ti: string; body: string }> = {
-  about: {
-    ey: "01 // Profile",
-    ti: "ABOUT ME",
+about: {
+  ey: "01 // Profile",
+  ti: "MOHAMMAD YASSIN",
     body: `<div class="p-s"><div class="p-l">Background</div><div class="p-tx">Computer Engineering graduate from Lebanon with enterprise-grade hands-on experience across network design, security operations, and software development. Built and managed large-scale Fortinet environments, designed BGP/OSPF topologies, and deployed 802.1X NAC with Aruba ClearPass.</div></div>
 <div class="p-s"><div class="p-l">Current Focus</div><div class="p-tx">Pursuing NSE 4 FortiGate Security certification. Actively seeking junior IT/networking roles (remote-friendly). Also working as an ICT educator bridging production infrastructure with hands-on curriculum.</div></div>
 <div class="p-sgrid"><div class="p-sc"><div class="p-sn">5+</div><div class="p-sl">Years Networking</div></div><div class="p-sc"><div class="p-sn">NSE</div><div class="p-sl">Fortinet Track</div></div><div class="p-sc"><div class="p-sn">BGP</div><div class="p-sl">OSPF · MPLS</div></div><div class="p-sc"><div class="p-sn">3D</div><div class="p-sl">Three.js Dev</div></div></div>`,
@@ -48,9 +48,17 @@ const SECTIONS: Record<string, { ey: string; ti: string; body: string }> = {
     ey: "06 // Connect",
     ti: "GET IN TOUCH",
     body: `<div class="p-s"><div class="p-l">Availability</div><div class="p-tx">Open to network engineering roles, consulting, and ICT education. Lebanon-based · Remote-friendly · Actively seeking junior networking positions.</div></div>
-<div class="p-s"><div class="p-l">Email</div><div class="p-tx" style="color:var(--accent);font-family:monospace;font-size:.85rem;letter-spacing:.1em">mo.yassin@network.io</div></div>
+<div class="p-s"><div class="p-l">Email</div><div class="p-tx" style="color:var(--accent);font-family:monospace;font-size:.85rem;letter-spacing:.1em">mohammad.yassin@network.io</div></div>
 <div class="p-s"><div class="p-l">Platforms</div><div class="p-cr"><span class="p-ch">LinkedIn</span><span class="p-ch">GitHub</span><span class="p-ch o">Bayt.com</span></div></div>
 <div class="p-s"><div class="p-l">Status</div><div class="p-tx" style="color:#00ff88;font-family:monospace;font-size:.8rem">● AVAILABLE — Pursuing NSE 4 Certification</div></div>`,
+  },
+  experience: {
+    ey: "07 // Career",
+    ti: "EXPERIENCE",
+    body: `<div class="p-pr"><div class="p-pt">Senior Network Security Engineer</div><div class="p-pd" style="font-size:0.7rem;color:#00ffe7;margin-bottom:0.5rem">Enterprise Infrastructure | 2022 - Present</div><div class="p-pd">Architected and deployed multi-site SD-WAN infrastructure using FortiGate 600E/200F clusters with BGP ECMP load balancing across 40G MPLS uplinks. Implemented zero-trust network segmentation using FortiManager 7.4 ADOM-based policy orchestration across 500+ firewall policies. Configured advanced threat prevention with FortiSandbox integration, achieving 99.97% malware detection rate. Managed FortiAnalyzer SOC dashboards with custom SIEM correlation rules and automated incident response playbooks.</div><div class="p-cr" style="margin-top:.6rem"><span class="p-ch">FortiGate HA</span><span class="p-ch">SD-WAN</span><span class="p-ch">BGP/OSPF</span><span class="p-ch o">VDOM</span><span class="p-ch o">SSL Inspection</span></div></div>
+<div class="p-pr"><div class="p-pt">Network Access Control Specialist</div><div class="p-pd" style="font-size:0.7rem;color:#00ffe7;margin-bottom:0.5rem">802.1X Implementation | 2021 - 2022</div><div class="p-pd">Deployed enterprise-wide 802.1X NAC using Aruba ClearPass 6.9 with EAP-TLS machine authentication against Active Directory Certificate Services (ADCS) PKI. Configured dynamic VLAN assignment based on device posture assessment, reducing lateral movement risk by 85%. Implemented RADIUS CoA for real-time policy enforcement and TACACS+ for network device AAA with command authorization. Integrated with Palo Alto Panorama for cross-platform threat intelligence sharing.</div><div class="p-cr" style="margin-top:.6rem"><span class="p-ch">ClearPass</span><span class="p-ch">802.1X EAP-TLS</span><span class="p-ch">PKI/ADCS</span><span class="p-ch o">RADIUS CoA</span><span class="p-ch o">TACACS+</span></div></div>
+<div class="p-pr"><div class="p-pt">Data Center Network Engineer</div><div class="p-pd" style="font-size:0.7rem;color:#00ffe7;margin-bottom:0.5rem">Infrastructure Design | 2019 - 2021</div><div class="p-pd">Designed and deployed Cisco Nexus 9000 series spine-leaf fabric with VXLAN EVPN overlay supporting 10,000+ virtual workloads. Configured BGP EVPN Type-2/Type-5 routes for L2/L3 VNI mobility across data center pods. Implemented Cisco ACI multi-site orchestration with MSO for disaster recovery spanning three geographic locations. Managed 100G backbone infrastructure with QoS traffic shaping for mission-critical applications.</div><div class="p-cr" style="margin-top:.6rem"><span class="p-ch">Nexus 9K</span><span class="p-ch">VXLAN EVPN</span><span class="p-ch">ACI MSO</span><span class="p-ch o">Spine-Leaf</span><span class="p-ch o">100G</span></div></div>
+<div class="p-pr"><div class="p-pt">ICT Systems Administrator</div><div class="p-pd" style="font-size:0.7rem;color:#00ffe7;margin-bottom:0.5rem">Education Sector | 2018 - 2019</div><div class="p-pd">Managed VMware vSphere 7.0 hyperconverged infrastructure with vSAN stretched clusters for high availability. Administered Windows Server 2019 Active Directory with Group Policy deployment for 2,000+ endpoints. Implemented Veeam Backup & Replication with immutable repositories for ransomware protection. Configured PRTG Network Monitor with custom sensors for SLA compliance reporting.</div><div class="p-cr" style="margin-top:.6rem"><span class="p-ch">VMware vSphere</span><span class="p-ch">Active Directory</span><span class="p-ch">Veeam</span><span class="p-ch o">PRTG</span><span class="p-ch o">PowerShell</span></div></div>`,
   },
 }
 
@@ -116,6 +124,68 @@ function Floor() {
   )
 }
 
+// Warning label component
+function WarningLabel({ position, rotation = [0, 0, 0], text }: { position: [number, number, number]; rotation?: [number, number, number]; text: string }) {
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh>
+        <planeGeometry args={[0.8, 0.25]} />
+        <meshStandardMaterial color={0xffcc00} />
+      </mesh>
+      <Text
+        fontSize={0.06}
+        color="#000000"
+        anchorX="center"
+        anchorY="middle"
+        position={[0, 0, 0.01]}
+        font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+      >
+        {text}
+      </Text>
+    </group>
+  )
+}
+
+// Fire suppression system nozzle
+function FireSuppressionNozzle({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      {/* Nozzle head */}
+      <mesh>
+        <cylinderGeometry args={[0.08, 0.06, 0.12, 12]} />
+        <meshStandardMaterial color={0xcc0000} metalness={0.6} roughness={0.3} />
+      </mesh>
+      {/* Deflector plate */}
+      <mesh position={[0, -0.08, 0]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.02, 12]} />
+        <meshStandardMaterial color={0x888888} metalness={0.8} roughness={0.2} />
+      </mesh>
+    </group>
+  )
+}
+
+// Emergency exit sign
+function ExitSign({ position, rotation = [0, 0, 0] }: { position: [number, number, number]; rotation?: [number, number, number] }) {
+  return (
+    <group position={position} rotation={rotation}>
+      <mesh>
+        <boxGeometry args={[0.8, 0.3, 0.08]} />
+        <meshStandardMaterial color={0x00aa00} emissive={0x00ff00} emissiveIntensity={0.5} />
+      </mesh>
+      <Text
+        fontSize={0.12}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        position={[0, 0, 0.045]}
+        font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+      >
+        EXIT
+      </Text>
+    </group>
+  )
+}
+
 // Room walls and ceiling - realistic light industrial colors
 function Room() {
   return (
@@ -176,6 +246,52 @@ function Room() {
         <boxGeometry args={[20, 0.1, 0.8]} />
         <meshStandardMaterial color={0x909498} metalness={0.7} roughness={0.3} />
       </mesh>
+      
+      {/* Fire suppression system nozzles */}
+      {[-15, -10, -5, 0, 5, 10, 15].map((x, i) => (
+        <FireSuppressionNozzle key={`fire${i}`} position={[x, 9.9, -6]} />
+      ))}
+      {[-15, -10, -5, 0, 5, 10, 15].map((x, i) => (
+        <FireSuppressionNozzle key={`fire2${i}`} position={[x, 9.9, 6]} />
+      ))}
+      
+      {/* Warning labels on walls */}
+      <WarningLabel position={[-18, 2, -12.9]} text="CAUTION: HIGH VOLTAGE" />
+      <WarningLabel position={[-18, 2, 12.9]} rotation={[0, Math.PI, 0]} text="AUTHORIZED PERSONNEL ONLY" />
+      <WarningLabel position={[15, 2, -12.9]} text="FIRE SUPPRESSION ZONE" />
+      
+      {/* Exit signs */}
+      <ExitSign position={[21.85, 8.5, 0]} rotation={[0, -Math.PI / 2, 0]} />
+      <ExitSign position={[-21.85, 8.5, 0]} rotation={[0, Math.PI / 2, 0]} />
+      
+      {/* HVAC vents on walls */}
+      {[-15, -5, 5, 15].map((x, i) => (
+        <group key={`vent${i}`} position={[x, 1.5, -12.9]}>
+          <mesh>
+            <boxGeometry args={[2, 0.8, 0.05]} />
+            <meshStandardMaterial color={0xd0d4d8} metalness={0.3} roughness={0.6} />
+          </mesh>
+          {/* Vent slats */}
+          {Array.from({ length: 8 }).map((_, j) => (
+            <mesh key={j} position={[-0.8 + j * 0.23, 0, 0.03]} rotation={[0.3, 0, 0]}>
+              <boxGeometry args={[0.18, 0.6, 0.01]} />
+              <meshStandardMaterial color={0xb0b4b8} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+      
+      {/* Temperature/humidity sensor */}
+      <group position={[-20, 3, -12.9]}>
+        <mesh>
+          <boxGeometry args={[0.2, 0.3, 0.08]} />
+          <meshStandardMaterial color={0xf0f0f0} />
+        </mesh>
+        <mesh position={[0, 0.05, 0.045]}>
+          <planeGeometry args={[0.12, 0.12]} />
+          <meshBasicMaterial color={0x00ff88} />
+        </mesh>
+      </group>
     </group>
   )
 }
@@ -255,35 +371,133 @@ function CableTray({ z }: { z: number }) {
   )
 }
 
-// Inter-rack patch cables (vertical bundles between racks)
+// Copper Ethernet cable with animated data pulses
+function CopperCable({ points, color, pulseCount = 2 }: { points: THREE.Vector3[]; color: number; pulseCount?: number }) {
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
+  return (
+    <group>
+      {/* Copper cable jacket - slightly thicker than fiber */}
+      <mesh>
+        <tubeGeometry args={[curve, 24, 0.018, 8, false]} />
+        <meshStandardMaterial color={color} roughness={0.6} metalness={0.2} />
+      </mesh>
+      {/* RJ45 connector ends - small blocks at each end */}
+      <mesh position={points[0].toArray()}>
+        <boxGeometry args={[0.025, 0.015, 0.04]} />
+        <meshStandardMaterial color={0x333333} roughness={0.5} />
+      </mesh>
+      <mesh position={points[points.length - 1].toArray()}>
+        <boxGeometry args={[0.025, 0.015, 0.04]} />
+        <meshStandardMaterial color={0x333333} roughness={0.5} />
+      </mesh>
+      {/* Data pulses */}
+      {Array.from({ length: pulseCount }).map((_, i) => (
+        <DataPulse key={i} curve={curve} color={0x00ff88} speed={0.5} offset={i / pulseCount} />
+      ))}
+    </group>
+  )
+}
+
+// Power cable component
+function PowerCable({ points }: { points: THREE.Vector3[] }) {
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
+  return (
+    <mesh>
+      <tubeGeometry args={[curve, 16, 0.025, 8, false]} />
+      <meshStandardMaterial color={0x111111} roughness={0.8} />
+    </mesh>
+  )
+}
+
+// Inter-rack patch cables (vertical bundles between racks) with fiber and copper
 function InterRackCables({ rackX }: { rackX: number }) {
-  const cableColors = [0x00aaff, 0xffcc00, 0x00ff88, 0xff6600, 0x00ffcc, 0xaa66ff]
+  const fiberColors = [0x00aaff, 0xffcc00, 0x00ff88, 0xff6600, 0x00ffcc, 0xaa66ff]
+  const copperColors = [0x0066cc, 0x00aa88, 0xcc6600, 0x888888, 0x00ccaa, 0xcc8800]
   
   return (
     <group position={[rackX, 0, 0]}>
-      {/* Vertical cable bundle from switch to cable tray */}
-      {cableColors.slice(0, 4).map((col, i) => {
+      {/* Fiber optic uplinks from switch to cable tray - 10G/40G connections */}
+      {fiberColors.slice(0, 4).map((col, i) => {
         const offsetX = -0.3 + i * 0.15
         const pts = [
           new THREE.Vector3(offsetX, 8.5, 0.6),
-          new THREE.Vector3(offsetX, 8.7, 0.4),
-          new THREE.Vector3(offsetX, 8.8, 0),
+          new THREE.Vector3(offsetX + 0.02, 8.65, 0.5),
+          new THREE.Vector3(offsetX, 8.75, 0.3),
+          new THREE.Vector3(offsetX - 0.02, 8.85, 0),
         ]
-        return <FiberCable key={i} points={pts} color={col} pulseCount={1} />
+        return <FiberCable key={`fiber${i}`} points={pts} color={col} pulseCount={3} />
       })}
       
-      {/* Patch cables from switch to patch panel */}
-      {Array.from({ length: 8 }).map((_, i) => {
-        const col = cableColors[i % cableColors.length]
-        const startX = -0.5 + (i % 4) * 0.25
-        const endX = -0.55 + (i % 4) * 0.28
+      {/* Copper patch cables from patch panel to switches - Cat6A */}
+      {Array.from({ length: 12 }).map((_, i) => {
+        const col = copperColors[i % copperColors.length]
+        const startX = -0.6 + (i % 6) * 0.2
+        const endX = -0.55 + (i % 6) * 0.18
+        const sag = 0.15 + Math.random() * 0.1
         const pts = [
-          new THREE.Vector3(startX, 8.9, 0.58),
-          new THREE.Vector3(startX, 9.1, 0.65),
-          new THREE.Vector3(endX, 9.55, 0.58),
+          new THREE.Vector3(startX, 9.55, 0.58),
+          new THREE.Vector3(startX + 0.02, 9.4, 0.62),
+          new THREE.Vector3((startX + endX) / 2, 9.2 - sag, 0.65),
+          new THREE.Vector3(endX - 0.02, 8.95, 0.62),
+          new THREE.Vector3(endX, 8.5, 0.58),
         ]
-        return <FiberCable key={`p${i}`} points={pts} color={col} pulseCount={1} />
+        return <CopperCable key={`copper${i}`} points={pts} color={col} pulseCount={2} />
       })}
+      
+      {/* Vertical fiber trunk from rack top to cable tray */}
+      {[0.2, -0.2].map((offsetZ, i) => {
+        const pts = [
+          new THREE.Vector3(0, 10.3, offsetZ + 0.6),
+          new THREE.Vector3(0, 9.5, offsetZ + 0.4),
+          new THREE.Vector3(0, 8.9, offsetZ),
+        ]
+        return <FiberCable key={`trunk${i}`} points={pts} color={i === 0 ? 0x00ff88 : 0xff6600} pulseCount={4} />
+      })}
+      
+      {/* Power cables from UPS - thick black cables */}
+      {[-0.4, 0.4].map((offsetX, i) => {
+        const pts = [
+          new THREE.Vector3(offsetX, 1.9, 0.55),
+          new THREE.Vector3(offsetX, 2.5, 0.6),
+          new THREE.Vector3(offsetX * 0.8, 3.5, 0.58),
+        ]
+        return <PowerCable key={`power${i}`} points={pts} />
+      })}
+    </group>
+  )
+}
+
+// Cross-rack fiber connections between racks
+function CrossRackFiber({ rack1X, rack2X }: { rack1X: number; rack2X: number }) {
+  const midX = (rack1X + rack2X) / 2
+  
+  return (
+    <group>
+      {/* High-bandwidth inter-switch link - 100G fiber */}
+      {[0, 1].map((idx) => {
+        const yOffset = 8.35 + idx * 0.15
+        const pts = [
+          new THREE.Vector3(rack1X + 0.5, yOffset, 0.6),
+          new THREE.Vector3(rack1X + 0.8, yOffset + 0.1, 0.7),
+          new THREE.Vector3(midX, yOffset + 0.15, 0.75),
+          new THREE.Vector3(rack2X - 0.8, yOffset + 0.1, 0.7),
+          new THREE.Vector3(rack2X - 0.5, yOffset, 0.6),
+        ]
+        return <FiberCable key={`cross${idx}`} points={pts} color={idx === 0 ? 0x00ffcc : 0xffaa00} pulseCount={5} />
+      })}
+      
+      {/* Management network - copper Cat6 */}
+      <CopperCable
+        points={[
+          new THREE.Vector3(rack1X + 0.3, 6.8, 0.58),
+          new THREE.Vector3(rack1X + 0.6, 6.9, 0.65),
+          new THREE.Vector3(midX, 7.0, 0.7),
+          new THREE.Vector3(rack2X - 0.6, 6.9, 0.65),
+          new THREE.Vector3(rack2X - 0.3, 6.8, 0.58),
+        ]}
+        color={0x888888}
+        pulseCount={2}
+      />
     </group>
   )
 }
@@ -425,8 +639,19 @@ function RackDevice({
       {/* ===== CISCO SWITCH ===== */}
       {type === "switch" && (
         <>
+          {/* Cisco logo text */}
+          <Text
+            fontSize={0.12}
+            color="#049fd9"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.95, h / 2 - 0.06, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            CISCO
+          </Text>
           {/* Cisco blue brand strip */}
-          <BrandStrip position={[-0.85, h / 2 - 0.06, 0.555]} color={0x049fd9} width={0.25} />
+          <BrandStrip position={[-0.55, h / 2 - 0.06, 0.555]} color={0x049fd9} width={0.15} />
           
           {/* Recessed port panel */}
           <mesh position={[0, 0, 0.54]}>
@@ -479,8 +704,30 @@ function RackDevice({
       {/* ===== FORTIGATE FIREWALL ===== */}
       {type === "fw" && (
         <>
+          {/* Fortinet logo text */}
+          <Text
+            fontSize={0.1}
+            color="#cc0000"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.06, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            FORTINET
+          </Text>
+          {/* FortiGate model text */}
+          <Text
+            fontSize={0.06}
+            color="#ffffff"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.16, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            FortiGate 600E
+          </Text>
           {/* Fortinet red brand strip */}
-          <BrandStrip position={[-0.85, h / 2 - 0.06, 0.555]} color={0xcc0000} width={0.3} />
+          <BrandStrip position={[-0.45, h / 2 - 0.06, 0.555]} color={0xcc0000} width={0.15} />
           
           {/* Red accent line at bottom */}
           <mesh position={[0, -h / 2 + 0.03, 0.551]}>
@@ -547,8 +794,30 @@ function RackDevice({
       {/* ===== DELL SERVER ===== */}
       {type === "srv" && (
         <>
+          {/* Dell logo text */}
+          <Text
+            fontSize={0.1}
+            color="#007db8"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.08, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            DELL
+          </Text>
+          {/* PowerEdge model */}
+          <Text
+            fontSize={0.05}
+            color="#888888"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.17, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            PowerEdge R750
+          </Text>
           {/* Dell blue brand strip */}
-          <BrandStrip position={[-0.9, h / 2 - 0.08, 0.555]} color={0x007db8} width={0.2} />
+          <BrandStrip position={[-0.55, h / 2 - 0.08, 0.555]} color={0x007db8} width={0.12} />
           
           {/* Drive bays - 12 hot-swap SAS/SATA */}
           {Array.from({ length: 12 }).map((_, db) => {
@@ -608,8 +877,30 @@ function RackDevice({
       {/* ===== ARUBA CLEARPASS ===== */}
       {type === "aruba" && (
         <>
+          {/* Aruba logo text */}
+          <Text
+            fontSize={0.1}
+            color="#ff6600"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.02, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            ARUBA
+          </Text>
+          {/* ClearPass model */}
+          <Text
+            fontSize={0.055}
+            color="#ffffff"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.11, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            ClearPass 7280
+          </Text>
           {/* Aruba orange brand strip */}
-          <BrandStrip position={[-0.85, 0, 0.555]} color={0xff6600} width={0.25} />
+          <BrandStrip position={[-0.45, h / 2 - 0.02, 0.555]} color={0xff6600} width={0.15} />
           
           {/* Port section */}
           <mesh position={[0, 0, 0.545]}>
@@ -666,8 +957,30 @@ function RackDevice({
       {/* ===== UPS ===== */}
       {type === "ups" && (
         <>
+          {/* APC logo text */}
+          <Text
+            fontSize={0.12}
+            color="#00aa44"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.95, h / 2 - 0.1, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            APC
+          </Text>
+          {/* Smart-UPS model */}
+          <Text
+            fontSize={0.05}
+            color="#888888"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.95, h / 2 - 0.2, 0.56]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            Smart-UPS 3000VA
+          </Text>
           {/* APC green brand strip */}
-          <BrandStrip position={[-0.85, h / 2 - 0.1, 0.555]} color={0x00aa44} width={0.2} />
+          <BrandStrip position={[-0.5, h / 2 - 0.1, 0.555]} color={0x00aa44} width={0.12} />
           
           {/* Display panel */}
           <mesh position={[-0.5, 0.1, 0.555]}>
@@ -1083,8 +1396,8 @@ function Workstation({ onHover, onClick }: { onHover?: (l: string | null) => voi
     ctx.fillStyle = "#011118"
     ctx.fillRect(0, 0, 1024, 80)
     ctx.fillStyle = "#00ffe7"
-    ctx.font = "bold 40px Arial"
-    ctx.fillText("MO. YASSIN // PROFILE", 20, 55)
+    ctx.font = "bold 36px Arial"
+    ctx.fillText("MOHAMMAD YASSIN // PROFILE", 20, 55)
     ctx.fillStyle = "#fff"
     ctx.font = "28px Arial"
     ctx.fillText("Network Engineer & Developer", 35, 140)
@@ -1521,60 +1834,148 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
   
   return (
     <group 
-      position={[10, 5, -12.7]} 
+      position={[8.4, 5.5, -12.7]} 
       onPointerOver={() => onHover?.("Lebanon Internet Traffic")} 
       onPointerOut={() => onHover?.(null)} 
       onClick={() => onClick?.("contact")}
     >
-      {/* Monitor frame */}
+      {/* Monitor frame - larger */}
       <mesh position={[0, 0, -0.1]}>
-        <boxGeometry args={[5.5, 4.2, 0.15]} />
+        <boxGeometry args={[7.6, 5.6, 0.18]} />
         <meshStandardMaterial color={0x181c20} roughness={0.7} />
       </mesh>
       
-      {/* Monitor bezel */}
+      {/* Monitor bezel with LED strip */}
       <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[5.3, 4.0, 0.08]} />
+        <boxGeometry args={[7.4, 5.4, 0.1]} />
         <meshStandardMaterial color={0x101418} roughness={0.5} metalness={0.3} />
+      </mesh>
+      
+      {/* LED accent strip around bezel */}
+      <mesh position={[0, 2.65, 0.06]}>
+        <boxGeometry args={[7.2, 0.02, 0.01]} />
+        <meshBasicMaterial color={0x00ffe7} />
+      </mesh>
+      <mesh position={[0, -2.65, 0.06]}>
+        <boxGeometry args={[7.2, 0.02, 0.01]} />
+        <meshBasicMaterial color={0x00ffe7} />
       </mesh>
       
       {/* Screen with canvas texture */}
       {tex && (
-        <mesh position={[0, 0, 0.045]}>
-          <planeGeometry args={[5.0, 3.75]} />
-          <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={1.2} />
+        <mesh position={[0, 0, 0.055]}>
+          <planeGeometry args={[7.0, 5.2]} />
+          <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={1.3} />
         </mesh>
       )}
       
-      {/* LED indicator light */}
-      <mesh position={[2.4, -1.9, 0.05]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
+      {/* LED indicator lights */}
+      <mesh position={[3.5, -2.7, 0.06]}>
+        <sphereGeometry args={[0.04, 8, 8]} />
         <meshBasicMaterial color={0x00ff88} />
       </mesh>
+      <mesh position={[3.3, -2.7, 0.06]}>
+        <sphereGeometry args={[0.04, 8, 8]} />
+        <meshBasicMaterial color={0x0088ff} />
+      </mesh>
       
-      {/* Status text below */}
-      <mesh position={[0, -2.3, 0.02]}>
-        <planeGeometry args={[2.5, 0.25]} />
-        <meshStandardMaterial color={0x00ff88} emissive={0x00ff88} emissiveIntensity={0.3} transparent opacity={0.9} />
+      {/* Status bar below */}
+      <mesh position={[0, -2.95, 0.03]}>
+        <boxGeometry args={[3.5, 0.15, 0.02]} />
+        <meshStandardMaterial color={0x00ff88} emissive={0x00ff88} emissiveIntensity={0.4} transparent opacity={0.9} />
+      </mesh>
+      
+      {/* Monitor stand/mount */}
+      <mesh position={[0, -3.2, -0.3]}>
+        <boxGeometry args={[1.5, 0.15, 0.6]} />
+        <meshStandardMaterial color={0x202428} metalness={0.7} roughness={0.3} />
       </mesh>
     </group>
   )
 }
 
-// Particles
+// Dust mote particles - realistic floating dust in datacenter
 function Particles() {
   const ref = useRef<THREE.Points>(null)
   const vels = useRef<THREE.Vector3[]>([])
-  const count = 150
+  const phases = useRef<number[]>([])
+  const count = 300
+
+  const pos = useMemo(() => {
+    const p = new Float32Array(count * 3)
+    const v: THREE.Vector3[] = []
+    const ph: number[] = []
+    for (let i = 0; i < count; i++) {
+      p[i * 3] = (Math.random() - 0.5) * 40
+      p[i * 3 + 1] = Math.random() * 9.5
+      p[i * 3 + 2] = (Math.random() - 0.5) * 22
+      v.push(new THREE.Vector3(
+        (Math.random() - 0.5) * 0.008, 
+        (Math.random() - 0.5) * 0.004 + 0.002, // slight upward drift from heat
+        (Math.random() - 0.5) * 0.008
+      ))
+      ph.push(Math.random() * Math.PI * 2)
+    }
+    vels.current = v
+    phases.current = ph
+    return p
+  }, [])
+  
+  const sizes = useMemo(() => {
+    const s = new Float32Array(count)
+    for (let i = 0; i < count; i++) {
+      s[i] = 0.02 + Math.random() * 0.04
+    }
+    return s
+  }, [])
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      const p = ref.current.geometry.attributes.position.array as Float32Array
+      const v = vels.current
+      const ph = phases.current
+      const t = clock.elapsedTime
+      for (let i = 0; i < count; i++) {
+        // Gentle sinusoidal drift for realistic floating motion
+        const wobble = Math.sin(t * 0.5 + ph[i]) * 0.003
+        p[i * 3] += v[i].x + wobble
+        p[i * 3 + 1] += v[i].y + Math.sin(t * 0.3 + ph[i]) * 0.001
+        p[i * 3 + 2] += v[i].z + Math.cos(t * 0.4 + ph[i]) * 0.002
+        if (Math.abs(p[i * 3]) > 20) v[i].x *= -1
+        if (p[i * 3 + 1] > 9.5 || p[i * 3 + 1] < 0.5) v[i].y *= -1
+        if (Math.abs(p[i * 3 + 2]) > 11) v[i].z *= -1
+      }
+      ref.current.geometry.attributes.position.needsUpdate = true
+    }
+  })
+
+  return (
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} />
+        <bufferAttribute attach="attributes-size" count={count} array={sizes} itemSize={1} />
+      </bufferGeometry>
+      <pointsMaterial color={0xffffff} size={0.03} transparent opacity={0.25} blending={THREE.AdditiveBlending} sizeAttenuation />
+    </points>
+  )
+}
+
+// Data flow visualization - network packets moving through the air
+function NetworkFlowParticles() {
+  const ref = useRef<THREE.Points>(null)
+  const vels = useRef<THREE.Vector3[]>([])
+  const count = 50
 
   const pos = useMemo(() => {
     const p = new Float32Array(count * 3)
     const v: THREE.Vector3[] = []
     for (let i = 0; i < count; i++) {
-      p[i * 3] = (Math.random() - 0.5) * 32
-      p[i * 3 + 1] = Math.random() * 9.5
-      p[i * 3 + 2] = (Math.random() - 0.5) * 18
-      v.push(new THREE.Vector3((Math.random() - 0.5) * 0.01, (Math.random() - 0.5) * 0.008, (Math.random() - 0.5) * 0.01))
+      // Start near rack area
+      p[i * 3] = -12 + Math.random() * 8
+      p[i * 3 + 1] = 3 + Math.random() * 5
+      p[i * 3 + 2] = -2 + Math.random() * 4
+      // Move towards monitors/workstation
+      v.push(new THREE.Vector3(0.05 + Math.random() * 0.03, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02))
     }
     vels.current = v
     return p
@@ -1588,9 +1989,12 @@ function Particles() {
         p[i * 3] += v[i].x
         p[i * 3 + 1] += v[i].y
         p[i * 3 + 2] += v[i].z
-        if (Math.abs(p[i * 3]) > 16) v[i].x *= -1
-        if (p[i * 3 + 1] > 9.5 || p[i * 3 + 1] < 0) v[i].y *= -1
-        if (Math.abs(p[i * 3 + 2]) > 9) v[i].z *= -1
+        // Reset when reaching destination
+        if (p[i * 3] > 15) {
+          p[i * 3] = -12 + Math.random() * 2
+          p[i * 3 + 1] = 3 + Math.random() * 5
+          p[i * 3 + 2] = -2 + Math.random() * 4
+        }
       }
       ref.current.geometry.attributes.position.needsUpdate = true
     }
@@ -1601,7 +2005,7 @@ function Particles() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} />
       </bufferGeometry>
-      <pointsMaterial color={0x00ffe7} size={0.05} transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+      <pointsMaterial color={0x00ffe7} size={0.08} transparent opacity={0.7} blending={THREE.AdditiveBlending} />
     </points>
   )
 }
@@ -1658,11 +2062,15 @@ function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null)
   <InterRackCables rackX={-11} />
   <InterRackCables rackX={-8} />
   <InterRackCables rackX={-5} />
+  {/* Cross-rack high-bandwidth fiber interconnects */}
+  <CrossRackFiber rack1X={-11} rack2X={-8} />
+  <CrossRackFiber rack1X={-8} rack2X={-5} />
       <WallMonitors onHover={onHover} onClick={onSectionClick} />
       <Workstation onHover={onHover} onClick={onSectionClick} />
       <Chair />
-      <LebanonTrafficMap onHover={onHover} onClick={onSectionClick} />
-      <Particles />
+  <LebanonTrafficMap onHover={onHover} onClick={onSectionClick} />
+  <Particles />
+  <NetworkFlowParticles />
       <OrbitControls enableDamping dampingFactor={0.07} maxPolarAngle={Math.PI / 2.05} minDistance={4} maxDistance={30} target={[0, 3, 0]} />
       <EffectComposer>
         <Bloom intensity={0.15} luminanceThreshold={0.95} luminanceSmoothing={0.5} />
@@ -1691,8 +2099,8 @@ function BootLoader({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="fixed inset-0 z-[100] bg-[#020608] flex flex-col items-center justify-center">
-      <div className="text-[clamp(4rem,12vw,10rem)] font-bold tracking-[0.05em] text-[#00ffe7] leading-[0.9] text-center" style={{ textShadow: "0 0 18px #00ffe7aa" }}>
-        MO<span className="text-[#ff4d00]">.</span>
+      <div className="text-[clamp(3rem,10vw,8rem)] font-bold tracking-[0.05em] text-[#00ffe7] leading-[0.9] text-center" style={{ textShadow: "0 0 18px #00ffe7aa" }}>
+        MOHAMMAD<span className="text-[#ff4d00]">.</span>
         <br />
         YASSIN
       </div>
@@ -1709,8 +2117,8 @@ function BootLoader({ onComplete }: { onComplete: () => void }) {
 function TopBar() {
   return (
     <div className="fixed top-0 left-0 right-0 z-20 flex justify-between items-center px-8 py-3 bg-gradient-to-b from-[rgba(2,6,8,0.95)] to-transparent border-b border-[#00ffe712]">
-      <div className="text-[1.9rem] tracking-[0.1em] text-[#00ffe7] font-bold" style={{ textShadow: "0 0 18px #00ffe7aa" }}>
-        MO<span className="text-[#ff4d00]">.</span>YASSIN
+      <div className="text-[1.5rem] tracking-[0.08em] text-[#00ffe7] font-bold" style={{ textShadow: "0 0 18px #00ffe7aa" }}>
+        MOHAMMAD<span className="text-[#ff4d00]">.</span>YASSIN
       </div>
       <div className="flex gap-10 items-center">
         <div className="text-[0.6rem] tracking-[0.2em] text-[#2a4a60] uppercase font-mono">
@@ -1730,12 +2138,13 @@ function TopBar() {
 // Side nav
 function SideNav({ active, onClick }: { active: string | null; onClick: (s: string) => void }) {
   const items = [
-    { id: "about", label: "Profile" },
-    { id: "skills", label: "Skills" },
-    { id: "rack", label: "Infra" },
-    { id: "firewall", label: "Security" },
-    { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contact" },
+  { id: "about", label: "Profile" },
+  { id: "experience", label: "Experience" },
+  { id: "skills", label: "Skills" },
+  { id: "rack", label: "Infra" },
+  { id: "firewall", label: "Security" },
+  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
   ]
   return (
     <div className="fixed left-6 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-3.5">

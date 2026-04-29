@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
+import { OrbitControls, Text } from "@react-three/drei"
 import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 
@@ -1026,10 +1026,10 @@ function WallMonitors({ onHover, onClick }: { onHover?: (l: string | null) => vo
       <WallMonitor position={[0, -0.4, 0]} size={[3.8, 2.4]} section="skills" label="PRTG Sensors" draw={drawPrtg} onHover={onHover} onClick={onClick} />
       <WallMonitor position={[4.2, -0.4, 0]} size={[3.8, 2.4]} section="projects" label="Projects Hub" draw={drawProjects} onHover={onHover} onClick={onClick} />
       
-      {/* Monitor bezels/frames */}
+      {/* Monitor bezels/frames - behind screens */}
       {[[-4.2, 2.8], [0, 2.8], [4.2, 2.8], [-4.2, -0.4], [0, -0.4], [4.2, -0.4]].map(([x, y], i) => (
-        <mesh key={`bezel${i}`} position={[x, y, 0.04]}>
-          <boxGeometry args={[3.9, 2.5, 0.08]} />
+        <mesh key={`bezel${i}`} position={[x, y, -0.02]}>
+          <boxGeometry args={[3.95, 2.55, 0.04]} />
           <meshStandardMaterial color={0x101418} roughness={0.6} metalness={0.3} />
         </mesh>
       ))}
@@ -1199,11 +1199,6 @@ function Workstation({ onHover, onClick }: { onHover?: (l: string | null) => voi
       </mesh>
       {/* Coffee */}
       <CoffeeMug position={[-1.3, 2.05, 0.3]} />
-      {/* Headphones */}
-      <mesh position={[-2, 2.2, -0.7]} rotation={[0, 0, Math.PI]}>
-        <torusGeometry args={[0.22, 0.026, 10, 24, Math.PI]} />
-        <meshPhysicalMaterial color={0x141e28} roughness={0.5} metalness={0.5} />
-      </mesh>
       {/* PC Tower on shelf */}
       <group position={[1.8, 0.955, -0.2]}>
         <mesh castShadow>

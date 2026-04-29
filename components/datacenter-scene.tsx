@@ -332,172 +332,327 @@ function FiberCable({ points, color, pulseCount = 3 }: { points: THREE.Vector3[]
   )
 }
 
-// Cable tray with realistic fiber bundles
+// Realistic cable tray with organized fiber bundles and cable ties
 function CableTray({ z }: { z: number }) {
-  const fiberColors = [0xffcc00, 0x00aaff, 0x00ff88, 0xff6600, 0x0066cc, 0xff00aa, 0x00ffcc, 0xaa00ff]
+  const singleModeFibers = [0xffcc00, 0xffcc00, 0xffcc00, 0xffcc00] // Yellow SM
+  const multiModeFibers = [0x00cccc, 0x00cccc, 0x00cccc, 0x00cccc] // Aqua OM4
+  const copperBundles = [0x0066cc, 0x0066cc, 0x0066cc] // Blue Cat6A
   
   return (
     <group>
-      {/* Metal cable tray */}
-      <mesh position={[-3, 8.8, z]}>
-        <boxGeometry args={[30, 0.06, 0.6]} />
-        <meshStandardMaterial color={0x707478} metalness={0.8} roughness={0.3} />
+      {/* Galvanized steel cable tray - ladder style */}
+      <mesh position={[-3, 8.88, z]}>
+        <boxGeometry args={[32, 0.04, 0.7]} />
+        <meshPhysicalMaterial color={0x808488} metalness={0.85} roughness={0.25} />
       </mesh>
-      {/* Tray sides */}
-      <mesh position={[-3, 8.82, z - 0.28]}>
-        <boxGeometry args={[30, 0.1, 0.02]} />
-        <meshStandardMaterial color={0x606468} metalness={0.8} roughness={0.3} />
+      {/* Tray side rails */}
+      <mesh position={[-3, 8.92, z - 0.33]}>
+        <boxGeometry args={[32, 0.12, 0.03]} />
+        <meshPhysicalMaterial color={0x707478} metalness={0.85} roughness={0.25} />
       </mesh>
-      <mesh position={[-3, 8.82, z + 0.28]}>
-        <boxGeometry args={[30, 0.1, 0.02]} />
-        <meshStandardMaterial color={0x606468} metalness={0.8} roughness={0.3} />
+      <mesh position={[-3, 8.92, z + 0.33]}>
+        <boxGeometry args={[32, 0.12, 0.03]} />
+        <meshPhysicalMaterial color={0x707478} metalness={0.85} roughness={0.25} />
       </mesh>
-      {/* Fiber bundles with natural sag */}
-      {fiberColors.map((col, fb) => {
-        const pts = Array.from({ length: 25 }).map((_, fs) => {
-          const t = fs / 24
-          const sag = Math.sin(t * Math.PI) * 0.03
+      {/* Cross rungs */}
+      {Array.from({ length: 22 }).map((_, r) => (
+        <mesh key={r} position={[-17 + r * 1.5, 8.88, z]}>
+          <boxGeometry args={[0.025, 0.03, 0.64]} />
+          <meshPhysicalMaterial color={0x606468} metalness={0.8} roughness={0.3} />
+        </mesh>
+      ))}
+      
+      {/* Single-mode fiber bundle (yellow) - for 40G/100G */}
+      {singleModeFibers.map((col, fb) => {
+        const pts = Array.from({ length: 30 }).map((_, fs) => {
+          const t = fs / 29
+          const sag = Math.sin(t * Math.PI) * 0.015
+          const wobble = Math.sin(t * Math.PI * 3 + fb) * 0.008
           return new THREE.Vector3(
-            -18 + t * 36, 
-            8.84 + sag, 
-            z - 0.2 + (fb % 4) * 0.1 + Math.floor(fb / 4) * 0.05
+            -17 + t * 34, 
+            8.92 + sag + wobble, 
+            z - 0.22 + fb * 0.035
           )
         })
-        return (
-          <FiberCable key={fb} points={pts} color={col} pulseCount={2} />
-        )
+        return <FiberCable key={`sm${fb}`} points={pts} color={col} pulseCount={5} />
       })}
-    </group>
-  )
-}
-
-// Copper Ethernet cable with animated data pulses
-function CopperCable({ points, color, pulseCount = 2 }: { points: THREE.Vector3[]; color: number; pulseCount?: number }) {
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
-  return (
-    <group>
-      {/* Copper cable jacket - slightly thicker than fiber */}
-      <mesh>
-        <tubeGeometry args={[curve, 24, 0.018, 8, false]} />
-        <meshStandardMaterial color={color} roughness={0.6} metalness={0.2} />
-      </mesh>
-      {/* RJ45 connector ends - small blocks at each end */}
-      <mesh position={points[0].toArray()}>
-        <boxGeometry args={[0.025, 0.015, 0.04]} />
-        <meshStandardMaterial color={0x333333} roughness={0.5} />
-      </mesh>
-      <mesh position={points[points.length - 1].toArray()}>
-        <boxGeometry args={[0.025, 0.015, 0.04]} />
-        <meshStandardMaterial color={0x333333} roughness={0.5} />
-      </mesh>
-      {/* Data pulses */}
-      {Array.from({ length: pulseCount }).map((_, i) => (
-        <DataPulse key={i} curve={curve} color={0x00ff88} speed={0.5} offset={i / pulseCount} />
+      
+      {/* Multi-mode fiber bundle (aqua OM4) - for 10G */}
+      {multiModeFibers.map((col, fb) => {
+        const pts = Array.from({ length: 30 }).map((_, fs) => {
+          const t = fs / 29
+          const sag = Math.sin(t * Math.PI) * 0.018
+          const wobble = Math.sin(t * Math.PI * 2.5 + fb * 1.2) * 0.006
+          return new THREE.Vector3(
+            -17 + t * 34, 
+            8.93 + sag + wobble, 
+            z + fb * 0.035
+          )
+        })
+        return <FiberCable key={`mm${fb}`} points={pts} color={col} pulseCount={4} />
+      })}
+      
+      {/* Copper Cat6A bundle - for management/1G */}
+      {copperBundles.map((col, cb) => {
+        const pts = Array.from({ length: 30 }).map((_, fs) => {
+          const t = fs / 29
+          const sag = Math.sin(t * Math.PI) * 0.02
+          return new THREE.Vector3(
+            -17 + t * 34, 
+            8.91 + sag, 
+            z + 0.18 + cb * 0.04
+          )
+        })
+        return <CopperCable key={`cu${cb}`} points={pts} color={col} pulseCount={2} thickness={0.015} />
+      })}
+      
+      {/* Velcro cable ties at intervals */}
+      {Array.from({ length: 12 }).map((_, t) => (
+        <CableTie key={t} position={[-15 + t * 2.5, 8.95, z]} width={0.5} />
       ))}
     </group>
   )
 }
 
-// Power cable component
-function PowerCable({ points }: { points: THREE.Vector3[] }) {
-  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
+// Realistic copper Cat6A cable with proper jacket and connectors
+function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }: { points: THREE.Vector3[]; color: number; pulseCount?: number; thickness?: number }) {
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5), [points])
   return (
-    <mesh>
-      <tubeGeometry args={[curve, 16, 0.025, 8, false]} />
-      <meshStandardMaterial color={0x111111} roughness={0.8} />
-    </mesh>
-  )
-}
-
-// Inter-rack patch cables (vertical bundles between racks) with fiber and copper
-function InterRackCables({ rackX }: { rackX: number }) {
-  const fiberColors = [0x00aaff, 0xffcc00, 0x00ff88, 0xff6600, 0x00ffcc, 0xaa66ff]
-  const copperColors = [0x0066cc, 0x00aa88, 0xcc6600, 0x888888, 0x00ccaa, 0xcc8800]
-  
-  return (
-    <group position={[rackX, 0, 0]}>
-      {/* Fiber optic uplinks from switch to cable tray - 10G/40G connections */}
-      {fiberColors.slice(0, 4).map((col, i) => {
-        const offsetX = -0.3 + i * 0.15
-        const pts = [
-          new THREE.Vector3(offsetX, 8.5, 0.6),
-          new THREE.Vector3(offsetX + 0.02, 8.65, 0.5),
-          new THREE.Vector3(offsetX, 8.75, 0.3),
-          new THREE.Vector3(offsetX - 0.02, 8.85, 0),
-        ]
-        return <FiberCable key={`fiber${i}`} points={pts} color={col} pulseCount={3} />
-      })}
-      
-      {/* Copper patch cables from patch panel to switches - Cat6A */}
-      {Array.from({ length: 12 }).map((_, i) => {
-        const col = copperColors[i % copperColors.length]
-        const startX = -0.6 + (i % 6) * 0.2
-        const endX = -0.55 + (i % 6) * 0.18
-        const sag = 0.15 + Math.random() * 0.1
-        const pts = [
-          new THREE.Vector3(startX, 9.55, 0.58),
-          new THREE.Vector3(startX + 0.02, 9.4, 0.62),
-          new THREE.Vector3((startX + endX) / 2, 9.2 - sag, 0.65),
-          new THREE.Vector3(endX - 0.02, 8.95, 0.62),
-          new THREE.Vector3(endX, 8.5, 0.58),
-        ]
-        return <CopperCable key={`copper${i}`} points={pts} color={col} pulseCount={2} />
-      })}
-      
-      {/* Vertical fiber trunk from rack top to cable tray */}
-      {[0.2, -0.2].map((offsetZ, i) => {
-        const pts = [
-          new THREE.Vector3(0, 10.3, offsetZ + 0.6),
-          new THREE.Vector3(0, 9.5, offsetZ + 0.4),
-          new THREE.Vector3(0, 8.9, offsetZ),
-        ]
-        return <FiberCable key={`trunk${i}`} points={pts} color={i === 0 ? 0x00ff88 : 0xff6600} pulseCount={4} />
-      })}
-      
-      {/* Power cables from UPS - thick black cables */}
-      {[-0.4, 0.4].map((offsetX, i) => {
-        const pts = [
-          new THREE.Vector3(offsetX, 1.9, 0.55),
-          new THREE.Vector3(offsetX, 2.5, 0.6),
-          new THREE.Vector3(offsetX * 0.8, 3.5, 0.58),
-        ]
-        return <PowerCable key={`power${i}`} points={pts} />
-      })}
+    <group>
+      {/* Cable jacket with realistic PVC look */}
+      <mesh>
+        <tubeGeometry args={[curve, 48, thickness, 8, false]} />
+        <meshPhysicalMaterial color={color} roughness={0.7} metalness={0.05} clearcoat={0.15} />
+      </mesh>
+      {/* Data pulses - subtle and fast */}
+      {Array.from({ length: pulseCount }).map((_, i) => (
+        <DataPulse key={i} curve={curve} color={0x00ff88} speed={0.6 + Math.random() * 0.3} offset={i / pulseCount} />
+      ))}
     </group>
   )
 }
 
-// Cross-rack fiber connections between racks
-function CrossRackFiber({ rack1X, rack2X }: { rack1X: number; rack2X: number }) {
-  const midX = (rack1X + rack2X) / 2
+// Heavy power cable with proper sheathing
+function PowerCable({ points, thickness = 0.02 }: { points: THREE.Vector3[]; thickness?: number }) {
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5), [points])
+  return (
+    <mesh>
+      <tubeGeometry args={[curve, 32, thickness, 8, false]} />
+      <meshPhysicalMaterial color={0x0a0a0a} roughness={0.85} metalness={0.05} />
+    </mesh>
+  )
+}
+
+// Velcro cable tie/wrap
+function CableTie({ position, rotation = [0, 0, 0], width = 0.15 }: { position: [number, number, number]; rotation?: [number, number, number]; width?: number }) {
+  return (
+    <mesh position={position} rotation={rotation}>
+      <boxGeometry args={[width, 0.02, 0.04]} />
+      <meshStandardMaterial color={0x1a1a1a} roughness={0.9} />
+    </mesh>
+  )
+}
+
+// Bundled cable run (multiple cables bound together)
+function CableBundle({ 
+  startPos, 
+  endPos, 
+  cableCount = 6, 
+  colors, 
+  isFiber = false,
+  bundleRadius = 0.08
+}: { 
+  startPos: [number, number, number]
+  endPos: [number, number, number]
+  cableCount?: number
+  colors: number[]
+  isFiber?: boolean
+  bundleRadius?: number
+}) {
+  const cables = useMemo(() => {
+    const result = []
+    const midY = (startPos[1] + endPos[1]) / 2
+    const midX = (startPos[0] + endPos[0]) / 2
+    const sagAmount = Math.abs(endPos[0] - startPos[0]) * 0.08
+    
+    for (let i = 0; i < cableCount; i++) {
+      const angle = (i / cableCount) * Math.PI * 2
+      const offsetX = Math.cos(angle) * bundleRadius * 0.3
+      const offsetZ = Math.sin(angle) * bundleRadius * 0.3
+      
+      const pts = [
+        new THREE.Vector3(startPos[0] + offsetX * 0.5, startPos[1], startPos[2] + offsetZ * 0.5),
+        new THREE.Vector3(startPos[0] + offsetX, startPos[1] - 0.1, startPos[2] + offsetZ + 0.05),
+        new THREE.Vector3(midX + offsetX * 0.8, midY - sagAmount, startPos[2] + offsetZ + 0.08),
+        new THREE.Vector3(endPos[0] + offsetX, endPos[1] + 0.1, endPos[2] + offsetZ + 0.05),
+        new THREE.Vector3(endPos[0] + offsetX * 0.5, endPos[1], endPos[2] + offsetZ * 0.5),
+      ]
+      result.push({ points: pts, color: colors[i % colors.length] })
+    }
+    return result
+  }, [startPos, endPos, cableCount, colors, bundleRadius])
   
   return (
     <group>
-      {/* High-bandwidth inter-switch link - 100G fiber */}
-      {[0, 1].map((idx) => {
-        const yOffset = 8.35 + idx * 0.15
+      {cables.map((cable, i) => (
+        isFiber 
+          ? <FiberCable key={i} points={cable.points} color={cable.color} pulseCount={3} />
+          : <CopperCable key={i} points={cable.points} color={cable.color} pulseCount={2} thickness={0.008} />
+      ))}
+    </group>
+  )
+}
+
+// Comprehensive rack cabling system
+function RackCableSystem({ rackX }: { rackX: number }) {
+  const fiberColors = [0xffcc00, 0x00aaff, 0x00ff88, 0xff6600, 0x00ffcc, 0xaa66ff, 0xff00aa, 0x88ff00]
+  const copperBlue = [0x0044aa, 0x0055bb, 0x0066cc, 0x0077dd, 0x0088ee, 0x0099ff]
+  const copperGray = [0x606060, 0x707070, 0x808080, 0x909090]
+  
+  return (
+    <group position={[rackX, 0, 0]}>
+      {/* === VERTICAL CABLE MANAGEMENT CHANNEL === */}
+      {/* D-rings / cable guides along rack side */}
+      {Array.from({ length: 8 }).map((_, i) => (
+        <mesh key={`dring${i}`} position={[-1.15, 2 + i * 0.9, 0.3]}>
+          <torusGeometry args={[0.04, 0.008, 8, 12, Math.PI]} />
+          <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.3} />
+        </mesh>
+      ))}
+      
+      {/* === FIBER UPLINKS: Switch to Cable Tray === */}
+      {/* 40G QSFP+ fiber trunks - yellow single-mode */}
+      {[0, 1, 2, 3].map((i) => {
+        const offsetX = -0.25 + i * 0.12
         const pts = [
-          new THREE.Vector3(rack1X + 0.5, yOffset, 0.6),
-          new THREE.Vector3(rack1X + 0.8, yOffset + 0.1, 0.7),
-          new THREE.Vector3(midX, yOffset + 0.15, 0.75),
-          new THREE.Vector3(rack2X - 0.8, yOffset + 0.1, 0.7),
-          new THREE.Vector3(rack2X - 0.5, yOffset, 0.6),
+          new THREE.Vector3(offsetX, 8.35, 0.58),
+          new THREE.Vector3(offsetX + 0.03, 8.45, 0.62),
+          new THREE.Vector3(offsetX + 0.02, 8.6, 0.55),
+          new THREE.Vector3(offsetX, 8.75, 0.35),
+          new THREE.Vector3(offsetX - 0.02, 8.85, 0.1),
+          new THREE.Vector3(offsetX, 8.9, -0.1),
         ]
-        return <FiberCable key={`cross${idx}`} points={pts} color={idx === 0 ? 0x00ffcc : 0xffaa00} pulseCount={5} />
+        return <FiberCable key={`qsfp${i}`} points={pts} color={0xffcc00} pulseCount={4} />
       })}
       
-      {/* Management network - copper Cat6 */}
+      {/* 10G SFP+ fiber - aqua multi-mode OM4 */}
+      {[0, 1].map((i) => {
+        const offsetX = 0.3 + i * 0.1
+        const pts = [
+          new THREE.Vector3(offsetX, 8.35, 0.58),
+          new THREE.Vector3(offsetX, 8.5, 0.6),
+          new THREE.Vector3(offsetX + 0.05, 8.7, 0.4),
+          new THREE.Vector3(offsetX + 0.03, 8.85, 0.05),
+        ]
+        return <FiberCable key={`sfp${i}`} points={pts} color={0x00cccc} pulseCount={3} />
+      })}
+      
+      {/* === PATCH CABLES: Patch Panel to Switch === */}
+      {/* Organized cable waterfall with service loops */}
+      {Array.from({ length: 24 }).map((_, i) => {
+        const col = copperBlue[i % copperBlue.length]
+        const portOffset = -0.65 + (i % 24) * 0.054
+        const switchPort = -0.65 + (i % 24) * 0.054
+        const sagVariation = 0.12 + (i % 4) * 0.025
+        const zVariation = 0.58 + (i % 3) * 0.02
+        
+        const pts = [
+          new THREE.Vector3(portOffset, 9.52, zVariation),
+          new THREE.Vector3(portOffset, 9.45, zVariation + 0.06),
+          new THREE.Vector3(portOffset * 0.95, 9.3, zVariation + 0.1),
+          new THREE.Vector3((portOffset + switchPort) / 2, 9.0 - sagVariation, zVariation + 0.12),
+          new THREE.Vector3(switchPort * 0.95, 8.6, zVariation + 0.08),
+          new THREE.Vector3(switchPort, 8.42, zVariation),
+        ]
+        return <CopperCable key={`patch${i}`} points={pts} color={col} pulseCount={1} thickness={0.006} />
+      })}
+      
+      {/* === POWER CABLES: UPS to PDU to Devices === */}
+      {/* Main power feeds - thick black */}
+      {[-0.5, 0.5].map((offsetX, i) => {
+        const pts = [
+          new THREE.Vector3(offsetX, 1.8, 0.52),
+          new THREE.Vector3(offsetX * 0.9, 2.2, 0.58),
+          new THREE.Vector3(offsetX * 0.85, 3.0, 0.55),
+          new THREE.Vector3(offsetX * 0.8, 4.5, 0.52),
+        ]
+        return <PowerCable key={`pwr${i}`} points={pts} thickness={0.025} />
+      })}
+      
+      {/* C13 power cords to devices - red */}
+      {[3.5, 5.2, 6.8, 8.3].map((y, i) => {
+        const pts = [
+          new THREE.Vector3(-0.35 + i * 0.05, y, 0.52),
+          new THREE.Vector3(-0.55, y - 0.1, 0.58),
+          new THREE.Vector3(-0.7, y - 0.15, 0.55),
+        ]
+        return (
+          <mesh key={`c13-${i}`}>
+            <tubeGeometry args={[new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...Object.values(p)))), 16, 0.01, 6, false]} />
+            <meshStandardMaterial color={0x880000} roughness={0.75} />
+          </mesh>
+        )
+      })}
+      
+      {/* === MANAGEMENT CABLES === */}
+      {/* Console cables - light blue RJ45 to serial */}
       <CopperCable
         points={[
-          new THREE.Vector3(rack1X + 0.3, 6.8, 0.58),
-          new THREE.Vector3(rack1X + 0.6, 6.9, 0.65),
-          new THREE.Vector3(midX, 7.0, 0.7),
-          new THREE.Vector3(rack2X - 0.6, 6.9, 0.65),
-          new THREE.Vector3(rack2X - 0.3, 6.8, 0.58),
+          new THREE.Vector3(-0.88, 8.38, 0.56),
+          new THREE.Vector3(-0.92, 8.3, 0.62),
+          new THREE.Vector3(-0.95, 8.0, 0.58),
+          new THREE.Vector3(-0.9, 7.5, 0.55),
         ]}
-        color={0x888888}
-        pulseCount={2}
+        color={0x66aacc}
+        pulseCount={1}
+        thickness={0.008}
       />
+      
+      {/* === CABLE TIES AT INTERVALS === */}
+      {[8.8, 9.0, 9.2, 9.4].map((y, i) => (
+        <CableTie key={`tie${i}`} position={[0, y, 0.62]} width={0.3} />
+      ))}
+    </group>
+  )
+}
+
+// Cross-rack fiber backbone with proper routing
+function CrossRackFiberBackbone({ rack1X, rack2X }: { rack1X: number; rack2X: number }) {
+  const midX = (rack1X + rack2X) / 2
+  const trunkColors = [0xffcc00, 0xffcc00, 0x00cccc, 0x00cccc]
+  
+  return (
+    <group>
+      {/* 100G QSFP28 inter-switch links via overhead tray */}
+      {trunkColors.map((col, idx) => {
+        const yBase = 8.85
+        const zOffset = -0.15 + (idx % 2) * 0.08
+        const xSpread = idx < 2 ? 0 : 0.08
+        const pts = [
+          new THREE.Vector3(rack1X + 0.35 + xSpread, 8.38, 0.58),
+          new THREE.Vector3(rack1X + 0.4 + xSpread, 8.5, 0.62),
+          new THREE.Vector3(rack1X + 0.5, 8.7, 0.5),
+          new THREE.Vector3(rack1X + 0.6, yBase, zOffset),
+          new THREE.Vector3(midX, yBase + 0.02, zOffset - 0.05),
+          new THREE.Vector3(rack2X - 0.6, yBase, zOffset),
+          new THREE.Vector3(rack2X - 0.5, 8.7, 0.5),
+          new THREE.Vector3(rack2X - 0.4 - xSpread, 8.5, 0.62),
+          new THREE.Vector3(rack2X - 0.35 - xSpread, 8.38, 0.58),
+        ]
+        return <FiberCable key={`trunk${idx}`} points={pts} color={col} pulseCount={6} />
+      })}
+      
+      {/* Redundant path - different color */}
+      {[0, 1].map((idx) => {
+        const pts = [
+          new THREE.Vector3(rack1X + 0.5, 6.78, 0.56),
+          new THREE.Vector3(rack1X + 0.7, 6.85, 0.62),
+          new THREE.Vector3(midX, 6.95, 0.65),
+          new THREE.Vector3(rack2X - 0.7, 6.85, 0.62),
+          new THREE.Vector3(rack2X - 0.5, 6.78, 0.56),
+        ]
+        return <FiberCable key={`redun${idx}`} points={pts} color={0xff6600} pulseCount={4} />
+      })}
     </group>
   )
 }
@@ -572,7 +727,7 @@ function BrandStrip({ position, color, width = 0.3 }: { position: [number, numbe
   )
 }
 
-// Rack device component - detailed with branding
+// Realistic rack device component - highly detailed appliances
 function RackDevice({
   y,
   h,
@@ -590,10 +745,6 @@ function RackDevice({
   onHover?: (l: string | null) => void
   onClick?: (s: string) => void
 }) {
-  // Realistic colors based on type
-  const bodyColor = type === "fw" ? 0xe8e8e8 : type === "switch" ? 0x1a1e22 : type === "srv" ? 0x0a0c10 : type === "aruba" ? 0xf5f5f5 : 0x181c20
-  const accentColor = type === "fw" ? 0xcc0000 : type === "switch" ? 0x00aacc : type === "aruba" ? 0xff6600 : 0x0066cc
-  
   return (
     <group
       position={[0, y, 0]}
@@ -601,306 +752,518 @@ function RackDevice({
       onPointerOut={() => onHover?.(null)}
       onClick={() => section && onClick?.(section)}
     >
-      {/* Main chassis with realistic texture */}
-      <mesh castShadow>
-        <boxGeometry args={[2.12, h, 1.08]} />
-        <meshStandardMaterial 
-          color={bodyColor} 
-          roughness={type === "fw" || type === "aruba" ? 0.7 : 0.4} 
-          metalness={type === "fw" || type === "aruba" ? 0.1 : 0.6} 
-        />
-      </mesh>
-      
-      {/* Bezel/faceplate - slightly protruding */}
-      <mesh position={[0, 0, 0.545]}>
-        <boxGeometry args={[2.1, h - 0.02, 0.01]} />
-        <meshStandardMaterial color={bodyColor} roughness={0.5} metalness={0.3} />
-      </mesh>
-      
-      {/* Rack ears with screw holes */}
-      {[-1.08, 1.08].map((ex, i) => (
-        <group key={`ear${i}`}>
-          <mesh position={[ex, 0, 0.54]}>
-            <boxGeometry args={[0.08, h - 0.02, 0.04]} />
-            <meshStandardMaterial color={0x303438} roughness={0.3} metalness={0.85} />
-          </mesh>
-          {/* Cage nuts / screws */}
-          <RackScrew position={[ex, h * 0.35, 0.56]} />
-          <RackScrew position={[ex, -h * 0.35, 0.56]} />
-        </group>
-      ))}
-      
-      {/* Brand accent stripe */}
-      <mesh position={[0, h / 2 - 0.025, 0.551]}>
-        <boxGeometry args={[2.1, 0.025, 0.005]} />
-        <meshBasicMaterial color={accentColor} />
-      </mesh>
-
-      {/* ===== CISCO SWITCH ===== */}
+      {/* ===== CISCO CATALYST 9300 SWITCH ===== */}
       {type === "switch" && (
-        <>
-          {/* Cisco logo text */}
+        <group>
+          {/* Main chassis - dark gunmetal with subtle texture */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0x1c2024} roughness={0.35} metalness={0.7} clearcoat={0.1} />
+          </mesh>
+          
+          {/* Front bezel - recessed panel look */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.02, 0.02]} />
+            <meshPhysicalMaterial color={0x181c20} roughness={0.4} metalness={0.6} />
+          </mesh>
+          
+          {/* Rack ears - brushed aluminum */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              {Array.from({ length: 3 }).map((_, j) => (
+                <mesh key={j} position={[ex, (j - 1) * h * 0.3, 0.565]}>
+                  <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                  <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+          
+          {/* CISCO logo with proper styling */}
           <Text
-            fontSize={0.12}
+            fontSize={0.09}
             color="#049fd9"
             anchorX="left"
             anchorY="middle"
-            position={[-0.95, h / 2 - 0.06, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+            position={[-0.98, h / 2 - 0.045, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"
+            letterSpacing={0.08}
           >
             CISCO
           </Text>
-          {/* Cisco blue brand strip */}
-          <BrandStrip position={[-0.55, h / 2 - 0.06, 0.555]} color={0x049fd9} width={0.15} />
+          <Text
+            fontSize={0.04}
+            color="#888888"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.98, h / 2 - 0.1, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            Catalyst 9300-48P
+          </Text>
           
-          {/* Recessed port panel */}
-          <mesh position={[0, 0, 0.54]}>
-            <boxGeometry args={[1.7, h * 0.75, 0.025]} />
-            <meshStandardMaterial color={0x0a0c10} roughness={0.9} />
+          {/* Blue accent strip */}
+          <mesh position={[0, h / 2 - 0.015, 0.545]}>
+            <boxGeometry args={[2.06, 0.018, 0.003]} />
+            <meshBasicMaterial color={0x049fd9} />
           </mesh>
           
-          {/* RJ45 Port grid - 48 ports */}
-          {Array.from({ length: 48 }).map((_, sp) => {
-            const row = Math.floor(sp / 24)
-            const col = sp % 24
-            const px = -0.72 + col * 0.06
-            const py = 0.1 - row * 0.15
+          {/* Recessed port bay */}
+          <mesh position={[0.05, -0.02, 0.535]}>
+            <boxGeometry args={[1.65, h * 0.68, 0.03]} />
+            <meshStandardMaterial color={0x0c0e10} roughness={0.95} />
+          </mesh>
+          
+          {/* 48x RJ45 PoE+ ports in realistic grid */}
+          {Array.from({ length: 48 }).map((_, p) => {
+            const row = Math.floor(p / 24)
+            const col = p % 24
+            const px = -0.68 + col * 0.058
+            const py = 0.06 - row * 0.13
             return (
-              <group key={sp}>
-                {/* Port housing */}
-                <mesh position={[px, py, 0.555]}>
-                  <boxGeometry args={[0.05, 0.055, 0.02]} />
-                  <meshStandardMaterial color={0x050608} roughness={0.8} />
+              <group key={p}>
+                {/* Port bezel */}
+                <mesh position={[px, py, 0.548]}>
+                  <boxGeometry args={[0.052, 0.058, 0.015]} />
+                  <meshStandardMaterial color={0x08090a} roughness={0.85} />
                 </mesh>
-                {/* Port LED */}
-                <LED position={[px, py - 0.035, 0.565]} baseColor={0x00ff88} altColor={0x0a1a0a} rate={1.5 + Math.random() * 4} offset={Math.random() * 6} size={0.006} />
+                {/* Gold pin contacts visible inside */}
+                <mesh position={[px, py, 0.554]}>
+                  <boxGeometry args={[0.04, 0.035, 0.002]} />
+                  <meshStandardMaterial color={0x1a1a1a} />
+                </mesh>
+                {/* Dual LEDs per port */}
+                <LED position={[px - 0.015, py + 0.035, 0.558]} baseColor={0x00ff44} altColor={0x0a120a} rate={2 + Math.random() * 5} offset={Math.random() * 8} size={0.005} />
+                <LED position={[px + 0.015, py + 0.035, 0.558]} baseColor={0xffaa00} altColor={0x120a00} rate={12 + Math.random() * 20} offset={Math.random() * 8} size={0.005} />
               </group>
             )
           })}
           
-          {/* SFP+ uplink modules */}
-          {Array.from({ length: 4 }).map((_, sfp) => (
-            <SFPModule key={`sfp${sfp}`} position={[0.82 + (sfp % 2) * 0.08, 0.08 - Math.floor(sfp / 2) * 0.12, 0.555]} />
+          {/* 4x SFP+ uplink module bay */}
+          <mesh position={[0.88, 0, 0.545]}>
+            <boxGeometry args={[0.22, h * 0.5, 0.025]} />
+            <meshStandardMaterial color={0x0a0c0e} roughness={0.9} />
+          </mesh>
+          {Array.from({ length: 4 }).map((_, s) => (
+            <SFPModule key={s} position={[0.88 + (s % 2) * 0.065 - 0.032, 0.05 - Math.floor(s / 2) * 0.1, 0.555]} />
           ))}
           
-          {/* Status LCD */}
-          <mesh position={[0.75, -0.12, 0.555]}>
-            <boxGeometry args={[0.18, 0.08, 0.01]} />
-            <meshBasicMaterial color={0x001a00} />
+          {/* Management section */}
+          <mesh position={[-0.88, -0.04, 0.548]}>
+            <boxGeometry args={[0.2, 0.18, 0.02]} />
+            <meshStandardMaterial color={0x0a0c0e} roughness={0.85} />
           </mesh>
-          <mesh position={[0.75, -0.12, 0.561]}>
-            <boxGeometry args={[0.16, 0.06, 0.002]} />
-            <meshBasicMaterial color={0x00cc44} transparent opacity={0.8} />
+          {/* Console port (light blue) */}
+          <mesh position={[-0.9, 0, 0.555]}>
+            <boxGeometry args={[0.05, 0.038, 0.012]} />
+            <meshStandardMaterial color={0x1a6090} />
+          </mesh>
+          {/* USB port */}
+          <mesh position={[-0.86, -0.06, 0.555]}>
+            <boxGeometry args={[0.032, 0.015, 0.008]} />
+            <meshStandardMaterial color={0x202020} />
           </mesh>
           
-          {/* Console port */}
-          <mesh position={[-0.9, -0.05, 0.555]}>
-            <boxGeometry args={[0.05, 0.035, 0.015]} />
-            <meshStandardMaterial color={0x1a5a8a} />
-          </mesh>
-        </>
+          {/* Status LED cluster */}
+          <LED position={[0.95, h / 2 - 0.06, 0.555]} baseColor={0x00ff44} size={0.012} />
+          <LED position={[0.95, h / 2 - 0.1, 0.555]} baseColor={0x049fd9} rate={0.5} size={0.01} />
+          
+          {/* Ventilation holes pattern */}
+          {Array.from({ length: 6 }).map((_, v) => (
+            <mesh key={v} position={[0.75 + (v % 3) * 0.06, -0.12 + Math.floor(v / 3) * 0.04, 0.545]}>
+              <circleGeometry args={[0.008, 6]} />
+              <meshStandardMaterial color={0x080808} />
+            </mesh>
+          ))}
+        </group>
       )}
 
-      {/* ===== FORTIGATE FIREWALL ===== */}
+      {/* ===== FORTIGATE 600E FIREWALL ===== */}
       {type === "fw" && (
-        <>
-          {/* Fortinet logo text */}
+        <group>
+          {/* Main chassis - Fortinet signature beige/cream */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0xe8e4dc} roughness={0.6} metalness={0.1} />
+          </mesh>
+          
+          {/* Front bezel */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.02, 0.02]} />
+            <meshPhysicalMaterial color={0xe0dcd4} roughness={0.55} metalness={0.05} />
+          </mesh>
+          
+          {/* Rack ears */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              {Array.from({ length: 3 }).map((_, j) => (
+                <mesh key={j} position={[ex, (j - 1) * h * 0.3, 0.565]}>
+                  <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                  <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+          
+          {/* Fortinet signature red stripe at top */}
+          <mesh position={[0, h / 2 - 0.02, 0.545]}>
+            <boxGeometry args={[2.06, 0.03, 0.005]} />
+            <meshBasicMaterial color={0xcc0000} />
+          </mesh>
+          {/* Fortinet signature red stripe at bottom */}
+          <mesh position={[0, -h / 2 + 0.02, 0.545]}>
+            <boxGeometry args={[2.06, 0.025, 0.005]} />
+            <meshBasicMaterial color={0xcc0000} />
+          </mesh>
+          
+          {/* FORTINET logo */}
           <Text
-            fontSize={0.1}
+            fontSize={0.085}
             color="#cc0000"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.06, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+            position={[-0.96, h / 2 - 0.07, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"
+            letterSpacing={0.06}
           >
             FORTINET
           </Text>
-          {/* FortiGate model text */}
           <Text
-            fontSize={0.06}
-            color="#ffffff"
+            fontSize={0.055}
+            color="#666666"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.16, 0.56]}
+            position={[-0.96, h / 2 - 0.14, 0.555]}
             font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
           >
             FortiGate 600E
           </Text>
-          {/* Fortinet red brand strip */}
-          <BrandStrip position={[-0.45, h / 2 - 0.06, 0.555]} color={0xcc0000} width={0.15} />
           
-          {/* Red accent line at bottom */}
-          <mesh position={[0, -h / 2 + 0.03, 0.551]}>
-            <boxGeometry args={[2.1, 0.04, 0.006]} />
-            <meshBasicMaterial color={0xcc0000} />
+          {/* Dark port panel area */}
+          <mesh position={[-0.3, -0.02, 0.54]}>
+            <boxGeometry args={[1.25, h * 0.6, 0.025]} />
+            <meshStandardMaterial color={0x1a1c1e} roughness={0.85} />
           </mesh>
           
-          {/* Port panel section */}
-          <mesh position={[-0.35, 0, 0.545]}>
-            <boxGeometry args={[1.3, h * 0.7, 0.02]} />
-            <meshStandardMaterial color={0x101214} roughness={0.85} />
-          </mesh>
-          
-          {/* Network ports - 16 GbE ports */}
-          {Array.from({ length: 16 }).map((_, pp) => {
-            const row = Math.floor(pp / 8)
-            const col = pp % 8
-            const px = -0.85 + col * 0.13
-            const py = 0.12 - row * 0.18
+          {/* 16x GbE RJ45 ports */}
+          {Array.from({ length: 16 }).map((_, p) => {
+            const row = Math.floor(p / 8)
+            const col = p % 8
+            const px = -0.78 + col * 0.12
+            const py = 0.08 - row * 0.16
             return (
-              <group key={pp}>
-                <mesh position={[px, py, 0.555]}>
-                  <boxGeometry args={[0.08, 0.06, 0.02]} />
-                  <meshStandardMaterial color={0x080a0c} roughness={0.7} />
+              <group key={p}>
+                <mesh position={[px, py, 0.552]}>
+                  <boxGeometry args={[0.072, 0.058, 0.018]} />
+                  <meshStandardMaterial color={0x0c0e10} roughness={0.8} />
                 </mesh>
-                {/* Link LED */}
-                <LED position={[px - 0.025, py + 0.04, 0.565]} baseColor={0x00ff00} altColor={0x001a00} rate={2 + Math.random() * 3} offset={Math.random() * 6} size={0.006} />
-                {/* Activity LED */}
-                <LED position={[px + 0.025, py + 0.04, 0.565]} baseColor={0xffaa00} altColor={0x1a0a00} rate={8 + Math.random() * 12} offset={Math.random() * 6} size={0.006} />
+                {/* Port number label area */}
+                <mesh position={[px, py + 0.045, 0.553]}>
+                  <boxGeometry args={[0.06, 0.015, 0.001]} />
+                  <meshStandardMaterial color={0x2a2c2e} />
+                </mesh>
+                {/* Link LED (green) */}
+                <LED position={[px - 0.022, py + 0.038, 0.562]} baseColor={0x00ff00} altColor={0x001800} rate={1.5 + Math.random() * 3} offset={Math.random() * 6} size={0.006} />
+                {/* Activity LED (amber) */}
+                <LED position={[px + 0.022, py + 0.038, 0.562]} baseColor={0xff8800} altColor={0x180800} rate={10 + Math.random() * 15} offset={Math.random() * 6} size={0.006} />
               </group>
             )
           })}
           
-          {/* SFP slots */}
-          {Array.from({ length: 4 }).map((_, sfp) => (
-            <SFPModule key={`fwsfp${sfp}`} position={[0.25 + (sfp % 2) * 0.1, 0.08 - Math.floor(sfp / 2) * 0.15, 0.555]} />
+          {/* 4x SFP+ slots */}
+          <mesh position={[0.22, 0, 0.548]}>
+            <boxGeometry args={[0.2, h * 0.45, 0.02]} />
+            <meshStandardMaterial color={0x1a1c1e} roughness={0.85} />
+          </mesh>
+          {Array.from({ length: 4 }).map((_, s) => (
+            <SFPModule key={s} position={[0.22 + (s % 2) * 0.06 - 0.03, 0.06 - Math.floor(s / 2) * 0.12, 0.555]} />
           ))}
           
-          {/* LCD status display */}
-          <mesh position={[0.7, 0.1, 0.555]}>
-            <boxGeometry args={[0.35, 0.22, 0.02]} />
-            <meshStandardMaterial color={0x080808} roughness={0.6} />
+          {/* LCD Status Display with bezel */}
+          <mesh position={[0.68, 0.04, 0.548]}>
+            <boxGeometry args={[0.38, 0.22, 0.025]} />
+            <meshStandardMaterial color={0x1a1a1a} roughness={0.5} />
           </mesh>
-          <mesh position={[0.7, 0.1, 0.566]}>
-            <boxGeometry args={[0.32, 0.18, 0.005]} />
-            <meshBasicMaterial color={0x00ff44} transparent opacity={0.85} />
+          <mesh position={[0.68, 0.04, 0.562]}>
+            <boxGeometry args={[0.34, 0.18, 0.005]} />
+            <meshBasicMaterial color={0x003311} />
           </mesh>
-          
-          {/* USB port */}
-          <mesh position={[0.7, -0.12, 0.555]}>
-            <boxGeometry args={[0.04, 0.02, 0.01]} />
-            <meshStandardMaterial color={0x303030} />
+          <mesh position={[0.68, 0.04, 0.566]}>
+            <boxGeometry args={[0.32, 0.16, 0.002]} />
+            <meshBasicMaterial color={0x00cc44} transparent opacity={0.9} />
           </mesh>
           
-          {/* Power button */}
-          <mesh position={[0.9, 0, 0.555]}>
-            <cylinderGeometry args={[0.02, 0.02, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
-            <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.2} />
+          {/* Control buttons */}
+          {[0.52, 0.58, 0.64].map((bx, i) => (
+            <mesh key={i} position={[bx, -0.1, 0.555]}>
+              <cylinderGeometry args={[0.012, 0.012, 0.008, 8]} rotation={[Math.PI / 2, 0, 0]} />
+              <meshStandardMaterial color={0x404040} metalness={0.7} roughness={0.3} />
+            </mesh>
+          ))}
+          
+          {/* USB 3.0 port */}
+          <mesh position={[0.78, -0.1, 0.555]}>
+            <boxGeometry args={[0.035, 0.018, 0.012]} />
+            <meshStandardMaterial color={0x0044cc} />
           </mesh>
-          <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={0.008} />
-        </>
+          
+          {/* Power button with LED ring */}
+          <mesh position={[0.92, 0, 0.555]}>
+            <cylinderGeometry args={[0.025, 0.025, 0.015, 16]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x505050} metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[0.92, 0, 0.564]}>
+            <torusGeometry args={[0.018, 0.003, 8, 16]} />
+            <meshBasicMaterial color={0x00ff00} />
+          </mesh>
+          
+          {/* System status LEDs */}
+          <group position={[0.92, h / 2 - 0.08, 0.555]}>
+            <LED position={[0, 0, 0]} baseColor={0x00ff44} size={0.01} />
+            <LED position={[0, -0.035, 0]} baseColor={0xff8800} rate={15} size={0.008} />
+            <LED position={[0, -0.07, 0]} baseColor={0x0088ff} rate={0.3} size={0.008} />
+          </group>
+        </group>
       )}
 
-      {/* ===== DELL SERVER ===== */}
+      {/* ===== DELL POWEREDGE R750 SERVER ===== */}
       {type === "srv" && (
-        <>
-          {/* Dell logo text */}
+        <group>
+          {/* Main chassis - matte black */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0x0a0c0e} roughness={0.5} metalness={0.6} />
+          </mesh>
+          
+          {/* Front bezel with perforations */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.02, 0.02]} />
+            <meshPhysicalMaterial color={0x101214} roughness={0.45} metalness={0.5} />
+          </mesh>
+          
+          {/* Rack ears */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              {Array.from({ length: 3 }).map((_, j) => (
+                <mesh key={j} position={[ex, (j - 1) * h * 0.3, 0.565]}>
+                  <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                  <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+          
+          {/* Dell EMC logo */}
           <Text
-            fontSize={0.1}
+            fontSize={0.075}
             color="#007db8"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.08, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+            position={[-0.96, h / 2 - 0.055, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"
+            letterSpacing={0.05}
           >
-            DELL
+            DELL EMC
           </Text>
-          {/* PowerEdge model */}
           <Text
-            fontSize={0.05}
-            color="#888888"
+            fontSize={0.04}
+            color="#666666"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.17, 0.56]}
+            position={[-0.96, h / 2 - 0.11, 0.555]}
             font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
           >
             PowerEdge R750
           </Text>
-          {/* Dell blue brand strip */}
-          <BrandStrip position={[-0.55, h / 2 - 0.08, 0.555]} color={0x007db8} width={0.12} />
           
-          {/* Drive bays - 12 hot-swap SAS/SATA */}
-          {Array.from({ length: 12 }).map((_, db) => {
-            const row = Math.floor(db / 6)
-            const col = db % 6
-            const bx = -0.72 + col * 0.24
-            const by = 0.15 - row * 0.35
+          {/* Blue accent line */}
+          <mesh position={[0, h / 2 - 0.015, 0.545]}>
+            <boxGeometry args={[2.06, 0.015, 0.003]} />
+            <meshBasicMaterial color={0x007db8} />
+          </mesh>
+          
+          {/* 12x 3.5" Hot-swap drive bays */}
+          {Array.from({ length: 12 }).map((_, d) => {
+            const row = Math.floor(d / 6)
+            const col = d % 6
+            const dx = -0.7 + col * 0.235
+            const dy = 0.12 - row * 0.32
             return (
-              <group key={db}>
-                {/* Drive caddy */}
-                <mesh position={[bx, by, 0.555]}>
-                  <boxGeometry args={[0.2, 0.28, 0.03]} />
-                  <meshStandardMaterial color={0x606468} roughness={0.35} metalness={0.75} />
+              <group key={d}>
+                {/* Drive carrier/caddy - brushed aluminum */}
+                <mesh position={[dx, dy, 0.552]}>
+                  <boxGeometry args={[0.21, 0.28, 0.035]} />
+                  <meshPhysicalMaterial color={0x585c60} roughness={0.25} metalness={0.85} clearcoat={0.2} />
                 </mesh>
-                {/* Drive handle */}
-                <mesh position={[bx, by + 0.1, 0.572]}>
-                  <boxGeometry args={[0.16, 0.04, 0.01]} />
-                  <meshStandardMaterial color={0x404448} metalness={0.8} roughness={0.3} />
+                {/* Handle recessed area */}
+                <mesh position={[dx, dy + 0.11, 0.568]}>
+                  <boxGeometry args={[0.17, 0.04, 0.01]} />
+                  <meshStandardMaterial color={0x404448} metalness={0.9} roughness={0.15} />
                 </mesh>
-                {/* Drive LED */}
-                <LED position={[bx + 0.08, by + 0.12, 0.575]} baseColor={0x4488ff} altColor={0x081828} rate={6 + Math.random() * 10} offset={Math.random() * 6} size={0.008} />
-                {/* Activity LED */}
-                <LED position={[bx + 0.08, by + 0.1, 0.575]} baseColor={0x00ff88} altColor={0x081808} rate={15 + Math.random() * 20} offset={Math.random() * 6} size={0.006} />
+                {/* Orange release button */}
+                <mesh position={[dx + 0.06, dy + 0.11, 0.575]}>
+                  <boxGeometry args={[0.025, 0.025, 0.008]} />
+                  <meshStandardMaterial color={0xff6600} />
+                </mesh>
+                {/* Drive bay number */}
+                <mesh position={[dx - 0.075, dy + 0.11, 0.575]}>
+                  <boxGeometry args={[0.03, 0.02, 0.002]} />
+                  <meshStandardMaterial color={0x222222} />
+                </mesh>
+                {/* Status LED (blue = healthy) */}
+                <LED position={[dx + 0.085, dy + 0.12, 0.575]} baseColor={0x0088ff} altColor={0x001830} rate={0.1} size={0.008} />
+                {/* Activity LED (green blink) */}
+                <LED position={[dx + 0.085, dy + 0.1, 0.575]} baseColor={0x00ff44} altColor={0x001808} rate={18 + Math.random() * 25} offset={Math.random() * 8} size={0.006} />
               </group>
             )
           })}
           
-          {/* iDRAC port */}
-          <mesh position={[0.85, 0.2, 0.555]}>
-            <boxGeometry args={[0.06, 0.045, 0.015]} />
+          {/* Info panel area */}
+          <mesh position={[0.8, 0, 0.548]}>
+            <boxGeometry args={[0.3, h * 0.65, 0.02]} />
+            <meshStandardMaterial color={0x0c0e10} roughness={0.9} />
+          </mesh>
+          
+          {/* iDRAC Quick Sync 2 module */}
+          <mesh position={[0.72, 0.15, 0.558]}>
+            <boxGeometry args={[0.08, 0.06, 0.015]} />
+            <meshStandardMaterial color={0x1a1a1a} />
+          </mesh>
+          <mesh position={[0.72, 0.15, 0.567]}>
+            <circleGeometry args={[0.02, 16]} />
+            <meshBasicMaterial color={0x003355} />
+          </mesh>
+          
+          {/* Dedicated iDRAC port */}
+          <mesh position={[0.88, 0.15, 0.558]}>
+            <boxGeometry args={[0.058, 0.045, 0.015]} />
             <meshStandardMaterial color={0x0a0a0a} />
           </mesh>
+          <Text
+            fontSize={0.018}
+            color="#007db8"
+            anchorX="center"
+            anchorY="middle"
+            position={[0.88, 0.19, 0.558]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            iDRAC
+          </Text>
           
           {/* VGA port */}
-          <mesh position={[0.85, 0.1, 0.555]}>
-            <boxGeometry args={[0.05, 0.035, 0.015]} />
-            <meshStandardMaterial color={0x0066cc} />
+          <mesh position={[0.88, 0.05, 0.558]}>
+            <boxGeometry args={[0.048, 0.032, 0.012]} />
+            <meshStandardMaterial color={0x0055aa} />
           </mesh>
           
-          {/* USB ports */}
-          {[0, 0.06].map((offset, i) => (
-            <mesh key={`usb${i}`} position={[0.85 + offset, 0, 0.555]}>
-              <boxGeometry args={[0.04, 0.02, 0.01]} />
-              <meshStandardMaterial color={0x303030} />
+          {/* Dual USB 3.0 */}
+          {[0, 0.05].map((offset, i) => (
+            <mesh key={i} position={[0.75 + offset, -0.05, 0.558]}>
+              <boxGeometry args={[0.035, 0.015, 0.01]} />
+              <meshStandardMaterial color={0x0044cc} />
             </mesh>
           ))}
           
-          {/* Power button */}
-          <mesh position={[0.9, -0.15, 0.555]}>
-            <cylinderGeometry args={[0.025, 0.025, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+          {/* System ID button */}
+          <mesh position={[0.88, -0.1, 0.558]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x0066cc} metalness={0.6} roughness={0.3} />
+          </mesh>
+          
+          {/* Power button with ring */}
+          <mesh position={[0.88, -0.18, 0.558]}>
+            <cylinderGeometry args={[0.022, 0.022, 0.012, 16]} rotation={[Math.PI / 2, 0, 0]} />
             <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.2} />
           </mesh>
-          <LED position={[0.9, -0.15, 0.562]} baseColor={0x00ff00} size={0.01} />
-        </>
+          <LED position={[0.88, -0.18, 0.566]} baseColor={0x00ff44} size={0.012} />
+          
+          {/* System health LEDs */}
+          <LED position={[0.95, h / 2 - 0.06, 0.555]} baseColor={0x00ff44} size={0.01} />
+          <LED position={[0.95, h / 2 - 0.09, 0.555]} baseColor={0x007db8} rate={0.4} size={0.008} />
+        </group>
       )}
 
-      {/* ===== ARUBA CLEARPASS ===== */}
+      {/* ===== ARUBA CLEARPASS C3010 ===== */}
       {type === "aruba" && (
-        <>
-          {/* Aruba logo text */}
+        <group>
+          {/* Main chassis - silver/white */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0xf0f0f0} roughness={0.5} metalness={0.15} />
+          </mesh>
+          
+          {/* Front bezel */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.02, 0.02]} />
+            <meshPhysicalMaterial color={0xe8e8e8} roughness={0.45} metalness={0.1} />
+          </mesh>
+          
+          {/* Rack ears */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              {Array.from({ length: 3 }).map((_, j) => (
+                <mesh key={j} position={[ex, (j - 1) * h * 0.3, 0.565]}>
+                  <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                  <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+          
+          {/* Aruba orange stripe */}
+          <mesh position={[0, h / 2 - 0.018, 0.545]}>
+            <boxGeometry args={[2.06, 0.025, 0.005]} />
+            <meshBasicMaterial color={0xff6600} />
+          </mesh>
+          
+          {/* HPE Aruba logo */}
           <Text
-            fontSize={0.1}
+            fontSize={0.065}
             color="#ff6600"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.02, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+            position={[-0.96, h / 2 - 0.065, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"
+            letterSpacing={0.04}
           >
-            ARUBA
+            aruba
           </Text>
-          {/* ClearPass model */}
           <Text
-            fontSize={0.055}
-            color="#ffffff"
+            fontSize={0.035}
+            color="#666666"
             anchorX="left"
             anchorY="middle"
-            position={[-0.98, h / 2 - 0.11, 0.56]}
+            position={[-0.96, h / 2 - 0.11, 0.555]}
             font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
           >
-            ClearPass 7280
+            ClearPass C3010
           </Text>
-          {/* Aruba orange brand strip */}
-          <BrandStrip position={[-0.45, h / 2 - 0.02, 0.555]} color={0xff6600} width={0.15} />
+          <Text
+            fontSize={0.025}
+            color="#888888"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.96, h / 2 - 0.14, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            a Hewlett Packard Enterprise company
+          </Text>
           
           {/* Port section */}
           <mesh position={[0, 0, 0.545]}>
@@ -919,96 +1282,298 @@ function RackDevice({
             </group>
           ))}
           
-          {/* Status LEDs */}
-          <LED position={[0.7, 0.02, 0.555]} baseColor={0x00ff00} size={0.01} />
-          <LED position={[0.7, -0.02, 0.555]} baseColor={0xff6600} rate={1.5} size={0.01} />
-        </>
-      )}
-
-      {/* ===== PATCH PANEL ===== */}
-      {type === "patch" && (
-        <>
-          {/* Panel face */}
-          <mesh position={[0, 0, 0.545]}>
-            <boxGeometry args={[2.0, h * 0.8, 0.02]} />
-            <meshStandardMaterial color={0x0a0c10} roughness={0.85} />
+          {/* Dark port panel area */}
+          <mesh position={[0, -0.02, 0.545]}>
+            <boxGeometry args={[1.55, h * 0.55, 0.02]} />
+            <meshStandardMaterial color={0x1a1a1a} roughness={0.85} />
           </mesh>
           
-          {/* 24 patch ports */}
+          {/* 4x GbE Management ports */}
+          {Array.from({ length: 4 }).map((_, p) => (
+            <group key={p}>
+              <mesh position={[-0.5 + p * 0.2, 0, 0.555]}>
+                <boxGeometry args={[0.075, 0.055, 0.018]} />
+                <meshStandardMaterial color={0x0c0e10} roughness={0.75} />
+              </mesh>
+              <LED position={[-0.5 + p * 0.2, -0.038, 0.565]} baseColor={0x00ff88} altColor={0x081808} rate={2 + Math.random() * 4} offset={Math.random() * 6} size={0.006} />
+              <LED position={[-0.5 + p * 0.2, -0.048, 0.565]} baseColor={0xffaa00} altColor={0x180800} rate={12 + Math.random() * 18} offset={Math.random() * 6} size={0.005} />
+            </group>
+          ))}
+          
+          {/* SFP+ ports */}
+          {Array.from({ length: 2 }).map((_, s) => (
+            <SFPModule key={s} position={[0.35 + s * 0.08, 0, 0.555]} />
+          ))}
+          
+          {/* LCD info panel */}
+          <mesh position={[0.72, 0.02, 0.548]}>
+            <boxGeometry args={[0.28, 0.18, 0.02]} />
+            <meshStandardMaterial color={0x1a1a1a} roughness={0.5} />
+          </mesh>
+          <mesh position={[0.72, 0.02, 0.56]}>
+            <boxGeometry args={[0.24, 0.14, 0.003]} />
+            <meshBasicMaterial color={0x001a08} />
+          </mesh>
+          <mesh position={[0.72, 0.02, 0.563]}>
+            <boxGeometry args={[0.22, 0.12, 0.001]} />
+            <meshBasicMaterial color={0x00cc44} transparent opacity={0.85} />
+          </mesh>
+          
+          {/* Power/Reset buttons */}
+          <mesh position={[0.88, 0.04, 0.555]}>
+            <cylinderGeometry args={[0.015, 0.015, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x404040} metalness={0.7} roughness={0.3} />
+          </mesh>
+          <mesh position={[0.88, -0.02, 0.555]}>
+            <cylinderGeometry args={[0.012, 0.012, 0.008, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x606060} metalness={0.6} roughness={0.4} />
+          </mesh>
+          
+          {/* Status LEDs */}
+          <LED position={[0.95, h / 2 - 0.05, 0.555]} baseColor={0x00ff44} size={0.01} />
+          <LED position={[0.95, h / 2 - 0.08, 0.555]} baseColor={0xff6600} rate={0.3} size={0.008} />
+          <LED position={[0.95, h / 2 - 0.11, 0.555]} baseColor={0x0088ff} rate={1.5} size={0.008} />
+        </group>
+      )}
+
+      {/* ===== 24-PORT PATCH PANEL ===== */}
+      {type === "patch" && (
+        <group>
+          {/* Main chassis - black metal */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0x1a1c1e} roughness={0.5} metalness={0.6} />
+          </mesh>
+          
+          {/* Front plate */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.01, 0.02]} />
+            <meshPhysicalMaterial color={0x101214} roughness={0.4} metalness={0.5} />
+          </mesh>
+          
+          {/* Rack ears */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              <mesh position={[ex, 0, 0.565]}>
+                <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+              </mesh>
+            </group>
+          ))}
+          
+          {/* Label area */}
+          <mesh position={[-0.88, 0, 0.548]}>
+            <boxGeometry args={[0.2, h * 0.6, 0.01]} />
+            <meshStandardMaterial color={0xf0f0f0} />
+          </mesh>
+          <Text
+            fontSize={0.035}
+            color="#333333"
+            anchorX="center"
+            anchorY="middle"
+            position={[-0.88, 0.02, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            CAT6A
+          </Text>
+          <Text
+            fontSize={0.025}
+            color="#666666"
+            anchorX="center"
+            anchorY="middle"
+            position={[-0.88, -0.02, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            PATCH
+          </Text>
+          
+          {/* 24 keystone ports */}
           {Array.from({ length: 24 }).map((_, pp) => {
-            const px = -0.85 + pp * 0.075
+            const px = -0.68 + pp * 0.062
             return (
               <group key={pp}>
-                <mesh position={[px, 0, 0.555]}>
-                  <boxGeometry args={[0.055, 0.055, 0.015]} />
-                  <meshStandardMaterial color={0x151820} roughness={0.6} />
+                {/* Port housing */}
+                <mesh position={[px, 0, 0.552]}>
+                  <boxGeometry args={[0.054, h * 0.65, 0.018]} />
+                  <meshStandardMaterial color={0x0a0c0e} roughness={0.85} />
                 </mesh>
-                {/* Port number label area */}
-                <mesh position={[px, 0.055, 0.555]}>
-                  <boxGeometry args={[0.04, 0.02, 0.002]} />
-                  <meshStandardMaterial color={0xf0f0f0} />
+                {/* Keystone jack - white */}
+                <mesh position={[px, 0, 0.562]}>
+                  <boxGeometry args={[0.044, h * 0.5, 0.008]} />
+                  <meshStandardMaterial color={0xf0f0f0} roughness={0.6} />
+                </mesh>
+                {/* Port opening */}
+                <mesh position={[px, 0.015, 0.567]}>
+                  <boxGeometry args={[0.032, 0.022, 0.002]} />
+                  <meshStandardMaterial color={0x1a1a1a} />
+                </mesh>
+                {/* Port number */}
+                <mesh position={[px, -0.035, 0.567]}>
+                  <boxGeometry args={[0.028, 0.015, 0.001]} />
+                  <meshStandardMaterial color={0x2a2a2a} />
                 </mesh>
               </group>
             )
           })}
-        </>
+        </group>
       )}
 
-      {/* ===== UPS ===== */}
+      {/* ===== APC SMART-UPS SRT 3000VA ===== */}
       {type === "ups" && (
-        <>
-          {/* APC logo text */}
+        <group>
+          {/* Main chassis - matte black */}
+          <mesh castShadow>
+            <boxGeometry args={[2.12, h, 1.08]} />
+            <meshPhysicalMaterial color={0x1a1a1a} roughness={0.6} metalness={0.3} />
+          </mesh>
+          
+          {/* Front bezel */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[2.08, h - 0.02, 0.02]} />
+            <meshPhysicalMaterial color={0x141414} roughness={0.55} metalness={0.25} />
+          </mesh>
+          
+          {/* Rack ears */}
+          {[-1.08, 1.08].map((ex, i) => (
+            <group key={`ear${i}`}>
+              <mesh position={[ex, 0, 0.53]}>
+                <boxGeometry args={[0.1, h - 0.01, 0.06]} />
+                <meshPhysicalMaterial color={0x404448} roughness={0.2} metalness={0.9} />
+              </mesh>
+              {Array.from({ length: 3 }).map((_, j) => (
+                <mesh key={j} position={[ex, (j - 1) * h * 0.3, 0.565]}>
+                  <cylinderGeometry args={[0.015, 0.015, 0.012, 6]} rotation={[Math.PI / 2, 0, 0]} />
+                  <meshPhysicalMaterial color={0x606468} metalness={0.95} roughness={0.05} />
+                </mesh>
+              ))}
+            </group>
+          ))}
+          
+          {/* APC by Schneider Electric logo */}
           <Text
-            fontSize={0.12}
+            fontSize={0.09}
             color="#00aa44"
             anchorX="left"
             anchorY="middle"
-            position={[-0.95, h / 2 - 0.1, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+            position={[-0.96, h / 2 - 0.08, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"
+            letterSpacing={0.08}
           >
             APC
           </Text>
-          {/* Smart-UPS model */}
           <Text
-            fontSize={0.05}
+            fontSize={0.032}
+            color="#666666"
+            anchorX="left"
+            anchorY="middle"
+            position={[-0.96, h / 2 - 0.13, 0.555]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
+          >
+            by Schneider Electric
+          </Text>
+          <Text
+            fontSize={0.038}
             color="#888888"
             anchorX="left"
             anchorY="middle"
-            position={[-0.95, h / 2 - 0.2, 0.56]}
+            position={[-0.96, h / 2 - 0.175, 0.555]}
             font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
           >
-            Smart-UPS 3000VA
+            Smart-UPS SRT 3000VA
           </Text>
-          {/* APC green brand strip */}
-          <BrandStrip position={[-0.5, h / 2 - 0.1, 0.555]} color={0x00aa44} width={0.12} />
           
-          {/* Display panel */}
-          <mesh position={[-0.5, 0.1, 0.555]}>
-            <boxGeometry args={[0.4, 0.25, 0.02]} />
-            <meshStandardMaterial color={0x0a0a0a} roughness={0.5} />
-          </mesh>
-          <mesh position={[-0.5, 0.1, 0.566]}>
-            <boxGeometry args={[0.35, 0.2, 0.005]} />
-            <meshBasicMaterial color={0x00ff88} transparent opacity={0.7} />
+          {/* Green accent line */}
+          <mesh position={[0, h / 2 - 0.018, 0.545]}>
+            <boxGeometry args={[2.06, 0.022, 0.004]} />
+            <meshBasicMaterial color={0x00aa44} />
           </mesh>
           
-          {/* Battery status LEDs */}
-          {Array.from({ length: 5 }).map((_, i) => (
-            <LED key={`bat${i}`} position={[-0.1 + i * 0.08, 0.2, 0.555]} baseColor={0x00ff00} altColor={0x002200} rate={0.5} offset={i * 0.3} size={0.012} />
-          ))}
+          {/* Main LCD display with bezel */}
+          <mesh position={[-0.45, 0.08, 0.545]}>
+            <boxGeometry args={[0.55, 0.32, 0.025]} />
+            <meshStandardMaterial color={0x0a0a0a} roughness={0.4} />
+          </mesh>
+          <mesh position={[-0.45, 0.08, 0.558]}>
+            <boxGeometry args={[0.48, 0.26, 0.005]} />
+            <meshBasicMaterial color={0x001a08} />
+          </mesh>
+          <mesh position={[-0.45, 0.08, 0.562]}>
+            <boxGeometry args={[0.45, 0.23, 0.002]} />
+            <meshBasicMaterial color={0x00ff88} transparent opacity={0.85} />
+          </mesh>
           
-          {/* Outlet banks */}
-          {Array.from({ length: 8 }).map((_, o) => (
-            <mesh key={`out${o}`} position={[0.4 + (o % 4) * 0.15, 0.1 - Math.floor(o / 4) * 0.2, 0.555]}>
-              <boxGeometry args={[0.1, 0.08, 0.02]} />
-              <meshStandardMaterial color={0x202020} roughness={0.6} />
+          {/* Control buttons under display */}
+          {[-0.58, -0.48, -0.38, -0.28].map((bx, i) => (
+            <mesh key={i} position={[bx, -0.12, 0.555]}>
+              <boxGeometry args={[0.06, 0.04, 0.01]} />
+              <meshStandardMaterial color={0x303030} metalness={0.5} roughness={0.4} />
             </mesh>
           ))}
           
+          {/* Battery level LED bar */}
+          <mesh position={[0.15, 0.18, 0.548]}>
+            <boxGeometry args={[0.5, 0.06, 0.015]} />
+            <meshStandardMaterial color={0x1a1a1a} roughness={0.6} />
+          </mesh>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <LED key={`bat${i}`} position={[-0.05 + i * 0.09, 0.18, 0.558]} baseColor={0x00ff44} altColor={0x001a08} rate={0.15} offset={i * 0.5} size={0.015} />
+          ))}
+          
+          {/* Load level LED bar */}
+          <mesh position={[0.15, 0.08, 0.548]}>
+            <boxGeometry args={[0.5, 0.06, 0.015]} />
+            <meshStandardMaterial color={0x1a1a1a} roughness={0.6} />
+          </mesh>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <LED key={`load${i}`} position={[-0.05 + i * 0.09, 0.08, 0.558]} baseColor={i < 3 ? 0x00ff44 : 0xffaa00} altColor={0x0a0a08} rate={0.08} offset={i * 0.3} size={0.015} />
+          ))}
+          
+          {/* Outlet banks - IEC C13 */}
+          <mesh position={[0.55, -0.02, 0.545]}>
+            <boxGeometry args={[0.6, h * 0.5, 0.02]} />
+            <meshStandardMaterial color={0x0c0c0c} roughness={0.85} />
+          </mesh>
+          {Array.from({ length: 8 }).map((_, o) => {
+            const ox = 0.35 + (o % 4) * 0.13
+            const oy = 0.06 - Math.floor(o / 4) * 0.14
+            return (
+              <group key={o}>
+                <mesh position={[ox, oy, 0.558]}>
+                  <boxGeometry args={[0.08, 0.055, 0.015]} />
+                  <meshStandardMaterial color={0x1a1a1a} />
+                </mesh>
+                {/* IEC pins */}
+                <mesh position={[ox - 0.015, oy, 0.568]}>
+                  <boxGeometry args={[0.008, 0.035, 0.005]} />
+                  <meshStandardMaterial color={0x0a0a0a} />
+                </mesh>
+                <mesh position={[ox + 0.015, oy, 0.568]}>
+                  <boxGeometry args={[0.008, 0.035, 0.005]} />
+                  <meshStandardMaterial color={0x0a0a0a} />
+                </mesh>
+                <mesh position={[ox, oy + 0.015, 0.568]}>
+                  <boxGeometry args={[0.012, 0.006, 0.005]} />
+                  <meshStandardMaterial color={0x0a0a0a} />
+                </mesh>
+              </group>
+            )
+          })}
+          
           {/* Cooling fans */}
-          <SpinningFan position={[0.8, 0.15, 0.555]} size={0.1} />
-          <SpinningFan position={[0.8, -0.15, 0.555]} size={0.1} />
-        </>
+          <SpinningFan position={[0.9, 0.12, 0.555]} size={0.09} />
+          <SpinningFan position={[0.9, -0.12, 0.555]} size={0.09} />
+          
+          {/* Status LEDs cluster */}
+          <group position={[0.95, h / 2 - 0.1, 0.555]}>
+            <LED position={[0, 0, 0]} baseColor={0x00ff44} size={0.012} />
+            <LED position={[0, -0.04, 0]} baseColor={0x00aa44} rate={0.5} size={0.01} />
+            <LED position={[0, -0.08, 0]} baseColor={0xff8800} rate={0.2} size={0.01} />
+          </group>
+        </group>
       )}
     </group>
   )
@@ -1834,60 +2399,58 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
   
   return (
     <group 
-      position={[8.4, 5.5, -12.7]} 
+      position={[17, 5.5, -12.7]} 
       onPointerOver={() => onHover?.("Lebanon Internet Traffic")} 
       onPointerOut={() => onHover?.(null)} 
       onClick={() => onClick?.("contact")}
     >
-      {/* Monitor frame - larger */}
+      {/* Monitor frame */}
       <mesh position={[0, 0, -0.1]}>
-        <boxGeometry args={[7.6, 5.6, 0.18]} />
+        <boxGeometry args={[6.5, 4.8, 0.18]} />
         <meshStandardMaterial color={0x181c20} roughness={0.7} />
       </mesh>
       
       {/* Monitor bezel with LED strip */}
       <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[7.4, 5.4, 0.1]} />
+        <boxGeometry args={[6.3, 4.6, 0.1]} />
         <meshStandardMaterial color={0x101418} roughness={0.5} metalness={0.3} />
       </mesh>
       
       {/* LED accent strip around bezel */}
-      <mesh position={[0, 2.65, 0.06]}>
-        <boxGeometry args={[7.2, 0.02, 0.01]} />
+      <mesh position={[0, 2.25, 0.06]}>
+        <boxGeometry args={[6.1, 0.02, 0.01]} />
         <meshBasicMaterial color={0x00ffe7} />
       </mesh>
-      <mesh position={[0, -2.65, 0.06]}>
-        <boxGeometry args={[7.2, 0.02, 0.01]} />
+      <mesh position={[0, -2.25, 0.06]}>
+        <boxGeometry args={[6.1, 0.02, 0.01]} />
         <meshBasicMaterial color={0x00ffe7} />
       </mesh>
       
       {/* Screen with canvas texture */}
       {tex && (
         <mesh position={[0, 0, 0.055]}>
-          <planeGeometry args={[7.0, 5.2]} />
+          <planeGeometry args={[6.0, 4.4]} />
           <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={1.3} />
         </mesh>
       )}
       
       {/* LED indicator lights */}
-      <mesh position={[3.5, -2.7, 0.06]}>
+      <mesh position={[2.9, -2.35, 0.06]}>
         <sphereGeometry args={[0.04, 8, 8]} />
         <meshBasicMaterial color={0x00ff88} />
       </mesh>
-      <mesh position={[3.3, -2.7, 0.06]}>
+      <mesh position={[2.7, -2.35, 0.06]}>
         <sphereGeometry args={[0.04, 8, 8]} />
         <meshBasicMaterial color={0x0088ff} />
       </mesh>
       
-      {/* Status bar below */}
-      <mesh position={[0, -2.95, 0.03]}>
-        <boxGeometry args={[3.5, 0.15, 0.02]} />
-        <meshStandardMaterial color={0x00ff88} emissive={0x00ff88} emissiveIntensity={0.4} transparent opacity={0.9} />
+      {/* Wall mount arm */}
+      <mesh position={[0, 0, -0.25]}>
+        <boxGeometry args={[0.8, 0.15, 0.3]} />
+        <meshStandardMaterial color={0x202428} metalness={0.7} roughness={0.3} />
       </mesh>
-      
-      {/* Monitor stand/mount */}
-      <mesh position={[0, -3.2, -0.3]}>
-        <boxGeometry args={[1.5, 0.15, 0.6]} />
+      <mesh position={[0, 0, -0.45]}>
+        <boxGeometry args={[0.15, 0.8, 0.15]} />
         <meshStandardMaterial color={0x202428} metalness={0.7} roughness={0.3} />
       </mesh>
     </group>
@@ -2059,12 +2622,13 @@ function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null)
   <ServerRack x={-8} onHover={onHover} onClick={onSectionClick} />
   <ServerRack x={-5} onHover={onHover} onClick={onSectionClick} />
   {/* Inter-rack fiber cables with data flow */}
-  <InterRackCables rackX={-11} />
-  <InterRackCables rackX={-8} />
-  <InterRackCables rackX={-5} />
-  {/* Cross-rack high-bandwidth fiber interconnects */}
-  <CrossRackFiber rack1X={-11} rack2X={-8} />
-  <CrossRackFiber rack1X={-8} rack2X={-5} />
+  {/* Comprehensive rack cabling with realistic cable management */}
+  <RackCableSystem rackX={-11} />
+  <RackCableSystem rackX={-8} />
+  <RackCableSystem rackX={-5} />
+  {/* Cross-rack fiber backbone interconnects */}
+  <CrossRackFiberBackbone rack1X={-11} rack2X={-8} />
+  <CrossRackFiberBackbone rack1X={-8} rack2X={-5} />
       <WallMonitors onHover={onHover} onClick={onSectionClick} />
       <Workstation onHover={onHover} onClick={onSectionClick} />
       <Chair />

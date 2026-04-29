@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls } from "@react-three/drei"
+import { OrbitControls, Text } from "@react-three/drei"
 import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 
@@ -85,94 +85,280 @@ function LED({
   )
 }
 
-// Floor with tiles and grid
+// Floor with realistic raised floor tiles - light gray industrial
 function Floor() {
   return (
     <group>
+      {/* Base floor - light gray concrete */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[60, 50]} />
-        <meshPhysicalMaterial color={0x080e14} roughness={0.4} metalness={0.15} clearcoat={0.1} />
+        <meshStandardMaterial color={0xd8dce0} roughness={0.7} metalness={0.05} />
       </mesh>
-      {/* Raised floor tiles - reduced count for performance */}
+      {/* Raised floor tiles - perforated metal look */}
       {Array.from({ length: 16 }).map((_, fx) =>
         Array.from({ length: 11 }).map((_, fz) => (
           <mesh key={`t-${fx}-${fz}`} position={[(fx - 7.5) * 2, 0.02, (fz - 5) * 2]} receiveShadow>
-            <boxGeometry args={[1.95, 0.04, 1.95]} />
-            <meshPhysicalMaterial color={0x0a1218} roughness={0.75} metalness={0.2} clearcoat={0.15} />
+            <boxGeometry args={[1.92, 0.05, 1.92]} />
+            <meshStandardMaterial color={0xc8ccd0} roughness={0.6} metalness={0.15} />
           </mesh>
         ))
       )}
-      <gridHelper args={[60, 60, 0x00ffe7, 0x00ffe7]} position={[0, 0.01, 0]}>
-        <meshBasicMaterial transparent opacity={0.06} />
-      </gridHelper>
-    </group>
-  )
-}
-
-// Room walls and ceiling
-function Room() {
-  return (
-    <group>
-      {/* Back wall */}
-      <mesh position={[0, 6, -13]}>
-        <boxGeometry args={[60, 12, 0.15]} />
-        <meshPhysicalMaterial color={0x050d14} roughness={0.9} metalness={0.08} />
-      </mesh>
-      {/* Side walls */}
-      <mesh position={[22, 6, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 12, 0.15]} />
-        <meshPhysicalMaterial color={0x050d14} roughness={0.9} metalness={0.08} />
-      </mesh>
-      <mesh position={[-22, 6, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <boxGeometry args={[26, 12, 0.15]} />
-        <meshPhysicalMaterial color={0x050d14} roughness={0.9} metalness={0.08} />
-      </mesh>
-      {/* Ceiling */}
-      <mesh position={[0, 10.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[60, 26]} />
-        <meshPhongMaterial color={0x030a12} />
-      </mesh>
-      {/* Ceiling neon strips */}
-      {[-14, -7, 0, 7, 14].map((x, i) => (
-        <group key={`neon-${i}`}>
-          <mesh position={[x, 9.88, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.06, 0.06, 14, 8]} />
-            <meshBasicMaterial color={0xaaddff} />
-          </mesh>
-          <pointLight position={[x, 9.5, 0]} color={0x6699cc} intensity={0.6} distance={10} />
-        </group>
+      {/* Subtle tile gap grid - dark lines between tiles */}
+      <gridHelper args={[60, 30, 0x909498, 0xa0a4a8]} position={[0, 0.03, 0]} />
+      {/* Perforated vent tiles in cold aisle */}
+      {[-8, -5, 5, 8].map((x, i) => (
+        <mesh key={`vent${i}`} position={[x, 0.025, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[1.9, 3.8]} />
+          <meshStandardMaterial color={0x404448} roughness={0.5} metalness={0.3} />
+        </mesh>
       ))}
     </group>
   )
 }
 
-// Cable tray with fibers
-function CableTray({ z }: { z: number }) {
-  const colors = [0xffcc00, 0x00cccc, 0x00ff88, 0xff6600, 0x0088ff]
+// Room walls and ceiling - realistic light industrial colors
+function Room() {
   return (
     <group>
-      <mesh position={[-3, 8.8, z]}>
-        <boxGeometry args={[30, 0.04, 0.5]} />
-        <meshPhysicalMaterial color={0x1a2830} roughness={0.5} metalness={0.7} />
+      {/* Back wall - light gray industrial */}
+      <mesh position={[0, 6, -13]}>
+        <boxGeometry args={[60, 12, 0.15]} />
+        <meshStandardMaterial color={0xe8ecf0} roughness={0.85} />
       </mesh>
-      {colors.map((col, fb) => {
-        const pts = Array.from({ length: 21 }).map((_, fs) => {
-          const t = fs / 20
-          return new THREE.Vector3(-18 + t * 36, 8.82, z - 0.15 + fb * 0.08 + Math.sin(t * Math.PI * 4 + fb) * 0.02)
-        })
-        const curve = new THREE.CatmullRomCurve3(pts)
-        return (
-          <mesh key={fb}>
-            <tubeGeometry args={[curve, 20, 0.018, 6, false]} />
-            <meshPhysicalMaterial color={col} roughness={0.3} clearcoat={0.8} transparent opacity={0.9} />
+      {/* Side walls */}
+      <mesh position={[22, 6, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[26, 12, 0.15]} />
+        <meshStandardMaterial color={0xe8ecf0} roughness={0.85} />
+      </mesh>
+      <mesh position={[-22, 6, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <boxGeometry args={[26, 12, 0.15]} />
+        <meshStandardMaterial color={0xe8ecf0} roughness={0.85} />
+      </mesh>
+      {/* Ceiling - white acoustic tiles */}
+      <mesh position={[0, 10.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[60, 26]} />
+        <meshStandardMaterial color={0xf5f7fa} roughness={0.9} />
+      </mesh>
+      {/* Ceiling tile grid */}
+      {Array.from({ length: 20 }).map((_, i) => (
+        <mesh key={`cgx${i}`} position={[-28 + i * 3, 10.05, 0]}>
+          <boxGeometry args={[0.02, 0.02, 26]} />
+          <meshStandardMaterial color={0xd0d4d8} />
+        </mesh>
+      ))}
+      {Array.from({ length: 9 }).map((_, i) => (
+        <mesh key={`cgz${i}`} position={[0, 10.05, -13 + i * 3.25]}>
+          <boxGeometry args={[60, 0.02, 0.02]} />
+          <meshStandardMaterial color={0xd0d4d8} />
+        </mesh>
+      ))}
+      {/* Fluorescent light fixtures - bright white panels */}
+      {[-12, -6, 0, 6, 12].map((x, i) => (
+        <group key={`light-${i}`}>
+          {/* Light fixture housing */}
+          <mesh position={[x, 9.95, 0]}>
+            <boxGeometry args={[0.8, 0.1, 12]} />
+            <meshStandardMaterial color={0xffffff} metalness={0.2} roughness={0.4} />
           </mesh>
+          {/* Emissive light panel */}
+          <mesh position={[x, 9.88, 0]}>
+            <boxGeometry args={[0.7, 0.02, 11.5]} />
+            <meshStandardMaterial color={0xffffff} emissive={0xffffff} emissiveIntensity={2.0} />
+          </mesh>
+        </group>
+      ))}
+      {/* Cable trays - silver metal */}
+      <mesh position={[0, 9.2, -4]}>
+        <boxGeometry args={[20, 0.1, 0.8]} />
+        <meshStandardMaterial color={0x909498} metalness={0.7} roughness={0.3} />
+      </mesh>
+      <mesh position={[0, 9.2, 4]}>
+        <boxGeometry args={[20, 0.1, 0.8]} />
+        <meshStandardMaterial color={0x909498} metalness={0.7} roughness={0.3} />
+      </mesh>
+    </group>
+  )
+}
+
+// Animated data pulse on fiber
+function DataPulse({ curve, color, speed, offset }: { curve: THREE.CatmullRomCurve3; color: number; speed: number; offset: number }) {
+  const ref = useRef<THREE.Mesh>(null)
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      const t = ((clock.elapsedTime * speed + offset) % 1)
+      const pos = curve.getPoint(t)
+      ref.current.position.copy(pos)
+    }
+  })
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[0.025, 8, 8]} />
+      <meshBasicMaterial color={color} transparent opacity={0.9} />
+    </mesh>
+  )
+}
+
+// Fiber cable with animated data flow
+function FiberCable({ points, color, pulseCount = 3 }: { points: THREE.Vector3[]; color: number; pulseCount?: number }) {
+  const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
+  return (
+    <group>
+      {/* Fiber jacket */}
+      <mesh>
+        <tubeGeometry args={[curve, 32, 0.012, 8, false]} />
+        <meshPhysicalMaterial color={color} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
+      </mesh>
+      {/* Data pulses */}
+      {Array.from({ length: pulseCount }).map((_, i) => (
+        <DataPulse key={i} curve={curve} color={0xffffff} speed={0.3} offset={i / pulseCount} />
+      ))}
+    </group>
+  )
+}
+
+// Cable tray with realistic fiber bundles
+function CableTray({ z }: { z: number }) {
+  const fiberColors = [0xffcc00, 0x00aaff, 0x00ff88, 0xff6600, 0x0066cc, 0xff00aa, 0x00ffcc, 0xaa00ff]
+  
+  return (
+    <group>
+      {/* Metal cable tray */}
+      <mesh position={[-3, 8.8, z]}>
+        <boxGeometry args={[30, 0.06, 0.6]} />
+        <meshStandardMaterial color={0x707478} metalness={0.8} roughness={0.3} />
+      </mesh>
+      {/* Tray sides */}
+      <mesh position={[-3, 8.82, z - 0.28]}>
+        <boxGeometry args={[30, 0.1, 0.02]} />
+        <meshStandardMaterial color={0x606468} metalness={0.8} roughness={0.3} />
+      </mesh>
+      <mesh position={[-3, 8.82, z + 0.28]}>
+        <boxGeometry args={[30, 0.1, 0.02]} />
+        <meshStandardMaterial color={0x606468} metalness={0.8} roughness={0.3} />
+      </mesh>
+      {/* Fiber bundles with natural sag */}
+      {fiberColors.map((col, fb) => {
+        const pts = Array.from({ length: 25 }).map((_, fs) => {
+          const t = fs / 24
+          const sag = Math.sin(t * Math.PI) * 0.03
+          return new THREE.Vector3(
+            -18 + t * 36, 
+            8.84 + sag, 
+            z - 0.2 + (fb % 4) * 0.1 + Math.floor(fb / 4) * 0.05
+          )
+        })
+        return (
+          <FiberCable key={fb} points={pts} color={col} pulseCount={2} />
         )
       })}
     </group>
   )
 }
 
-// Rack device component
+// Inter-rack patch cables (vertical bundles between racks)
+function InterRackCables({ rackX }: { rackX: number }) {
+  const cableColors = [0x00aaff, 0xffcc00, 0x00ff88, 0xff6600, 0x00ffcc, 0xaa66ff]
+  
+  return (
+    <group position={[rackX, 0, 0]}>
+      {/* Vertical cable bundle from switch to cable tray */}
+      {cableColors.slice(0, 4).map((col, i) => {
+        const offsetX = -0.3 + i * 0.15
+        const pts = [
+          new THREE.Vector3(offsetX, 8.5, 0.6),
+          new THREE.Vector3(offsetX, 8.7, 0.4),
+          new THREE.Vector3(offsetX, 8.8, 0),
+        ]
+        return <FiberCable key={i} points={pts} color={col} pulseCount={1} />
+      })}
+      
+      {/* Patch cables from switch to patch panel */}
+      {Array.from({ length: 8 }).map((_, i) => {
+        const col = cableColors[i % cableColors.length]
+        const startX = -0.5 + (i % 4) * 0.25
+        const endX = -0.55 + (i % 4) * 0.28
+        const pts = [
+          new THREE.Vector3(startX, 8.9, 0.58),
+          new THREE.Vector3(startX, 9.1, 0.65),
+          new THREE.Vector3(endX, 9.55, 0.58),
+        ]
+        return <FiberCable key={`p${i}`} points={pts} color={col} pulseCount={1} />
+      })}
+    </group>
+  )
+}
+
+// SFP Module component
+function SFPModule({ position }: { position: [number, number, number] }) {
+  return (
+    <group position={position}>
+      {/* SFP housing */}
+      <mesh>
+        <boxGeometry args={[0.055, 0.035, 0.08]} />
+        <meshPhysicalMaterial color={0x404448} metalness={0.9} roughness={0.2} />
+      </mesh>
+      {/* Fiber port */}
+      <mesh position={[0, 0, 0.042]}>
+        <cylinderGeometry args={[0.008, 0.008, 0.01, 8]} rotation={[Math.PI / 2, 0, 0]} />
+        <meshBasicMaterial color={0x00ff88} />
+      </mesh>
+      {/* LC connector */}
+      <mesh position={[0, 0, 0.05]}>
+        <boxGeometry args={[0.02, 0.015, 0.015]} />
+        <meshStandardMaterial color={0x0088ff} />
+      </mesh>
+    </group>
+  )
+}
+
+// Spinning fan component
+function SpinningFan({ position, size = 0.08 }: { position: [number, number, number]; size?: number }) {
+  const ref = useRef<THREE.Mesh>(null)
+  useFrame(() => {
+    if (ref.current) ref.current.rotation.z += 0.15
+  })
+  return (
+    <group position={position}>
+      {/* Fan housing */}
+      <mesh>
+        <cylinderGeometry args={[size, size, 0.02, 16]} />
+        <meshStandardMaterial color={0x202428} metalness={0.6} roughness={0.4} />
+      </mesh>
+      {/* Fan blades */}
+      <mesh ref={ref} position={[0, 0, 0.012]}>
+        <circleGeometry args={[size * 0.85, 6]} />
+        <meshStandardMaterial color={0x303438} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Center hub */}
+      <mesh position={[0, 0, 0.015]}>
+        <cylinderGeometry args={[size * 0.2, size * 0.2, 0.015, 12]} />
+        <meshStandardMaterial color={0x404448} metalness={0.8} roughness={0.2} />
+      </mesh>
+    </group>
+  )
+}
+
+// Rack mounting screw
+function RackScrew({ position }: { position: [number, number, number] }) {
+  return (
+    <mesh position={position}>
+      <cylinderGeometry args={[0.012, 0.012, 0.008, 6]} />
+      <meshStandardMaterial color={0x505458} metalness={0.9} roughness={0.1} />
+    </mesh>
+  )
+}
+
+// Brand logo text placeholder (rendered as colored strip since we can't do text easily)
+function BrandStrip({ position, color, width = 0.3 }: { position: [number, number, number]; color: number; width?: number }) {
+  return (
+    <mesh position={position}>
+      <boxGeometry args={[width, 0.06, 0.005]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} />
+    </mesh>
+  )
+}
+
+// Rack device component - detailed with branding
 function RackDevice({
   y,
   h,
@@ -190,7 +376,10 @@ function RackDevice({
   onHover?: (l: string | null) => void
   onClick?: (s: string) => void
 }) {
-  const col = type === "fw" ? 0xeeeeee : type === "switch" ? 0x041424 : type === "srv" ? 0x050505 : 0x111111
+  // Realistic colors based on type
+  const bodyColor = type === "fw" ? 0xe8e8e8 : type === "switch" ? 0x1a1e22 : type === "srv" ? 0x0a0c10 : type === "aruba" ? 0xf5f5f5 : 0x181c20
+  const accentColor = type === "fw" ? 0xcc0000 : type === "switch" ? 0x00aacc : type === "aruba" ? 0xff6600 : 0x0066cc
+  
   return (
     <group
       position={[0, y, 0]}
@@ -198,79 +387,314 @@ function RackDevice({
       onPointerOut={() => onHover?.(null)}
       onClick={() => section && onClick?.(section)}
     >
+      {/* Main chassis with realistic texture */}
       <mesh castShadow>
         <boxGeometry args={[2.12, h, 1.08]} />
-        <meshPhysicalMaterial color={col} roughness={type === "fw" ? 0.6 : 0.45} metalness={type === "fw" ? 0.1 : 0.65} clearcoat={0.35} />
+        <meshStandardMaterial 
+          color={bodyColor} 
+          roughness={type === "fw" || type === "aruba" ? 0.7 : 0.4} 
+          metalness={type === "fw" || type === "aruba" ? 0.1 : 0.6} 
+        />
       </mesh>
-      {/* Ears */}
-      {[-1.04, 1.04].map((ex, i) => (
-        <mesh key={i} position={[ex, 0, 0.54]}>
-          <boxGeometry args={[0.15, h - 0.02, 0.04]} />
-          <meshPhysicalMaterial color={0x2a3a4a} roughness={0.4} metalness={0.8} />
-        </mesh>
+      
+      {/* Bezel/faceplate - slightly protruding */}
+      <mesh position={[0, 0, 0.545]}>
+        <boxGeometry args={[2.1, h - 0.02, 0.01]} />
+        <meshStandardMaterial color={bodyColor} roughness={0.5} metalness={0.3} />
+      </mesh>
+      
+      {/* Rack ears with screw holes */}
+      {[-1.08, 1.08].map((ex, i) => (
+        <group key={`ear${i}`}>
+          <mesh position={[ex, 0, 0.54]}>
+            <boxGeometry args={[0.08, h - 0.02, 0.04]} />
+            <meshStandardMaterial color={0x303438} roughness={0.3} metalness={0.85} />
+          </mesh>
+          {/* Cage nuts / screws */}
+          <RackScrew position={[ex, h * 0.35, 0.56]} />
+          <RackScrew position={[ex, -h * 0.35, 0.56]} />
+        </group>
       ))}
-      {/* Type-specific */}
+      
+      {/* Brand accent stripe */}
+      <mesh position={[0, h / 2 - 0.025, 0.551]}>
+        <boxGeometry args={[2.1, 0.025, 0.005]} />
+        <meshBasicMaterial color={accentColor} />
+      </mesh>
+
+      {/* ===== CISCO SWITCH ===== */}
       {type === "switch" && (
         <>
-          <mesh position={[0.1, 0, 0.55]}>
-            <boxGeometry args={[1.6, h * 0.7, 0.02]} />
-            <meshPhysicalMaterial color={0x111111} roughness={0.8} />
+          {/* Cisco blue brand strip */}
+          <BrandStrip position={[-0.85, h / 2 - 0.06, 0.555]} color={0x049fd9} width={0.25} />
+          
+          {/* Recessed port panel */}
+          <mesh position={[0, 0, 0.54]}>
+            <boxGeometry args={[1.7, h * 0.75, 0.025]} />
+            <meshStandardMaterial color={0x0a0c10} roughness={0.9} />
           </mesh>
-          {Array.from({ length: 24 }).map((_, sp) => {
-            const px = -0.6 + (sp % 12) * 0.12
-            const py = sp < 12 ? 0.08 : -0.08
+          
+          {/* RJ45 Port grid - 48 ports */}
+          {Array.from({ length: 48 }).map((_, sp) => {
+            const row = Math.floor(sp / 24)
+            const col = sp % 24
+            const px = -0.72 + col * 0.06
+            const py = 0.1 - row * 0.15
             return (
               <group key={sp}>
-                <mesh position={[px, py, 0.56]}>
-                  <boxGeometry args={[0.08, 0.06, 0.04]} />
-                  <meshPhongMaterial color={0x050505} />
+                {/* Port housing */}
+                <mesh position={[px, py, 0.555]}>
+                  <boxGeometry args={[0.05, 0.055, 0.02]} />
+                  <meshStandardMaterial color={0x050608} roughness={0.8} />
                 </mesh>
-                <LED position={[px, py - 0.04, 0.58]} baseColor={0x00ff88} altColor={0x113311} rate={2 + Math.random() * 5} offset={Math.random() * 6} size={0.0075} />
+                {/* Port LED */}
+                <LED position={[px, py - 0.035, 0.565]} baseColor={0x00ff88} altColor={0x0a1a0a} rate={1.5 + Math.random() * 4} offset={Math.random() * 6} size={0.006} />
               </group>
             )
           })}
+          
+          {/* SFP+ uplink modules */}
+          {Array.from({ length: 4 }).map((_, sfp) => (
+            <SFPModule key={`sfp${sfp}`} position={[0.82 + (sfp % 2) * 0.08, 0.08 - Math.floor(sfp / 2) * 0.12, 0.555]} />
+          ))}
+          
+          {/* Status LCD */}
+          <mesh position={[0.75, -0.12, 0.555]}>
+            <boxGeometry args={[0.18, 0.08, 0.01]} />
+            <meshBasicMaterial color={0x001a00} />
+          </mesh>
+          <mesh position={[0.75, -0.12, 0.561]}>
+            <boxGeometry args={[0.16, 0.06, 0.002]} />
+            <meshBasicMaterial color={0x00cc44} transparent opacity={0.8} />
+          </mesh>
+          
+          {/* Console port */}
+          <mesh position={[-0.9, -0.05, 0.555]}>
+            <boxGeometry args={[0.05, 0.035, 0.015]} />
+            <meshStandardMaterial color={0x1a5a8a} />
+          </mesh>
         </>
       )}
+
+      {/* ===== FORTIGATE FIREWALL ===== */}
       {type === "fw" && (
         <>
-          <mesh position={[0, -h / 2 + 0.06, 0.55]}>
-            <boxGeometry args={[2.12, 0.04, 0.02]} />
-            <meshPhongMaterial color={0xcc0000} />
+          {/* Fortinet red brand strip */}
+          <BrandStrip position={[-0.85, h / 2 - 0.06, 0.555]} color={0xcc0000} width={0.3} />
+          
+          {/* Red accent line at bottom */}
+          <mesh position={[0, -h / 2 + 0.03, 0.551]}>
+            <boxGeometry args={[2.1, 0.04, 0.006]} />
+            <meshBasicMaterial color={0xcc0000} />
           </mesh>
-          <mesh position={[-0.25, 0, 0.55]}>
-            <boxGeometry args={[1.4, h * 0.8, 0.02]} />
-            <meshPhysicalMaterial color={0x111111} roughness={0.7} />
+          
+          {/* Port panel section */}
+          <mesh position={[-0.35, 0, 0.545]}>
+            <boxGeometry args={[1.3, h * 0.7, 0.02]} />
+            <meshStandardMaterial color={0x101214} roughness={0.85} />
           </mesh>
+          
+          {/* Network ports - 16 GbE ports */}
           {Array.from({ length: 16 }).map((_, pp) => {
-            const px = -0.85 + (pp % 8) * 0.14
-            const py = pp < 8 ? 0.12 : -0.12
-            return <LED key={pp} position={[px, py - 0.07, 0.59]} baseColor={0x00ff00} altColor={0x003300} rate={3 + Math.random() * 4} offset={Math.random() * 6} size={0.0075} />
-          })}
-          <mesh position={[0.65, 0.1, 0.55]}>
-            <boxGeometry args={[0.4, 0.25, 0.03]} />
-            <meshBasicMaterial color={0x001100} />
-          </mesh>
-          <mesh position={[0.65, 0.1, 0.565]}>
-            <boxGeometry args={[0.36, 0.2, 0.01]} />
-            <meshBasicMaterial color={0x00ff44} transparent opacity={0.8} />
-          </mesh>
-        </>
-      )}
-      {type === "srv" && (
-        <>
-          {Array.from({ length: 12 }).map((_, db) => {
-            const bx = -0.7 + (db % 6) * 0.22
-            const by = db < 6 ? 0.15 : -0.15
+            const row = Math.floor(pp / 8)
+            const col = pp % 8
+            const px = -0.85 + col * 0.13
+            const py = 0.12 - row * 0.18
             return (
-              <group key={db}>
-                <mesh position={[bx, by, 0.55]}>
-                  <boxGeometry args={[0.18, 0.26, 0.04]} />
-                  <meshPhysicalMaterial color={0x8899aa} roughness={0.4} metalness={0.8} />
+              <group key={pp}>
+                <mesh position={[px, py, 0.555]}>
+                  <boxGeometry args={[0.08, 0.06, 0.02]} />
+                  <meshStandardMaterial color={0x080a0c} roughness={0.7} />
                 </mesh>
-                <LED position={[bx + 0.06, by, 0.58]} baseColor={0x4488ff} altColor={0x112244} rate={8 + Math.random() * 10} offset={Math.random() * 6} size={0.012} />
+                {/* Link LED */}
+                <LED position={[px - 0.025, py + 0.04, 0.565]} baseColor={0x00ff00} altColor={0x001a00} rate={2 + Math.random() * 3} offset={Math.random() * 6} size={0.006} />
+                {/* Activity LED */}
+                <LED position={[px + 0.025, py + 0.04, 0.565]} baseColor={0xffaa00} altColor={0x1a0a00} rate={8 + Math.random() * 12} offset={Math.random() * 6} size={0.006} />
               </group>
             )
           })}
+          
+          {/* SFP slots */}
+          {Array.from({ length: 4 }).map((_, sfp) => (
+            <SFPModule key={`fwsfp${sfp}`} position={[0.25 + (sfp % 2) * 0.1, 0.08 - Math.floor(sfp / 2) * 0.15, 0.555]} />
+          ))}
+          
+          {/* LCD status display */}
+          <mesh position={[0.7, 0.1, 0.555]}>
+            <boxGeometry args={[0.35, 0.22, 0.02]} />
+            <meshStandardMaterial color={0x080808} roughness={0.6} />
+          </mesh>
+          <mesh position={[0.7, 0.1, 0.566]}>
+            <boxGeometry args={[0.32, 0.18, 0.005]} />
+            <meshBasicMaterial color={0x00ff44} transparent opacity={0.85} />
+          </mesh>
+          
+          {/* USB port */}
+          <mesh position={[0.7, -0.12, 0.555]}>
+            <boxGeometry args={[0.04, 0.02, 0.01]} />
+            <meshStandardMaterial color={0x303030} />
+          </mesh>
+          
+          {/* Power button */}
+          <mesh position={[0.9, 0, 0.555]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.2} />
+          </mesh>
+          <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={0.008} />
+        </>
+      )}
+
+      {/* ===== DELL SERVER ===== */}
+      {type === "srv" && (
+        <>
+          {/* Dell blue brand strip */}
+          <BrandStrip position={[-0.9, h / 2 - 0.08, 0.555]} color={0x007db8} width={0.2} />
+          
+          {/* Drive bays - 12 hot-swap SAS/SATA */}
+          {Array.from({ length: 12 }).map((_, db) => {
+            const row = Math.floor(db / 6)
+            const col = db % 6
+            const bx = -0.72 + col * 0.24
+            const by = 0.15 - row * 0.35
+            return (
+              <group key={db}>
+                {/* Drive caddy */}
+                <mesh position={[bx, by, 0.555]}>
+                  <boxGeometry args={[0.2, 0.28, 0.03]} />
+                  <meshStandardMaterial color={0x606468} roughness={0.35} metalness={0.75} />
+                </mesh>
+                {/* Drive handle */}
+                <mesh position={[bx, by + 0.1, 0.572]}>
+                  <boxGeometry args={[0.16, 0.04, 0.01]} />
+                  <meshStandardMaterial color={0x404448} metalness={0.8} roughness={0.3} />
+                </mesh>
+                {/* Drive LED */}
+                <LED position={[bx + 0.08, by + 0.12, 0.575]} baseColor={0x4488ff} altColor={0x081828} rate={6 + Math.random() * 10} offset={Math.random() * 6} size={0.008} />
+                {/* Activity LED */}
+                <LED position={[bx + 0.08, by + 0.1, 0.575]} baseColor={0x00ff88} altColor={0x081808} rate={15 + Math.random() * 20} offset={Math.random() * 6} size={0.006} />
+              </group>
+            )
+          })}
+          
+          {/* iDRAC port */}
+          <mesh position={[0.85, 0.2, 0.555]}>
+            <boxGeometry args={[0.06, 0.045, 0.015]} />
+            <meshStandardMaterial color={0x0a0a0a} />
+          </mesh>
+          
+          {/* VGA port */}
+          <mesh position={[0.85, 0.1, 0.555]}>
+            <boxGeometry args={[0.05, 0.035, 0.015]} />
+            <meshStandardMaterial color={0x0066cc} />
+          </mesh>
+          
+          {/* USB ports */}
+          {[0, 0.06].map((offset, i) => (
+            <mesh key={`usb${i}`} position={[0.85 + offset, 0, 0.555]}>
+              <boxGeometry args={[0.04, 0.02, 0.01]} />
+              <meshStandardMaterial color={0x303030} />
+            </mesh>
+          ))}
+          
+          {/* Power button */}
+          <mesh position={[0.9, -0.15, 0.555]}>
+            <cylinderGeometry args={[0.025, 0.025, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+            <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.2} />
+          </mesh>
+          <LED position={[0.9, -0.15, 0.562]} baseColor={0x00ff00} size={0.01} />
+        </>
+      )}
+
+      {/* ===== ARUBA CLEARPASS ===== */}
+      {type === "aruba" && (
+        <>
+          {/* Aruba orange brand strip */}
+          <BrandStrip position={[-0.85, 0, 0.555]} color={0xff6600} width={0.25} />
+          
+          {/* Port section */}
+          <mesh position={[0, 0, 0.545]}>
+            <boxGeometry args={[1.5, h * 0.6, 0.015]} />
+            <meshStandardMaterial color={0xe0e0e0} roughness={0.8} />
+          </mesh>
+          
+          {/* Management ports */}
+          {Array.from({ length: 4 }).map((_, p) => (
+            <group key={p}>
+              <mesh position={[-0.4 + p * 0.2, 0, 0.555]}>
+                <boxGeometry args={[0.08, 0.055, 0.015]} />
+                <meshStandardMaterial color={0x101010} roughness={0.7} />
+              </mesh>
+              <LED position={[-0.4 + p * 0.2, -0.04, 0.562]} baseColor={0x00ff88} altColor={0x0a1a0a} rate={2 + Math.random() * 3} offset={Math.random() * 6} size={0.006} />
+            </group>
+          ))}
+          
+          {/* Status LEDs */}
+          <LED position={[0.7, 0.02, 0.555]} baseColor={0x00ff00} size={0.01} />
+          <LED position={[0.7, -0.02, 0.555]} baseColor={0xff6600} rate={1.5} size={0.01} />
+        </>
+      )}
+
+      {/* ===== PATCH PANEL ===== */}
+      {type === "patch" && (
+        <>
+          {/* Panel face */}
+          <mesh position={[0, 0, 0.545]}>
+            <boxGeometry args={[2.0, h * 0.8, 0.02]} />
+            <meshStandardMaterial color={0x0a0c10} roughness={0.85} />
+          </mesh>
+          
+          {/* 24 patch ports */}
+          {Array.from({ length: 24 }).map((_, pp) => {
+            const px = -0.85 + pp * 0.075
+            return (
+              <group key={pp}>
+                <mesh position={[px, 0, 0.555]}>
+                  <boxGeometry args={[0.055, 0.055, 0.015]} />
+                  <meshStandardMaterial color={0x151820} roughness={0.6} />
+                </mesh>
+                {/* Port number label area */}
+                <mesh position={[px, 0.055, 0.555]}>
+                  <boxGeometry args={[0.04, 0.02, 0.002]} />
+                  <meshStandardMaterial color={0xf0f0f0} />
+                </mesh>
+              </group>
+            )
+          })}
+        </>
+      )}
+
+      {/* ===== UPS ===== */}
+      {type === "ups" && (
+        <>
+          {/* APC green brand strip */}
+          <BrandStrip position={[-0.85, h / 2 - 0.1, 0.555]} color={0x00aa44} width={0.2} />
+          
+          {/* Display panel */}
+          <mesh position={[-0.5, 0.1, 0.555]}>
+            <boxGeometry args={[0.4, 0.25, 0.02]} />
+            <meshStandardMaterial color={0x0a0a0a} roughness={0.5} />
+          </mesh>
+          <mesh position={[-0.5, 0.1, 0.566]}>
+            <boxGeometry args={[0.35, 0.2, 0.005]} />
+            <meshBasicMaterial color={0x00ff88} transparent opacity={0.7} />
+          </mesh>
+          
+          {/* Battery status LEDs */}
+          {Array.from({ length: 5 }).map((_, i) => (
+            <LED key={`bat${i}`} position={[-0.1 + i * 0.08, 0.2, 0.555]} baseColor={0x00ff00} altColor={0x002200} rate={0.5} offset={i * 0.3} size={0.012} />
+          ))}
+          
+          {/* Outlet banks */}
+          {Array.from({ length: 8 }).map((_, o) => (
+            <mesh key={`out${o}`} position={[0.4 + (o % 4) * 0.15, 0.1 - Math.floor(o / 4) * 0.2, 0.555]}>
+              <boxGeometry args={[0.1, 0.08, 0.02]} />
+              <meshStandardMaterial color={0x202020} roughness={0.6} />
+            </mesh>
+          ))}
+          
+          {/* Cooling fans */}
+          <SpinningFan position={[0.8, 0.15, 0.555]} size={0.1} />
+          <SpinningFan position={[0.8, -0.15, 0.555]} size={0.1} />
         </>
       )}
     </group>
@@ -585,13 +1009,30 @@ function WallMonitors({ onHover, onClick }: { onHover?: (l: string | null) => vo
   }, [])
 
   return (
-    <group position={[0, 7, -12.5]}>
-      <WallMonitor position={[-3, 1.2, 0]} size={[1.4, 0.9]} section="about" label="NIST Compliance" draw={drawNist} onHover={onHover} onClick={onClick} />
-      <WallMonitor position={[0, 1.4, 0]} size={[1.0, 0.65]} section="skills" label="Cisco DNA" draw={drawDna} onHover={onHover} onClick={onClick} />
-      <WallMonitor position={[3, 1.2, 0]} size={[1.4, 0.9]} section="firewall" label="FortiAnalyzer" draw={drawLogs} onHover={onHover} onClick={onClick} />
-      <WallMonitor position={[-3, 0, 0]} size={[1.4, 0.9]} section="rack" label="OSPF Topology" draw={drawOspf} onHover={onHover} onClick={onClick} />
-      <WallMonitor position={[0, 0, 0]} size={[1.4, 0.9]} section="skills" label="PRTG Sensors" draw={drawPrtg} onHover={onHover} onClick={onClick} />
-      <WallMonitor position={[3, 0, 0]} size={[1.4, 0.9]} section="projects" label="Projects Hub" draw={drawProjects} onHover={onHover} onClick={onClick} />
+    <group position={[0, 5.5, -12.7]}>
+      {/* Video wall frame - professional NOC style */}
+      <mesh position={[0, 1.2, -0.1]}>
+        <boxGeometry args={[14, 6.5, 0.15]} />
+        <meshStandardMaterial color={0x181c20} roughness={0.8} />
+      </mesh>
+      
+      {/* Top row - 3 large monitors */}
+      <WallMonitor position={[-4.2, 2.8, 0]} size={[3.8, 2.4]} section="about" label="NIST Compliance" draw={drawNist} onHover={onHover} onClick={onClick} />
+      <WallMonitor position={[0, 2.8, 0]} size={[3.8, 2.4]} section="skills" label="Cisco DNA" draw={drawDna} onHover={onHover} onClick={onClick} />
+      <WallMonitor position={[4.2, 2.8, 0]} size={[3.8, 2.4]} section="firewall" label="FortiAnalyzer" draw={drawLogs} onHover={onHover} onClick={onClick} />
+      
+      {/* Bottom row - 3 large monitors */}
+      <WallMonitor position={[-4.2, -0.4, 0]} size={[3.8, 2.4]} section="rack" label="OSPF Topology" draw={drawOspf} onHover={onHover} onClick={onClick} />
+      <WallMonitor position={[0, -0.4, 0]} size={[3.8, 2.4]} section="skills" label="PRTG Sensors" draw={drawPrtg} onHover={onHover} onClick={onClick} />
+      <WallMonitor position={[4.2, -0.4, 0]} size={[3.8, 2.4]} section="projects" label="Projects Hub" draw={drawProjects} onHover={onHover} onClick={onClick} />
+      
+      {/* Monitor bezels/frames - behind screens */}
+      {[[-4.2, 2.8], [0, 2.8], [4.2, 2.8], [-4.2, -0.4], [0, -0.4], [4.2, -0.4]].map(([x, y], i) => (
+        <mesh key={`bezel${i}`} position={[x, y, -0.02]}>
+          <boxGeometry args={[3.95, 2.55, 0.04]} />
+          <meshStandardMaterial color={0x101418} roughness={0.6} metalness={0.3} />
+        </mesh>
+      ))}
     </group>
   )
 }
@@ -758,11 +1199,6 @@ function Workstation({ onHover, onClick }: { onHover?: (l: string | null) => voi
       </mesh>
       {/* Coffee */}
       <CoffeeMug position={[-1.3, 2.05, 0.3]} />
-      {/* Headphones */}
-      <mesh position={[-2, 2.2, -0.7]} rotation={[0, 0, Math.PI]}>
-        <torusGeometry args={[0.22, 0.026, 10, 24, Math.PI]} />
-        <meshPhysicalMaterial color={0x141e28} roughness={0.5} metalness={0.5} />
-      </mesh>
       {/* PC Tower on shelf */}
       <group position={[1.8, 0.955, -0.2]}>
         <mesh castShadow>
@@ -824,38 +1260,303 @@ function Chair() {
   )
 }
 
-// Contact sphere
-function ContactSphere({ onHover, onClick }: { onHover?: (l: string | null) => void; onClick?: (s: string) => void }) {
-  const sphere = useRef<THREE.Mesh>(null)
-  const ring1 = useRef<THREE.Mesh>(null)
-  const ring2 = useRef<THREE.Mesh>(null)
-  const glow = useRef<THREE.PointLight>(null)
+// Lebanon Internet Traffic Map - wall mounted display
+function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) => void; onClick?: (s: string) => void }) {
+  // Animated data flow particles
+  const inboundParticles = useRef<THREE.Points>(null)
+  const outboundParticles = useRef<THREE.Points>(null)
+  
+  // Lebanon approximate shape points (simplified)
+  const lebanonOutline = useMemo(() => {
+    // Simplified Lebanon shape - a narrow strip along Mediterranean
+    const points = [
+      new THREE.Vector2(0, 1.8),    // North
+      new THREE.Vector2(0.3, 1.5),
+      new THREE.Vector2(0.4, 1.0),
+      new THREE.Vector2(0.5, 0.5),
+      new THREE.Vector2(0.4, 0),
+      new THREE.Vector2(0.3, -0.5),
+      new THREE.Vector2(0.2, -1.0),
+      new THREE.Vector2(0, -1.5),   // South
+      new THREE.Vector2(-0.1, -1.0),
+      new THREE.Vector2(-0.15, -0.5),
+      new THREE.Vector2(-0.1, 0),
+      new THREE.Vector2(-0.15, 0.5),
+      new THREE.Vector2(-0.1, 1.0),
+      new THREE.Vector2(-0.05, 1.5),
+    ]
+    const shape = new THREE.Shape(points)
+    return shape
+  }, [])
+  
+  // World connection points (major internet hubs)
+  const worldHubs = useMemo(() => [
+    { name: "Frankfurt", x: -1.8, y: 1.2, color: 0x00aaff },
+    { name: "London", x: -2.2, y: 1.5, color: 0x00ff88 },
+    { name: "Paris", x: -2.0, y: 1.0, color: 0x00ffcc },
+    { name: "Dubai", x: 1.5, y: -0.3, color: 0xff8800 },
+    { name: "Mumbai", x: 2.2, y: -0.8, color: 0xffcc00 },
+    { name: "Singapore", x: 2.8, y: -1.2, color: 0xff00aa },
+    { name: "New York", x: -3.0, y: 0.8, color: 0x00ff44 },
+    { name: "São Paulo", x: -2.5, y: -1.5, color: 0xaaff00 },
+  ], [])
+  
+  // Animated traffic flows
+  const trafficFlows = useRef<{pos: number; speed: number; hub: number; inbound: boolean}[]>([])
+  
+  useEffect(() => {
+    // Initialize traffic flow particles
+    trafficFlows.current = Array.from({ length: 24 }).map((_, i) => ({
+      pos: Math.random(),
+      speed: 0.3 + Math.random() * 0.4,
+      hub: Math.floor(Math.random() * worldHubs.length),
+      inbound: i % 2 === 0
+    }))
+  }, [worldHubs.length])
+  
+  // Traffic stats
+  const [stats, setStats] = useState({ inbound: 4.2, outbound: 1.8 })
+  
+  useEffect(() => {
+    const iv = setInterval(() => {
+      setStats({
+        inbound: 4.0 + Math.random() * 0.8,
+        outbound: 1.5 + Math.random() * 0.6
+      })
+    }, 2000)
+    return () => clearInterval(iv)
+  }, [])
 
-  useFrame(({ clock }) => {
-    const t = clock.elapsedTime
-    if (ring1.current) ring1.current.rotation.x += 0.01
-    if (ring2.current) ring2.current.rotation.y += 0.015
-    if (glow.current) glow.current.intensity = 1.8 + Math.sin(t * 1.9) * 0.8
-    if (sphere.current) {
-      ;(sphere.current.material as THREE.MeshPhysicalMaterial).emissiveIntensity = 0.55 + Math.sin(t * 1.9) * 0.32
+  // Draw the map on canvas
+  const drawMap = useCallback((ctx: CanvasRenderingContext2D, t: number) => {
+    const w = 1024, h = 768
+    
+    // Dark background with subtle grid
+    ctx.fillStyle = "#0a1018"
+    ctx.fillRect(0, 0, w, h)
+    
+    // Grid lines
+    ctx.strokeStyle = "#1a2a3a"
+    ctx.lineWidth = 1
+    for (let x = 0; x < w; x += 40) {
+      ctx.beginPath()
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, h)
+      ctx.stroke()
     }
-  })
-
+    for (let y = 0; y < h; y += 40) {
+      ctx.beginPath()
+      ctx.moveTo(0, y)
+      ctx.lineTo(w, y)
+      ctx.stroke()
+    }
+    
+    // Title
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "bold 32px Arial"
+    ctx.fillText("LEBANON INTERNET TRAFFIC", 30, 50)
+    ctx.font = "18px Arial"
+    ctx.fillStyle = "#6a8a9a"
+    ctx.fillText("Real-time Data Flow Visualization", 30, 75)
+    
+    // World map outline (simplified - just major landmasses as context)
+    ctx.strokeStyle = "#2a3a4a"
+    ctx.lineWidth = 2
+    // Europe
+    ctx.beginPath()
+    ctx.ellipse(200, 200, 120, 80, 0, 0, Math.PI * 2)
+    ctx.stroke()
+    // Africa
+    ctx.beginPath()
+    ctx.ellipse(280, 450, 100, 150, 0.2, 0, Math.PI * 2)
+    ctx.stroke()
+    // Asia
+    ctx.beginPath()
+    ctx.ellipse(600, 280, 180, 120, 0, 0, Math.PI * 2)
+    ctx.stroke()
+    // Americas
+    ctx.beginPath()
+    ctx.ellipse(80, 350, 60, 180, 0, 0, Math.PI * 2)
+    ctx.stroke()
+    
+    // Lebanon position (center-ish, east Mediterranean)
+    const lbX = 420, lbY = 300
+    
+    // Lebanon glow
+    const gradient = ctx.createRadialGradient(lbX, lbY, 0, lbX, lbY, 80)
+    gradient.addColorStop(0, "rgba(0, 255, 136, 0.4)")
+    gradient.addColorStop(1, "rgba(0, 255, 136, 0)")
+    ctx.fillStyle = gradient
+    ctx.fillRect(lbX - 80, lbY - 80, 160, 160)
+    
+    // Lebanon shape
+    ctx.fillStyle = "#00ff88"
+    ctx.beginPath()
+    ctx.moveTo(lbX, lbY - 35)
+    ctx.lineTo(lbX + 12, lbY - 25)
+    ctx.lineTo(lbX + 15, lbY - 10)
+    ctx.lineTo(lbX + 12, lbY + 10)
+    ctx.lineTo(lbX + 8, lbY + 30)
+    ctx.lineTo(lbX, lbY + 35)
+    ctx.lineTo(lbX - 5, lbY + 25)
+    ctx.lineTo(lbX - 8, lbY + 10)
+    ctx.lineTo(lbX - 6, lbY - 10)
+    ctx.lineTo(lbX - 4, lbY - 25)
+    ctx.closePath()
+    ctx.fill()
+    
+    // Connection hubs
+    const hubs = [
+      { x: 180, y: 180, name: "Frankfurt", col: "#00aaff" },
+      { x: 140, y: 150, name: "London", col: "#00ff88" },
+      { x: 160, y: 200, name: "Paris", col: "#00ffcc" },
+      { x: 580, y: 380, name: "Dubai", col: "#ff8800" },
+      { x: 700, y: 420, name: "Mumbai", col: "#ffcc00" },
+      { x: 800, y: 480, name: "Singapore", col: "#ff00aa" },
+      { x: 60, y: 250, name: "New York", col: "#00ff44" },
+      { x: 100, y: 550, name: "São Paulo", col: "#aaff00" },
+    ]
+    
+    // Draw connection lines with animated particles
+    for (let i = 0; i < hubs.length; i++) {
+      const hub = hubs[i]
+      
+      // Connection line
+      ctx.strokeStyle = hub.col + "40"
+      ctx.lineWidth = 2
+      ctx.beginPath()
+      ctx.moveTo(lbX, lbY)
+      ctx.lineTo(hub.x, hub.y)
+      ctx.stroke()
+      
+      // Animated data packets
+      const packetCount = 3
+      for (let p = 0; p < packetCount; p++) {
+        const progress = ((t * 0.5 + i * 0.1 + p * 0.33) % 1)
+        const isInbound = p % 2 === 0
+        const actualProgress = isInbound ? progress : 1 - progress
+        const px = lbX + (hub.x - lbX) * actualProgress
+        const py = lbY + (hub.y - lbY) * actualProgress
+        
+        ctx.fillStyle = isInbound ? "#00ff88" : "#ff6600"
+        ctx.beginPath()
+        ctx.arc(px, py, 4, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      
+      // Hub marker
+      ctx.fillStyle = hub.col
+      ctx.beginPath()
+      ctx.arc(hub.x, hub.y, 8, 0, Math.PI * 2)
+      ctx.fill()
+      
+      // Hub label
+      ctx.fillStyle = "#ffffff"
+      ctx.font = "12px Arial"
+      ctx.fillText(hub.name, hub.x - 25, hub.y - 15)
+    }
+    
+    // Lebanon label
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "bold 16px Arial"
+    ctx.fillText("LEBANON", lbX - 35, lbY + 60)
+    ctx.font = "12px monospace"
+    ctx.fillStyle = "#00ff88"
+    ctx.fillText("● BEIRUT IX", lbX - 30, lbY + 78)
+    
+    // Stats panel
+    ctx.fillStyle = "#0a1520"
+    ctx.fillRect(750, 50, 250, 180)
+    ctx.strokeStyle = "#00ff88"
+    ctx.lineWidth = 2
+    ctx.strokeRect(750, 50, 250, 180)
+    
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "bold 18px Arial"
+    ctx.fillText("TRAFFIC STATS", 770, 80)
+    
+    // Inbound
+    ctx.fillStyle = "#00ff88"
+    ctx.font = "14px Arial"
+    ctx.fillText("INBOUND", 770, 110)
+    ctx.font = "bold 28px Arial"
+    const inboundVal = (4.0 + Math.sin(t * 0.8) * 0.5).toFixed(1)
+    ctx.fillText(inboundVal + " Gbps", 770, 140)
+    
+    // Outbound
+    ctx.fillStyle = "#ff6600"
+    ctx.font = "14px Arial"
+    ctx.fillText("OUTBOUND", 770, 170)
+    ctx.font = "bold 28px Arial"
+    const outboundVal = (1.5 + Math.sin(t * 1.2) * 0.3).toFixed(1)
+    ctx.fillText(outboundVal + " Gbps", 770, 200)
+    
+    // Status indicator
+    ctx.fillStyle = "#00ff88"
+    ctx.font = "14px Arial"
+    ctx.fillText("● CONNECTED", 770, 225)
+    
+    // ISP breakdown
+    ctx.fillStyle = "#0a1520"
+    ctx.fillRect(750, 250, 250, 120)
+    ctx.strokeStyle = "#0088ff"
+    ctx.strokeRect(750, 250, 250, 120)
+    
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "bold 14px Arial"
+    ctx.fillText("TOP ISP PEERS", 770, 275)
+    
+    const isps = ["Ogero Telecom", "Touch LB", "Alfa Lebanon", "IDM"]
+    const ispColors = ["#00aaff", "#ff6600", "#00ff88", "#ffcc00"]
+    for (let i = 0; i < isps.length; i++) {
+      ctx.fillStyle = ispColors[i]
+      ctx.fillRect(770, 290 + i * 20, 8, 12)
+      ctx.fillStyle = "#cccccc"
+      ctx.font = "12px Arial"
+      ctx.fillText(isps[i], 785, 300 + i * 20)
+    }
+  }, [])
+  
+  const tex = useCanvasTex(1024, 768, drawMap)
+  
   return (
-    <group position={[12, 2.5, -3]} onPointerOver={() => onHover?.("Contact Me")} onPointerOut={() => onHover?.(null)} onClick={() => onClick?.("contact")}>
-      <mesh ref={sphere}>
-        <sphereGeometry args={[0.8, 32, 32]} />
-        <meshPhysicalMaterial color={0x00ffe7} emissive={0x00ffe7} emissiveIntensity={0.55} roughness={0.1} metalness={0.2} clearcoat={1.0} transparent opacity={0.8} />
+    <group 
+      position={[10, 5, -12.7]} 
+      onPointerOver={() => onHover?.("Lebanon Internet Traffic")} 
+      onPointerOut={() => onHover?.(null)} 
+      onClick={() => onClick?.("contact")}
+    >
+      {/* Monitor frame */}
+      <mesh position={[0, 0, -0.1]}>
+        <boxGeometry args={[5.5, 4.2, 0.15]} />
+        <meshStandardMaterial color={0x181c20} roughness={0.7} />
       </mesh>
-      <mesh ref={ring1}>
-        <torusGeometry args={[1.2, 0.03, 16, 64]} />
-        <meshBasicMaterial color={0x00ffe7} transparent opacity={0.6} />
+      
+      {/* Monitor bezel */}
+      <mesh position={[0, 0, 0]}>
+        <boxGeometry args={[5.3, 4.0, 0.08]} />
+        <meshStandardMaterial color={0x101418} roughness={0.5} metalness={0.3} />
       </mesh>
-      <mesh ref={ring2} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[1.0, 0.02, 16, 64]} />
-        <meshBasicMaterial color={0x0088ff} transparent opacity={0.4} />
+      
+      {/* Screen with canvas texture */}
+      {tex && (
+        <mesh position={[0, 0, 0.045]}>
+          <planeGeometry args={[5.0, 3.75]} />
+          <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={1.2} />
+        </mesh>
+      )}
+      
+      {/* LED indicator light */}
+      <mesh position={[2.4, -1.9, 0.05]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshBasicMaterial color={0x00ff88} />
       </mesh>
-      <pointLight ref={glow} color={0x00ffe7} intensity={1.2} distance={5} />
+      
+      {/* Status text below */}
+      <mesh position={[0, -2.3, 0.02]}>
+        <planeGeometry args={[2.5, 0.25]} />
+        <meshStandardMaterial color={0x00ff88} emissive={0x00ff88} emissiveIntensity={0.3} transparent opacity={0.9} />
+      </mesh>
     </group>
   )
 }
@@ -905,32 +1606,36 @@ function Particles() {
   )
 }
 
-// Lighting
+// Lighting - Realistic datacenter with bright overhead fluorescents
 function Lights() {
   const fwGlow = useRef<THREE.PointLight>(null)
   const rackGlow = useRef<THREE.PointLight>(null)
-  const contactGlow = useRef<THREE.PointLight>(null)
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime
-    if (fwGlow.current) fwGlow.current.intensity = 2.5 + Math.sin(t * 1.3) * 0.7
-    if (rackGlow.current) rackGlow.current.intensity = 3.5 + Math.sin(t * 0.75) * 0.8
-    if (contactGlow.current) contactGlow.current.intensity = 1.8 + Math.sin(t * 1.9) * 0.8
+    // Subtle equipment glow pulsing
+    if (fwGlow.current) fwGlow.current.intensity = 0.6 + Math.sin(t * 1.3) * 0.15
+    if (rackGlow.current) rackGlow.current.intensity = 0.4 + Math.sin(t * 0.75) * 0.1
   })
 
   return (
     <>
-      <ambientLight color={0x1a2a3a} intensity={1.2} />
-      <hemisphereLight color={0x224466} groundColor={0x080810} intensity={1.0} />
-      <directionalLight color={0x6699cc} intensity={0.8} position={[4, 14, 6]} castShadow shadow-mapSize={[2048, 2048]} />
-      <directionalLight color={0x334466} intensity={0.4} position={[5, 8, 15]} />
-      <pointLight ref={rackGlow} color={0x00ffe7} intensity={1.5} distance={16} position={[-8, 3.5, 0]} />
-      <pointLight color={0x0055ff} intensity={1.2} distance={10} position={[7.5, 3.5, 1.5]} />
-      <pointLight ref={fwGlow} color={0xff4400} intensity={1.5} distance={8} position={[0, 2.5, -3.5]} />
-      <pointLight color={0x00ffe7} intensity={1.0} distance={5} position={[7, 2.8, 3]} />
-      <pointLight ref={contactGlow} color={0x00ffe7} intensity={1.2} distance={5} position={[12, 2.5, -3]} />
-      <pointLight color={0x0088ff} intensity={1.0} distance={10} position={[-8, 7, 0]} />
-      <pointLight color={0x00ff88} intensity={0.8} distance={8} position={[-5, 2, 2]} />
+      {/* High ambient for bright datacenter look */}
+      <ambientLight color={0xf8faff} intensity={1.0} />
+      <hemisphereLight color={0xffffff} groundColor={0xe0e4e8} intensity={0.7} />
+      {/* Main overhead directional - simulates fluorescent ceiling */}
+      <directionalLight color={0xffffff} intensity={1.4} position={[0, 14, 2]} castShadow shadow-mapSize={[2048, 2048]} />
+      <directionalLight color={0xf8f8ff} intensity={0.8} position={[8, 12, 6]} />
+      <directionalLight color={0xf8f8ff} intensity={0.6} position={[-8, 12, -4]} />
+      {/* Overhead fluorescent row lights */}
+      {[-12, -6, 0, 6, 12].map((x, i) => (
+        <pointLight key={`fl${i}`} color={0xf5f8ff} intensity={1.8} distance={14} decay={2} position={[x, 9.5, 0]} />
+      ))}
+      {/* Subtle equipment accent glows - toned down for realism */}
+      <pointLight ref={rackGlow} color={0x00ffe7} intensity={0.3} distance={6} position={[-8, 3.5, 0]} />
+      <pointLight color={0x00ccff} intensity={0.2} distance={4} position={[7.5, 3.5, 1.5]} />
+      <pointLight ref={fwGlow} color={0xff6600} intensity={0.4} distance={4} position={[0, 2.5, -3.5]} />
+      <pointLight color={0x00ff88} intensity={0.15} distance={3} position={[7, 2.8, 3]} />
     </>
   )
 }
@@ -939,24 +1644,28 @@ function Lights() {
 function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null) => void; onSectionClick: (s: string) => void }) {
   return (
     <>
-      <color attach="background" args={[0x020608]} />
-      <fog attach="fog" args={[0x020608, 0, 60]} />
+      <color attach="background" args={[0xe8ecf0]} />
+      <fog attach="fog" args={[0xe8ecf0, 30, 80]} />
       <Lights />
       <Floor />
       <Room />
       <CableTray z={0} />
       <CableTray z={-3} />
-      <ServerRack x={-11} onHover={onHover} onClick={onSectionClick} />
-      <ServerRack x={-8} onHover={onHover} onClick={onSectionClick} />
-      <ServerRack x={-5} onHover={onHover} onClick={onSectionClick} />
+<ServerRack x={-11} onHover={onHover} onClick={onSectionClick} />
+  <ServerRack x={-8} onHover={onHover} onClick={onSectionClick} />
+  <ServerRack x={-5} onHover={onHover} onClick={onSectionClick} />
+  {/* Inter-rack fiber cables with data flow */}
+  <InterRackCables rackX={-11} />
+  <InterRackCables rackX={-8} />
+  <InterRackCables rackX={-5} />
       <WallMonitors onHover={onHover} onClick={onSectionClick} />
       <Workstation onHover={onHover} onClick={onSectionClick} />
       <Chair />
-      <ContactSphere onHover={onHover} onClick={onSectionClick} />
+      <LebanonTrafficMap onHover={onHover} onClick={onSectionClick} />
       <Particles />
       <OrbitControls enableDamping dampingFactor={0.07} maxPolarAngle={Math.PI / 2.05} minDistance={4} maxDistance={30} target={[0, 3, 0]} />
       <EffectComposer>
-        <Bloom intensity={0.6} luminanceThreshold={0.9} luminanceSmoothing={0.4} />
+        <Bloom intensity={0.15} luminanceThreshold={0.95} luminanceSmoothing={0.5} />
       </EffectComposer>
     </>
   )

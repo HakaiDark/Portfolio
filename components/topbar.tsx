@@ -15,8 +15,8 @@ export function Topbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between border-b border-border/20 bg-gradient-to-b from-background/95 to-transparent px-6 py-4 backdrop-blur-sm">
       {/* Logo */}
-      <div className="font-mono text-xl font-bold tracking-widest text-foreground">
-        MO<span className="text-destructive">.</span>YASSIN
+      <div className="font-mono text-lg font-bold tracking-widest text-foreground">
+        MOHAMMAD<span className="text-destructive">.</span>YASSIN
       </div>
 
       {/* Status Bar */}

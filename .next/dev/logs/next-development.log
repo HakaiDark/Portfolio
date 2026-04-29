@@ -1,0 +1,98 @@
+{"timestamp":"00:00:01.700","source":"Server","level":"LOG","message":""}
+{"timestamp":"00:00:27.731","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:00:27.756","source":"Server","level":"WARN","message":"[browser] \"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\""}
+{"timestamp":"00:00:27.757","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:00:28.480","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:28.530","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:28.531","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:30.685","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:30.736","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:30.736","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:30.737","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:30.737","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:30.737","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:32.621","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:32.622","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:32.622","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:32.874","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:32.874","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:32.874","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:33.528","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:33.529","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:33.530","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:34.068","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:34.069","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:34.070","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:38.052","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:38.054","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:38.055","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:39.273","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:39.311","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:39.312","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:39.449","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:39.449","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:39.450","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:45.733","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:45.735","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:45.735","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:45.987","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:45.988","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:45.988","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:50.607","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:00:50.609","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:00:50.609","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:43.796","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:43.797","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:43.798","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:44.192","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:44.192","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:44.193","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:44.852","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:44.853","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:44.853","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:46.178","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:46.179","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:46.179","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.351","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.352","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:54.352","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.448","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.448","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.448","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:54.448","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:02:54.449","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:02:54.449","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:08:14.500","source":"Server","level":"LOG","message":"✓ Compiled in 101ms"}
+{"timestamp":"00:08:15.135","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:08:15.184","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:08:15.184","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:11:50.766","source":"Server","level":"LOG","message":"✓ Compiled in 50ms"}
+{"timestamp":"00:11:51.129","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:11:51.129","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:11:51.130","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:13:36.862","source":"Server","level":"LOG","message":"✓ Compiled in 60ms"}
+{"timestamp":"00:13:36.963","source":"Browser","level":"ERROR","message":"./components/datacenter-scene.tsx:948:11\nExpression expected\n  946 |           </mesh>\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\n> 948 |         </>\n      |           ^\n  949 |       )}\n  950 |\n  951 |       {/* ===== DELL SERVER ===== */}\n\nParsing ecmascript source code failed\n\nImport trace:\n  Client Component Browser:\n    ./components/datacenter-scene.tsx [Client Component Browser]\n    ./app/page.tsx [Client Component Browser]\n    ./app/page.tsx [Server Component]"}
+{"timestamp":"00:13:36.978","source":"Server","level":"ERROR","message":"[browser] \"./components/datacenter-scene.tsx:948:11\\nExpression expected\\n  946 |           </mesh>\\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\\n> 948 |         </>\\n      |           ^\\n  949 |       )}\\n  950 |\\n  951 |       {/* ===== DELL SERVER ===== */}\\n\\nParsing ecmascript source code failed\\n\\nImport trace:\\n  Client Component Browser:\\n    ./components/datacenter-scene.tsx [Client Component Browser]\\n    ./app/page.tsx [Client Component Browser]\\n    ./app/page.tsx [Server Component]\" \"\""}
+{"timestamp":"00:13:36.978","source":"Browser","level":"ERROR","message":"./components/datacenter-scene.tsx:948:11\nExpression expected\n  946 |           </mesh>\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\n> 948 |         </>\n      |           ^\n  949 |       )}\n  950 |\n  951 |       {/* ===== DELL SERVER ===== */}\n\nParsing ecmascript source code failed\n\nImport trace:\n  Client Component Browser:\n    ./components/datacenter-scene.tsx [Client Component Browser]\n    ./app/page.tsx [Client Component Browser]\n    ./app/page.tsx [Server Component] \"\""}
+{"timestamp":"00:13:37.065","source":"Browser","level":"ERROR","message":"./components/datacenter-scene.tsx:948:11\nExpression expected\n  946 |           </mesh>\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\n> 948 |         </>\n      |           ^\n  949 |       )}\n  950 |\n  951 |       {/* ===== DELL SERVER ===== */}\n\nParsing ecmascript source code failed\n\nImport trace:\n  Client Component Browser:\n    ./components/datacenter-scene.tsx [Client Component Browser]\n    ./app/page.tsx [Client Component Browser]\n    ./app/page.tsx [Server Component]"}
+{"timestamp":"00:13:37.065","source":"Server","level":"ERROR","message":"[browser] \"./components/datacenter-scene.tsx:948:11\\nExpression expected\\n  946 |           </mesh>\\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\\n> 948 |         </>\\n      |           ^\\n  949 |       )}\\n  950 |\\n  951 |       {/* ===== DELL SERVER ===== */}\\n\\nParsing ecmascript source code failed\\n\\nImport trace:\\n  Client Component Browser:\\n    ./components/datacenter-scene.tsx [Client Component Browser]\\n    ./app/page.tsx [Client Component Browser]\\n    ./app/page.tsx [Server Component]\" \"\""}
+{"timestamp":"00:13:37.065","source":"Browser","level":"ERROR","message":"./components/datacenter-scene.tsx:948:11\nExpression expected\n  946 |           </mesh>\n  947 |           <LED position={[0.9, 0, 0.562]} baseColor={0x00ff00} size={...\n> 948 |         </>\n      |           ^\n  949 |       )}\n  950 |\n  951 |       {/* ===== DELL SERVER ===== */}\n\nParsing ecmascript source code failed\n\nImport trace:\n  Client Component Browser:\n    ./components/datacenter-scene.tsx [Client Component Browser]\n    ./app/page.tsx [Client Component Browser]\n    ./app/page.tsx [Server Component] \"\""}
+{"timestamp":"00:14:08.820","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:14:08.820","source":"Server","level":"WARN","message":"[browser] \"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\""}
+{"timestamp":"00:14:08.820","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:14:09.115","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:09.144","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:14:09.145","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:09.170","source":"Browser","level":"LOG","message":"THREE.WebGLRenderer: Context Lost."}
+{"timestamp":"00:14:12.102","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:12.102","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:12.102","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:14:12.102","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:12.103","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:14:12.103","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:24.848","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:24.896","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:14:24.897","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:25.058","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}
+{"timestamp":"00:14:25.059","source":"Server","level":"WARN","message":"[browser] \"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead.\""}
+{"timestamp":"00:14:25.059","source":"Browser","level":"WARN","message":"THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."}

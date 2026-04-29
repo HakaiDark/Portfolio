@@ -20,10 +20,14 @@ function BlinkingLED({
 }) {
   const ref = useRef<MeshStandardMaterial>(null)
 
+  const lastState = useRef<number | null>(null)
   useFrame(({ clock }) => {
     if (ref.current) {
       const blink = Math.sin(clock.elapsedTime * speed * Math.PI) > 0 ? 1 : 0.2
-      ref.current.emissiveIntensity = blink
+      if (lastState.current !== blink) {
+        ref.current.emissiveIntensity = blink
+        lastState.current = blink
+      }
     }
   })
 
@@ -170,8 +174,8 @@ export function ServerRacks({ onRackClick }: ServerRacksProps) {
 
       {/* Inter-rack cables */}
       {[-0.6, 0.6].map((x, i) => (
-        <mesh key={i} position={[x, 1.8, 0.35]}>
-          <cylinderGeometry args={[0.015, 0.015, 0.3, 8]} rotation={[0, 0, Math.PI / 2]} />
+        <mesh key={i} position={[x, 1.8, 0.35]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.015, 0.015, 0.3, 8]} />
           <meshStandardMaterial color={i === 0 ? "#f4a020" : "#20a0f4"} />
         </mesh>
       ))}

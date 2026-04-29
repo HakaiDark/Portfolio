@@ -3,7 +3,7 @@
 import { useRef, useState } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Html, Text } from "@react-three/drei"
-import { Mesh } from "three"
+import { Mesh, MeshStandardMaterial } from "three"
 
 interface WorkstationProps {
   onMonitor1Click: () => void
@@ -26,7 +26,7 @@ function Monitor({
 
   useFrame(({ clock }) => {
     if (screenRef.current && hovered) {
-      screenRef.current.material.emissiveIntensity = 0.3 + Math.sin(clock.elapsedTime * 2) * 0.1
+      ;(screenRef.current.material as MeshStandardMaterial).emissiveIntensity = 0.3 + Math.sin(clock.elapsedTime * 2) * 0.1
     }
   })
 
@@ -74,7 +74,7 @@ function Monitor({
             fontSize={0.06}
             color="#4a9a6a"
             anchorX="center"
-            anchorY="center"
+            anchorY="middle"
           >
             98%
           </Text>
@@ -82,7 +82,7 @@ function Monitor({
             fontSize={0.025}
             color="#5a6a7a"
             anchorX="center"
-            anchorY="center"
+            anchorY="middle"
             position={[0, -0.12, 0]}
           >
             NETWORK HEALTH
@@ -114,7 +114,7 @@ function Monitor({
 
 export function Workstation({ onMonitor1Click, onMonitor2Click }: WorkstationProps) {
   return (
-    <group position={[2.5, 1.4, -2]}>
+    <group position={[2.5, 1.44, -2]} scale={1.6}>
       {/* Desk */}
       <mesh position={[0, -0.55, 0]} receiveShadow castShadow>
         <boxGeometry args={[2.5, 0.05, 0.9]} />

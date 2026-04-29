@@ -2,7 +2,7 @@
 
 import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls, Text } from "@react-three/drei"
+import { OrbitControls, Text, BakeShadows, Preload } from "@react-three/drei"
 import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 
@@ -79,10 +79,14 @@ function LED({
   size?: number
 }) {
   const ref = useRef<THREE.Mesh>(null)
+  const isBase = useRef(true)
   useFrame(({ clock }) => {
-    if (ref.current) {
+    if (ref.current && rate > 0) {
       const on = Math.sin(clock.elapsedTime * rate + offset) > 0.18
-      ;(ref.current.material as THREE.MeshBasicMaterial).color.setHex(on ? baseColor : altColor)
+      if (on !== isBase.current) {
+        ;(ref.current.material as THREE.MeshBasicMaterial).color.setHex(on ? baseColor : altColor)
+        isBase.current = on
+      }
     }
   })
   return (
@@ -205,19 +209,19 @@ function Room() {
         <meshStandardMaterial color={0xe8ecf0} roughness={0.85} />
       </mesh>
       {/* Ceiling - white acoustic tiles */}
-      <mesh position={[0, 10.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
+      <mesh position={[0, 13.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <planeGeometry args={[60, 26]} />
         <meshStandardMaterial color={0xf5f7fa} roughness={0.9} />
       </mesh>
       {/* Ceiling tile grid */}
       {Array.from({ length: 20 }).map((_, i) => (
-        <mesh key={`cgx${i}`} position={[-28 + i * 3, 10.05, 0]}>
+        <mesh key={`cgx${i}`} position={[-28 + i * 3, 13.05, 0]}>
           <boxGeometry args={[0.02, 0.02, 26]} />
           <meshStandardMaterial color={0xd0d4d8} />
         </mesh>
       ))}
       {Array.from({ length: 9 }).map((_, i) => (
-        <mesh key={`cgz${i}`} position={[0, 10.05, -13 + i * 3.25]}>
+        <mesh key={`cgz${i}`} position={[0, 13.05, -13 + i * 3.25]}>
           <boxGeometry args={[60, 0.02, 0.02]} />
           <meshStandardMaterial color={0xd0d4d8} />
         </mesh>
@@ -226,33 +230,33 @@ function Room() {
       {[-12, -6, 0, 6, 12].map((x, i) => (
         <group key={`light-${i}`}>
           {/* Light fixture housing */}
-          <mesh position={[x, 9.95, 0]}>
+          <mesh position={[x, 12.95, 0]}>
             <boxGeometry args={[0.8, 0.1, 12]} />
             <meshStandardMaterial color={0xffffff} metalness={0.2} roughness={0.4} />
           </mesh>
           {/* Emissive light panel */}
-          <mesh position={[x, 9.88, 0]}>
+          <mesh position={[x, 12.88, 0]}>
             <boxGeometry args={[0.7, 0.02, 11.5]} />
             <meshStandardMaterial color={0xffffff} emissive={0xffffff} emissiveIntensity={2.0} />
           </mesh>
         </group>
       ))}
       {/* Cable trays - silver metal */}
-      <mesh position={[0, 9.2, -4]}>
+      <mesh position={[0, 12.2, -4]}>
         <boxGeometry args={[20, 0.1, 0.8]} />
         <meshStandardMaterial color={0x909498} metalness={0.7} roughness={0.3} />
       </mesh>
-      <mesh position={[0, 9.2, 4]}>
+      <mesh position={[0, 12.2, 4]}>
         <boxGeometry args={[20, 0.1, 0.8]} />
         <meshStandardMaterial color={0x909498} metalness={0.7} roughness={0.3} />
       </mesh>
       
       {/* Fire suppression system nozzles */}
       {[-15, -10, -5, 0, 5, 10, 15].map((x, i) => (
-        <FireSuppressionNozzle key={`fire${i}`} position={[x, 9.9, -6]} />
+        <FireSuppressionNozzle key={`fire${i}`} position={[x, 12.9, -6]} />
       ))}
       {[-15, -10, -5, 0, 5, 10, 15].map((x, i) => (
-        <FireSuppressionNozzle key={`fire2${i}`} position={[x, 9.9, 6]} />
+        <FireSuppressionNozzle key={`fire2${i}`} position={[x, 12.9, 6]} />
       ))}
       
       {/* Warning labels on walls */}
@@ -341,22 +345,22 @@ function CableTray({ z }: { z: number }) {
   return (
     <group>
       {/* Galvanized steel cable tray - ladder style */}
-      <mesh position={[-3, 8.88, z]}>
+      <mesh position={[-3, 11.88, z]}>
         <boxGeometry args={[32, 0.04, 0.7]} />
         <meshPhysicalMaterial color={0x808488} metalness={0.85} roughness={0.25} />
       </mesh>
       {/* Tray side rails */}
-      <mesh position={[-3, 8.92, z - 0.33]}>
+      <mesh position={[-3, 11.92, z - 0.33]}>
         <boxGeometry args={[32, 0.12, 0.03]} />
         <meshPhysicalMaterial color={0x707478} metalness={0.85} roughness={0.25} />
       </mesh>
-      <mesh position={[-3, 8.92, z + 0.33]}>
+      <mesh position={[-3, 11.92, z + 0.33]}>
         <boxGeometry args={[32, 0.12, 0.03]} />
         <meshPhysicalMaterial color={0x707478} metalness={0.85} roughness={0.25} />
       </mesh>
       {/* Cross rungs */}
       {Array.from({ length: 22 }).map((_, r) => (
-        <mesh key={r} position={[-17 + r * 1.5, 8.88, z]}>
+        <mesh key={r} position={[-17 + r * 1.5, 11.88, z]}>
           <boxGeometry args={[0.025, 0.03, 0.64]} />
           <meshPhysicalMaterial color={0x606468} metalness={0.8} roughness={0.3} />
         </mesh>
@@ -367,7 +371,7 @@ function CableTray({ z }: { z: number }) {
           const t = fs / 29
           const sag = Math.sin(t * Math.PI) * 0.015
           const wobble = Math.sin(t * Math.PI * 3 + fb) * 0.008
-          return new THREE.Vector3(-17 + t * 34, 8.92 + sag + wobble, z - 0.22 + fb * 0.035)
+          return new THREE.Vector3(-17 + t * 34, 11.92 + sag + wobble, z - 0.22 + fb * 0.035)
         })
         return <FiberCable key={`sm${fb}`} points={pts} color={col} pulseCount={5} />
       })}
@@ -377,7 +381,7 @@ function CableTray({ z }: { z: number }) {
           const t = fs / 29
           const sag = Math.sin(t * Math.PI) * 0.018
           const wobble = Math.sin(t * Math.PI * 2.5 + fb * 1.2) * 0.006
-          return new THREE.Vector3(-17 + t * 34, 8.93 + sag + wobble, z + fb * 0.035)
+          return new THREE.Vector3(-17 + t * 34, 11.93 + sag + wobble, z + fb * 0.035)
         })
         return <FiberCable key={`mm${fb}`} points={pts} color={col} pulseCount={4} />
       })}
@@ -386,13 +390,13 @@ function CableTray({ z }: { z: number }) {
         const pts = Array.from({ length: 30 }).map((_, fs) => {
           const t = fs / 29
           const sag = Math.sin(t * Math.PI) * 0.02
-          return new THREE.Vector3(-17 + t * 34, 8.91 + sag, z + 0.18 + cb * 0.04)
+          return new THREE.Vector3(-17 + t * 34, 11.91 + sag, z + 0.18 + cb * 0.04)
         })
         return <CopperCable key={`cu${cb}`} points={pts} color={col} pulseCount={2} thickness={0.015} />
       })}
       {/* Velcro cable ties at intervals */}
       {Array.from({ length: 12 }).map((_, i) => (
-        <CableTie key={i} position={[-15 + i * 2.5, 8.95, z]} width={0.5} />
+        <CableTie key={i} position={[-15 + i * 2.5, 11.95, z]} width={0.5} />
       ))}
     </group>
   )
@@ -509,8 +513,8 @@ function RackCableSystem({ rackX }: { rackX: number }) {
           new THREE.Vector3(offsetX + 0.03, 8.45, 0.62),
           new THREE.Vector3(offsetX + 0.02, 8.6, 0.55),
           new THREE.Vector3(offsetX, 8.75, 0.35),
-          new THREE.Vector3(offsetX - 0.02, 8.85, 0.1),
-          new THREE.Vector3(offsetX, 8.9, -0.1),
+          new THREE.Vector3(offsetX - 0.02, 10.85, 0.1),
+          new THREE.Vector3(offsetX, 11.9, -0.1),
         ]
         return <FiberCable key={`fu${i}`} points={pts} color={0xffcc00} pulseCount={5} />
       })}
@@ -537,9 +541,9 @@ function RackCableSystem({ rackX }: { rackX: number }) {
       {[0.18, -0.18].map((oz, i) => {
         const pts = [
           new THREE.Vector3(0, 10.3, oz + 0.6),
-          new THREE.Vector3(0.02, 9.7, oz + 0.45),
-          new THREE.Vector3(0, 9.1, oz + 0.2),
-          new THREE.Vector3(0, 8.9, oz),
+          new THREE.Vector3(0.02, 11.0, oz + 0.45),
+          new THREE.Vector3(0, 11.5, oz + 0.2),
+          new THREE.Vector3(0, 11.9, oz),
         ]
         return <FiberCable key={`vt${i}`} points={pts} color={i === 0 ? 0x00ff88 : 0xff6600} pulseCount={4} />
       })}
@@ -602,8 +606,8 @@ function SFPModule({ position }: { position: [number, number, number] }) {
         <meshPhysicalMaterial color={0x404448} metalness={0.9} roughness={0.2} />
       </mesh>
       {/* Fiber port */}
-      <mesh position={[0, 0, 0.042]}>
-        <cylinderGeometry args={[0.008, 0.008, 0.01, 8]} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh position={[0, 0, 0.042]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.008, 0.008, 0.01, 8]} />
         <meshBasicMaterial color={0x00ff88} />
       </mesh>
       {/* LC connector */}
@@ -869,8 +873,8 @@ function RackDevice({
             <meshStandardMaterial color={0x202020} />
           </mesh>
           {/* Power button + LED */}
-          <mesh position={[0.93, 0, 0.557]}>
-            <cylinderGeometry args={[0.02, 0.02, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
+          <mesh position={[0.93, 0, 0.557]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.01, 12]} />
             <meshPhysicalMaterial color={0x383838} metalness={0.9} roughness={0.15} />
           </mesh>
           <LED position={[0.93, 0, 0.564]} baseColor={0x00ff00} size={0.009} rate={0.4} />
@@ -889,159 +893,193 @@ function RackDevice({
       {/* ===== DELL SERVER ===== */}
       {type === "srv" && (
         <>
-          {/* Dell logo text */}
-          <Text
-            fontSize={0.1}
-            color="#007db8"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.98, h / 2 - 0.08, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
+          {/* DELL wordmark */}
+          <Text fontSize={0.11} color="#007db8" anchorX="left" anchorY="middle"
+            position={[-0.98, h / 2 - 0.08, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
             DELL
           </Text>
           {/* PowerEdge model */}
-          <Text
-            fontSize={0.05}
-            color="#888888"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.98, h / 2 - 0.17, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
+          <Text fontSize={0.045} color="#888888" anchorX="left" anchorY="middle"
+            position={[-0.98, h / 2 - 0.17, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
             PowerEdge R750
           </Text>
-          {/* Dell blue brand strip */}
-          <BrandStrip position={[-0.55, h / 2 - 0.08, 0.555]} color={0x007db8} width={0.12} />
+          <BrandStrip position={[-0.45, h / 2 - 0.08, 0.558]} color={0x007db8} width={0.15} />
           
-          {/* Drive bays - 12 hot-swap SAS/SATA */}
+          {/* Honeycomb bezel ventilation (left side) */}
+          <mesh position={[-0.8, 0.05, 0.548]}>
+            <boxGeometry args={[0.3, 0.5, 0.015]} />
+            <meshStandardMaterial color={0x06080a} roughness={0.9} />
+          </mesh>
+          {Array.from({ length: 15 }).map((_, vx) =>
+            Array.from({ length: 10 }).map((_, vy) => (
+              <mesh key={`v${vx}-${vy}`} position={[-0.92 + vx * 0.018, -0.15 + vy * 0.045 + (vx % 2) * 0.02, 0.556]} rotation={[Math.PI / 2, 0, 0]}>
+                <cylinderGeometry args={[0.007, 0.007, 0.004, 6]} />
+                <meshStandardMaterial color={0x030405} />
+              </mesh>
+            ))
+          )}
+
+          {/* Drive bays - 12x 3.5" hot-swap SAS */}
           {Array.from({ length: 12 }).map((_, db) => {
             const row = Math.floor(db / 6)
             const col = db % 6
-            const bx = -0.72 + col * 0.24
+            const bx = -0.5 + col * 0.22
             const by = 0.15 - row * 0.35
             return (
               <group key={db}>
                 {/* Drive caddy */}
                 <mesh position={[bx, by, 0.555]}>
                   <boxGeometry args={[0.2, 0.28, 0.03]} />
-                  <meshStandardMaterial color={0x606468} roughness={0.35} metalness={0.75} />
+                  <meshPhysicalMaterial color={0x3a4048} roughness={0.3} metalness={0.8} />
                 </mesh>
-                {/* Drive handle */}
-                <mesh position={[bx, by + 0.1, 0.572]}>
-                  <boxGeometry args={[0.16, 0.04, 0.01]} />
-                  <meshStandardMaterial color={0x404448} metalness={0.8} roughness={0.3} />
+                <mesh position={[bx - 0.07, by, 0.57]}>
+                  <boxGeometry args={[0.04, 0.25, 0.005]} />
+                  <meshStandardMaterial color={0x15181c} />
                 </mesh>
-                {/* Drive LED */}
-                <LED position={[bx + 0.08, by + 0.12, 0.575]} baseColor={0x4488ff} altColor={0x081828} rate={6 + Math.random() * 10} offset={Math.random() * 6} size={0.008} />
+                {/* Drive release button */}
+                <mesh position={[bx + 0.07, by - 0.08, 0.57]}>
+                  <boxGeometry args={[0.03, 0.08, 0.01]} />
+                  <meshStandardMaterial color={0x600000} />
+                </mesh>
+                {/* Status LED */}
+                <LED position={[bx + 0.07, by + 0.1, 0.575]} baseColor={0x4488ff} altColor={0x081828} rate={4 + Math.random() * 6} offset={Math.random() * 6} size={0.007} />
                 {/* Activity LED */}
-                <LED position={[bx + 0.08, by + 0.1, 0.575]} baseColor={0x00ff88} altColor={0x081808} rate={15 + Math.random() * 20} offset={Math.random() * 6} size={0.006} />
+                <LED position={[bx + 0.07, by + 0.05, 0.575]} baseColor={0x00ff88} altColor={0x081808} rate={15 + Math.random() * 20} offset={Math.random() * 6} size={0.005} />
               </group>
             )
           })}
           
-          {/* iDRAC port */}
-          <mesh position={[0.85, 0.2, 0.555]}>
-            <boxGeometry args={[0.06, 0.045, 0.015]} />
-            <meshStandardMaterial color={0x0a0a0a} />
+          {/* Quick Sync / iDRAC control panel (right side) */}
+          <mesh position={[0.88, 0.15, 0.555]}>
+            <boxGeometry args={[0.15, 0.25, 0.015]} />
+            <meshStandardMaterial color={0x080a0c} />
+          </mesh>
+          <mesh position={[0.88, 0.2, 0.563]}>
+            <boxGeometry args={[0.1, 0.08, 0.005]} />
+            <meshBasicMaterial color={0x00aacc} transparent opacity={0.6} />
           </mesh>
           
           {/* VGA port */}
-          <mesh position={[0.85, 0.1, 0.555]}>
-            <boxGeometry args={[0.05, 0.035, 0.015]} />
-            <meshStandardMaterial color={0x0066cc} />
+          <mesh position={[0.85, 0, 0.558]}>
+            <boxGeometry args={[0.04, 0.025, 0.015]} />
+            <meshStandardMaterial color={0x0044aa} />
           </mesh>
-          
           {/* USB ports */}
-          {[0, 0.06].map((offset, i) => (
-            <mesh key={`usb${i}`} position={[0.85 + offset, 0, 0.555]}>
-              <boxGeometry args={[0.04, 0.02, 0.01]} />
-              <meshStandardMaterial color={0x303030} />
+          {[0, 0.05].map((offset, i) => (
+            <mesh key={`usb${i}`} position={[0.92, -0.05 + offset, 0.558]}>
+              <boxGeometry args={[0.035, 0.015, 0.01]} />
+              <meshStandardMaterial color={0x1a1a1a} />
             </mesh>
           ))}
-          
           {/* Power button */}
-          <mesh position={[0.9, -0.15, 0.555]}>
-            <cylinderGeometry args={[0.025, 0.025, 0.01, 12]} rotation={[Math.PI / 2, 0, 0]} />
-            <meshStandardMaterial color={0x404040} metalness={0.8} roughness={0.2} />
+          <mesh position={[0.88, -0.15, 0.558]} rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.02, 0.02, 0.01, 12]} />
+            <meshStandardMaterial color={0x404040} metalness={0.8} />
           </mesh>
-          <LED position={[0.9, -0.15, 0.562]} baseColor={0x00ff00} size={0.01} />
+          <LED position={[0.88, -0.15, 0.565]} baseColor={0x00ff00} size={0.008} rate={0} />
+
+          {/* Dual Rear Power Supplies */}
+          {[-0.8, -0.6].map((px, i) => (
+            <group key={`psu${i}`} position={[px, -0.15, -0.535]}>
+              <mesh>
+                <boxGeometry args={[0.16, 0.2, 0.02]} />
+                <meshStandardMaterial color={0x202428} />
+              </mesh>
+              {/* PSU fan */}
+              <SpinningFan position={[0, 0, -0.01]} size={0.04} />
+              {/* PSU handle */}
+              <mesh position={[0.05, 0, -0.015]}>
+                <boxGeometry args={[0.02, 0.12, 0.04]} />
+                <meshStandardMaterial color={0x404448} />
+              </mesh>
+              {/* PSU LED */}
+              <LED position={[-0.05, 0.06, -0.015]} baseColor={0x00ff44} size={0.005} />
+            </group>
+          ))}
         </>
       )}
 
       {/* ===== ARUBA CLEARPASS ===== */}
       {type === "aruba" && (
         <>
-          {/* Aruba logo text */}
-          <Text
-            fontSize={0.1}
-            color="#ff6600"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.98, h / 2 - 0.02, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
+          {/* ARUBA wordmark */}
+          <Text fontSize={0.11} color="#ff6600" anchorX="left" anchorY="middle"
+            position={[-0.98, h / 2 - 0.025, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
             ARUBA
           </Text>
           {/* ClearPass model */}
-          <Text
-            fontSize={0.055}
-            color="#ffffff"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.98, h / 2 - 0.11, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
+          <Text fontSize={0.05} color="#eeeeee" anchorX="left" anchorY="middle"
+            position={[-0.98, h / 2 - 0.115, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
             ClearPass 7280
           </Text>
-          {/* Aruba orange brand strip */}
-          <BrandStrip position={[-0.45, h / 2 - 0.02, 0.555]} color={0xff6600} width={0.15} />
+          <BrandStrip position={[-0.45, h / 2 - 0.025, 0.558]} color={0xff6600} width={0.15} />
           
-          {/* Port section */}
-          <mesh position={[0, 0, 0.545]}>
-            <boxGeometry args={[1.5, h * 0.6, 0.015]} />
-            <meshStandardMaterial color={0xe0e0e0} roughness={0.8} />
+          {/* Port / display section */}
+          <mesh position={[0, 0, 0.546]}>
+            <boxGeometry args={[1.5, h * 0.65, 0.018]} />
+            <meshStandardMaterial color={0xc0c4c8} roughness={0.8} />
           </mesh>
           
-          {/* Management ports */}
-          {Array.from({ length: 4 }).map((_, p) => (
+          {/* Management ports (Data/Mgmt/IPMI) */}
+          {Array.from({ length: 6 }).map((_, p) => (
             <group key={p}>
-              <mesh position={[-0.4 + p * 0.2, 0, 0.555]}>
-                <boxGeometry args={[0.08, 0.055, 0.015]} />
-                <meshStandardMaterial color={0x101010} roughness={0.7} />
+              <mesh position={[-0.5 + p * 0.16, 0, 0.556]}>
+                <boxGeometry args={[0.075, 0.052, 0.018]} />
+                <meshStandardMaterial color={0x080808} />
               </mesh>
-              <LED position={[-0.4 + p * 0.2, -0.04, 0.562]} baseColor={0x00ff88} altColor={0x0a1a0a} rate={2 + Math.random() * 3} offset={Math.random() * 6} size={0.006} />
+              <LED position={[-0.51 + p * 0.16, -0.038, 0.566]} baseColor={0x00ff44} altColor={0x001a00} rate={2 + Math.random() * 3} offset={Math.random() * 6} size={0.005} />
             </group>
           ))}
           
+          {/* Front LCD display */}
+          <mesh position={[0.55, 0, 0.556]}>
+            <boxGeometry args={[0.22, 0.12, 0.01]} />
+            <meshStandardMaterial color={0x080808} />
+          </mesh>
+          <mesh position={[0.55, 0, 0.562]}>
+            <boxGeometry args={[0.2, 0.1, 0.002]} />
+            <meshBasicMaterial color={0x2288ff} transparent opacity={0.9} />
+          </mesh>
+          
           {/* Status LEDs */}
-          <LED position={[0.7, 0.02, 0.555]} baseColor={0x00ff00} size={0.01} />
-          <LED position={[0.7, -0.02, 0.555]} baseColor={0xff6600} rate={1.5} size={0.01} />
+          <LED position={[0.8, 0.04, 0.556]} baseColor={0x00ff00} size={0.008} />
+          <LED position={[0.8, 0, 0.556]} baseColor={0xffaa00} rate={1.2} size={0.008} />
+          <LED position={[0.8, -0.04, 0.556]} baseColor={0x00aaff} rate={0} size={0.008} />
         </>
       )}
 
       {/* ===== PATCH PANEL ===== */}
       {type === "patch" && (
         <>
-          {/* Panel face */}
-          <mesh position={[0, 0, 0.545]}>
-            <boxGeometry args={[2.0, h * 0.8, 0.02]} />
-            <meshStandardMaterial color={0x0a0c10} roughness={0.85} />
+          {/* Patch panel faceplate (brushed aluminum/black) */}
+          <mesh position={[0, 0, 0.546]}>
+            <boxGeometry args={[2.08, h * 0.9, 0.022]} />
+            <meshPhysicalMaterial color={0x121418} roughness={0.6} metalness={0.8} />
           </mesh>
           
-          {/* 24 patch ports */}
+          {/* 24 keystone patch ports */}
           {Array.from({ length: 24 }).map((_, pp) => {
-            const px = -0.85 + pp * 0.075
+            const px = -0.92 + pp * 0.08
             return (
               <group key={pp}>
-                <mesh position={[px, 0, 0.555]}>
-                  <boxGeometry args={[0.055, 0.055, 0.015]} />
-                  <meshStandardMaterial color={0x151820} roughness={0.6} />
+                {/* Keystone jack opening */}
+                <mesh position={[px, -0.02, 0.558]}>
+                  <boxGeometry args={[0.052, 0.065, 0.015]} />
+                  <meshStandardMaterial color={0x050608} roughness={0.8} />
                 </mesh>
-                {/* Port number label area */}
-                <mesh position={[px, 0.055, 0.555]}>
-                  <boxGeometry args={[0.04, 0.02, 0.002]} />
-                  <meshStandardMaterial color={0xf0f0f0} />
+                {/* RJ45 inner contact area */}
+                <mesh position={[px, -0.02, 0.562]}>
+                  <boxGeometry args={[0.038, 0.045, 0.01]} />
+                  <meshStandardMaterial color={0x0a0c10} />
+                </mesh>
+                {/* Port number label (white stripe) */}
+                <mesh position={[px, 0.06, 0.558]}>
+                  <boxGeometry args={[0.045, 0.025, 0.003]} />
+                  <meshStandardMaterial color={0xf8f9fa} />
                 </mesh>
               </group>
             )
@@ -1052,57 +1090,76 @@ function RackDevice({
       {/* ===== UPS ===== */}
       {type === "ups" && (
         <>
-          {/* APC logo text */}
-          <Text
-            fontSize={0.12}
-            color="#00aa44"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.95, h / 2 - 0.1, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
+          {/* APC wordmark */}
+          <Text fontSize={0.13} color="#00aa44" anchorX="left" anchorY="middle"
+            position={[-0.95, h / 2 - 0.1, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
             APC
           </Text>
           {/* Smart-UPS model */}
-          <Text
-            fontSize={0.05}
-            color="#888888"
-            anchorX="left"
-            anchorY="middle"
-            position={[-0.95, h / 2 - 0.2, 0.56]}
-            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"
-          >
-            Smart-UPS 3000VA
+          <Text fontSize={0.055} color="#aaaaaa" anchorX="left" anchorY="middle"
+            position={[-0.95, h / 2 - 0.22, 0.562]}
+            font="https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf">
+            Smart-UPS SRT 3000VA
           </Text>
-          {/* APC green brand strip */}
-          <BrandStrip position={[-0.5, h / 2 - 0.1, 0.555]} color={0x00aa44} width={0.12} />
+          <BrandStrip position={[-0.5, h / 2 - 0.1, 0.558]} color={0x00aa44} width={0.15} />
           
-          {/* Display panel */}
-          <mesh position={[-0.5, 0.1, 0.555]}>
-            <boxGeometry args={[0.4, 0.25, 0.02]} />
-            <meshStandardMaterial color={0x0a0a0a} roughness={0.5} />
-          </mesh>
-          <mesh position={[-0.5, 0.1, 0.566]}>
-            <boxGeometry args={[0.35, 0.2, 0.005]} />
-            <meshBasicMaterial color={0x00ff88} transparent opacity={0.7} />
-          </mesh>
-          
-          {/* Battery status LEDs */}
-          {Array.from({ length: 5 }).map((_, i) => (
-            <LED key={`bat${i}`} position={[-0.1 + i * 0.08, 0.2, 0.555]} baseColor={0x00ff00} altColor={0x002200} rate={0.5} offset={i * 0.3} size={0.012} />
-          ))}
-          
-          {/* Outlet banks */}
-          {Array.from({ length: 8 }).map((_, o) => (
-            <mesh key={`out${o}`} position={[0.4 + (o % 4) * 0.15, 0.1 - Math.floor(o / 4) * 0.2, 0.555]}>
-              <boxGeometry args={[0.1, 0.08, 0.02]} />
-              <meshStandardMaterial color={0x202020} roughness={0.6} />
+          {/* Front battery bank vent slots */}
+          {Array.from({ length: 12 }).map((_, vx) => (
+            <mesh key={`upsv${vx}`} position={[-0.95 + vx * 0.08, -0.1, 0.552]}>
+              <boxGeometry args={[0.04, 0.4, 0.015]} />
+              <meshStandardMaterial color={0x06080a} />
             </mesh>
           ))}
           
-          {/* Cooling fans */}
-          <SpinningFan position={[0.8, 0.15, 0.555]} size={0.1} />
-          <SpinningFan position={[0.8, -0.15, 0.555]} size={0.1} />
+          {/* LCD Status Control Panel */}
+          <mesh position={[0.2, 0.1, 0.555]}>
+            <boxGeometry args={[0.38, 0.28, 0.02]} />
+            <meshStandardMaterial color={0x040506} roughness={0.6} />
+          </mesh>
+          <mesh position={[0.2, 0.1, 0.566]}>
+            <boxGeometry args={[0.34, 0.22, 0.005]} />
+            <meshBasicMaterial color={0x00ffaa} transparent opacity={0.75} />
+          </mesh>
+          {/* Control buttons below LCD */}
+          {[-0.08, 0, 0.08].map((ox, bi) => (
+            <mesh key={`btn${bi}`} position={[0.2 + ox, -0.08, 0.56]} rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.02, 0.02, 0.01, 8]} />
+              <meshStandardMaterial color={0x2a2a2a} />
+            </mesh>
+          ))}
+          
+          {/* Load/Battery status bar graphs */}
+          {Array.from({ length: 5 }).map((_, i) => (
+            <group key={`bat${i}`}>
+              {/* Load % */}
+              <LED position={[0.5, 0.2 - i * 0.04, 0.558]} baseColor={i < 3 ? 0x00ff00 : i === 3 ? 0xffaa00 : 0xff0000} altColor={0x001100} rate={i < 2 ? 0 : 0.5} offset={i * 0.3} size={0.01} />
+              {/* Battery Charge % */}
+              <LED position={[0.55, 0.2 - i * 0.04, 0.558]} baseColor={0x00ff00} altColor={0x002200} rate={0} size={0.01} />
+            </group>
+          ))}
+          
+          {/* Outlet banks */}
+          {Array.from({ length: 8 }).map((_, o) => {
+            const ox = 0.7 + (o % 2) * 0.18
+            const oy = 0.15 - Math.floor(o / 2) * 0.15
+            return (
+              <group key={`out${o}`}>
+                <mesh position={[ox, oy, 0.558]}>
+                  <boxGeometry args={[0.12, 0.1, 0.015]} />
+                  <meshStandardMaterial color={0x181a1c} />
+                </mesh>
+                <mesh position={[ox, oy, 0.566]}>
+                  <boxGeometry args={[0.06, 0.08, 0.005]} />
+                  <meshStandardMaterial color={0x040404} />
+                </mesh>
+              </group>
+            )
+          })}
+          
+          {/* Rear exhaust cooling fans */}
+          <SpinningFan position={[-0.7, 0, -0.53]} size={0.12} />
+          <SpinningFan position={[-0.4, 0, -0.53]} size={0.12} />
         </>
       )}
     </group>
@@ -1237,13 +1294,18 @@ function useCanvasTex(w: number, h: number, draw: (ctx: CanvasRenderingContext2D
     texRef.current.minFilter = THREE.LinearFilter
   }, [w, h])
 
+  const lastDraw = useRef(0)
+
   useFrame(({ clock }) => {
-    if (canvasRef.current && texRef.current) {
-      const ctx = canvasRef.current.getContext("2d")
-      if (ctx) {
-        draw(ctx, clock.elapsedTime)
-        texRef.current.needsUpdate = true
+    if (clock.elapsedTime - lastDraw.current > 0.066) { // ~15 FPS
+      if (canvasRef.current && texRef.current) {
+        const ctx = canvasRef.current.getContext("2d")
+        if (ctx) {
+          draw(ctx, clock.elapsedTime)
+          texRef.current.needsUpdate = true
+        }
       }
+      lastDraw.current = clock.elapsedTime
     }
   })
 
@@ -1701,7 +1763,7 @@ function Workstation({ onHover, onClick }: { onHover?: (l: string | null) => voi
 // Chair
 function Chair() {
   return (
-    <group position={[7.5, 0.75, 3.5]} rotation={[0, Math.PI, 0]}>
+    <group position={[7.5, 1.2, 3.5]} rotation={[0, Math.PI, 0]} scale={1.6}>
       <mesh>
         <boxGeometry args={[0.8, 0.07, 0.72]} />
         <meshPhysicalMaterial color={0x141e28} roughness={0.7} metalness={0.3} />
@@ -1992,7 +2054,8 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
   
   return (
     <group 
-      position={[8.4, 5.5, -12.7]} 
+      position={[14.0, 5.5, -12.7]} 
+      scale={1.2}
       onPointerOver={() => onHover?.("Lebanon Internet Traffic")} 
       onPointerOut={() => onHover?.(null)} 
       onClick={() => onClick?.("contact")}
@@ -2110,8 +2173,8 @@ function Particles() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} />
-        <bufferAttribute attach="attributes-size" count={count} array={sizes} itemSize={1} />
+        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} args={[pos, 3]} />
+        <bufferAttribute attach="attributes-size" count={count} array={sizes} itemSize={1} args={[sizes, 1]} />
       </bufferGeometry>
       <pointsMaterial color={0xffffff} size={0.03} transparent opacity={0.25} blending={THREE.AdditiveBlending} sizeAttenuation />
     </points>
@@ -2161,7 +2224,7 @@ function NetworkFlowParticles() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} args={[pos, 3]} />
       </bufferGeometry>
       <pointsMaterial color={0x00ffe7} size={0.08} transparent opacity={0.7} blending={THREE.AdditiveBlending} />
     </points>
@@ -2186,7 +2249,7 @@ function Lights() {
       <ambientLight color={0xf8faff} intensity={1.0} />
       <hemisphereLight color={0xffffff} groundColor={0xe0e4e8} intensity={0.7} />
       {/* Main overhead directional - simulates fluorescent ceiling */}
-      <directionalLight color={0xffffff} intensity={1.4} position={[0, 14, 2]} castShadow shadow-mapSize={[2048, 2048]} />
+      <directionalLight color={0xffffff} intensity={1.4} position={[0, 14, 2]} castShadow shadow-mapSize={[1024, 1024]} />
       <directionalLight color={0xf8f8ff} intensity={0.8} position={[8, 12, 6]} />
       <directionalLight color={0xf8f8ff} intensity={0.6} position={[-8, 12, -4]} />
       {/* Overhead fluorescent row lights */}
@@ -2434,9 +2497,11 @@ export default function DatacenterScene() {
     <div className="w-full h-screen bg-[#020608] overflow-hidden cursor-none">
       <Cursor hovering={!!hovered} />
       {booting && <BootLoader onComplete={handleBootComplete} />}
-      <Canvas camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
+      <Canvas dpr={[1, 1.5]} camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1, powerPreference: "high-performance" }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
         <Suspense fallback={null}>
+          <BakeShadows />
           <SceneContent onHover={setHovered} onSectionClick={setActiveSection} />
+          <Preload all />
         </Suspense>
       </Canvas>
       {showUI && (

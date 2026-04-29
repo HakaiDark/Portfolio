@@ -13,6 +13,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$t
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$b389eeca$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__ = __turbopack_context__.i("[project]/node_modules/@react-three/fiber/dist/events-b389eeca.esm.js [app-client] (ecmascript) <export D as useFrame>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$OrbitControls$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@react-three/drei/core/OrbitControls.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@react-three/drei/core/Text.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$BakeShadows$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@react-three/drei/core/BakeShadows.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Preload$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@react-three/drei/core/Preload.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$postprocessing$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@react-three/postprocessing/dist/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/three/build/three.core.js [app-client] (ecmascript)");
 ;
@@ -83,11 +85,16 @@ const SECTIONS = {
 function LED({ position, baseColor, altColor = 0x111111, rate = 3, offset = 0, size = 0.033 }) {
     _s();
     const ref = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const isBase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(true);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$b389eeca$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"])({
         "LED.useFrame": ({ clock })=>{
-            if (ref.current) {
+            if (ref.current && rate > 0) {
                 const on = Math.sin(clock.elapsedTime * rate + offset) > 0.18;
-                ref.current.material.color.setHex(on ? baseColor : altColor);
+                if (on !== isBase.current) {
+                    ;
+                    ref.current.material.color.setHex(on ? baseColor : altColor);
+                    isBase.current = on;
+                }
             }
         }
     }["LED.useFrame"]);
@@ -103,24 +110,24 @@ function LED({ position, baseColor, altColor = 0x111111, rate = 3, offset = 0, s
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 90,
+                lineNumber: 94,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                 color: baseColor
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 91,
+                lineNumber: 95,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 89,
+        lineNumber: 93,
         columnNumber: 5
     }, this);
 }
-_s(LED, "8QVLrcMdYxPUkj6ry5zpyt6J6X8=", false, function() {
+_s(LED, "y163/ATwXAIlkEqnbuEFuxda4b4=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$b389eeca$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"]
     ];
@@ -145,7 +152,7 @@ function Floor() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 102,
+                        lineNumber: 106,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -154,13 +161,13 @@ function Floor() {
                         metalness: 0.05
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 103,
+                        lineNumber: 107,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 101,
+                lineNumber: 105,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -183,7 +190,7 @@ function Floor() {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 109,
+                                lineNumber: 113,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -192,13 +199,13 @@ function Floor() {
                                 metalness: 0.15
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 110,
+                                lineNumber: 114,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, `t-${fx}-${fz}`, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 108,
+                        lineNumber: 112,
                         columnNumber: 11
                     }, this))),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("gridHelper", {
@@ -215,7 +222,7 @@ function Floor() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 115,
+                lineNumber: 119,
                 columnNumber: 7
             }, this),
             [
@@ -242,7 +249,7 @@ function Floor() {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 119,
+                            lineNumber: 123,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -251,19 +258,19 @@ function Floor() {
                             metalness: 0.3
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 120,
+                            lineNumber: 124,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `vent${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 118,
+                    lineNumber: 122,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 99,
+        lineNumber: 103,
         columnNumber: 5
     }, this);
 }
@@ -287,20 +294,20 @@ function WarningLabel({ position, rotation = [
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 132,
+                        lineNumber: 136,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                         color: 0xffcc00
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 133,
+                        lineNumber: 137,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 131,
+                lineNumber: 135,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
@@ -317,13 +324,13 @@ function WarningLabel({ position, rotation = [
                 children: text
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 135,
+                lineNumber: 139,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 130,
+        lineNumber: 134,
         columnNumber: 5
     }, this);
 }
@@ -344,7 +351,7 @@ function FireSuppressionNozzle({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 155,
+                        lineNumber: 159,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -353,13 +360,13 @@ function FireSuppressionNozzle({ position }) {
                         roughness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 156,
+                        lineNumber: 160,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 154,
+                lineNumber: 158,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -378,7 +385,7 @@ function FireSuppressionNozzle({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 160,
+                        lineNumber: 164,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -387,19 +394,19 @@ function FireSuppressionNozzle({ position }) {
                         roughness: 0.2
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 161,
+                        lineNumber: 165,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 159,
+                lineNumber: 163,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 152,
+        lineNumber: 156,
         columnNumber: 5
     }, this);
 }
@@ -424,7 +431,7 @@ function ExitSign({ position, rotation = [
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 172,
+                        lineNumber: 176,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -433,13 +440,13 @@ function ExitSign({ position, rotation = [
                         emissiveIntensity: 0.5
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 173,
+                        lineNumber: 177,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 171,
+                lineNumber: 175,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
@@ -456,13 +463,13 @@ function ExitSign({ position, rotation = [
                 children: "EXIT"
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 175,
+                lineNumber: 179,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 170,
+        lineNumber: 174,
         columnNumber: 5
     }, this);
 }
@@ -486,7 +493,7 @@ function Room() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 195,
+                        lineNumber: 199,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -494,13 +501,13 @@ function Room() {
                         roughness: 0.85
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 196,
+                        lineNumber: 200,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 194,
+                lineNumber: 198,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -512,43 +519,6 @@ function Room() {
                 rotation: [
                     0,
                     Math.PI / 2,
-                    0
-                ],
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
-                        args: [
-                            26,
-                            12,
-                            0.15
-                        ]
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 200,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                        color: 0xe8ecf0,
-                        roughness: 0.85
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 201,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 199,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                position: [
-                    -22,
-                    6,
-                    0
-                ],
-                rotation: [
-                    0,
-                    -Math.PI / 2,
                     0
                 ],
                 children: [
@@ -579,8 +549,45 @@ function Room() {
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                 position: [
+                    -22,
+                    6,
+                    0
+                ],
+                rotation: [
                     0,
-                    10.1,
+                    -Math.PI / 2,
+                    0
+                ],
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                        args: [
+                            26,
+                            12,
+                            0.15
+                        ]
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 208,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                        color: 0xe8ecf0,
+                        roughness: 0.85
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 209,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/datacenter-scene.tsx",
+                lineNumber: 207,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                position: [
+                    0,
+                    13.1,
                     0
                 ],
                 rotation: [
@@ -596,7 +603,7 @@ function Room() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 209,
+                        lineNumber: 213,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -604,13 +611,13 @@ function Room() {
                         roughness: 0.9
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 210,
+                        lineNumber: 214,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 208,
+                lineNumber: 212,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -618,7 +625,7 @@ function Room() {
             }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                     position: [
                         -28 + i * 3,
-                        10.05,
+                        13.05,
                         0
                     ],
                     children: [
@@ -630,20 +637,20 @@ function Room() {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 215,
+                            lineNumber: 219,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                             color: 0xd0d4d8
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 216,
+                            lineNumber: 220,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `cgx${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 214,
+                    lineNumber: 218,
                     columnNumber: 9
                 }, this)),
             Array.from({
@@ -651,7 +658,7 @@ function Room() {
             }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                     position: [
                         0,
-                        10.05,
+                        13.05,
                         -13 + i * 3.25
                     ],
                     children: [
@@ -663,20 +670,20 @@ function Room() {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 221,
+                            lineNumber: 225,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                             color: 0xd0d4d8
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 222,
+                            lineNumber: 226,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `cgz${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 220,
+                    lineNumber: 224,
                     columnNumber: 9
                 }, this)),
             [
@@ -690,7 +697,7 @@ function Room() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                             position: [
                                 x,
-                                9.95,
+                                12.95,
                                 0
                             ],
                             children: [
@@ -702,7 +709,7 @@ function Room() {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 230,
+                                    lineNumber: 234,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -711,19 +718,19 @@ function Room() {
                                     roughness: 0.4
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 231,
+                                    lineNumber: 235,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 229,
+                            lineNumber: 233,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                             position: [
                                 x,
-                                9.88,
+                                12.88,
                                 0
                             ],
                             children: [
@@ -735,7 +742,7 @@ function Room() {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 235,
+                                    lineNumber: 239,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -744,59 +751,26 @@ function Room() {
                                     emissiveIntensity: 2.0
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 236,
+                                    lineNumber: 240,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 234,
+                            lineNumber: 238,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `light-${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 227,
+                    lineNumber: 231,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                 position: [
                     0,
-                    9.2,
+                    12.2,
                     -4
-                ],
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
-                        args: [
-                            20,
-                            0.1,
-                            0.8
-                        ]
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 242,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                        color: 0x909498,
-                        metalness: 0.7,
-                        roughness: 0.3
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 243,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 241,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                position: [
-                    0,
-                    9.2,
-                    4
                 ],
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
@@ -825,6 +799,39 @@ function Room() {
                 lineNumber: 245,
                 columnNumber: 7
             }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                position: [
+                    0,
+                    12.2,
+                    4
+                ],
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                        args: [
+                            20,
+                            0.1,
+                            0.8
+                        ]
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 250,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                        color: 0x909498,
+                        metalness: 0.7,
+                        roughness: 0.3
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 251,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/datacenter-scene.tsx",
+                lineNumber: 249,
+                columnNumber: 7
+            }, this),
             [
                 -15,
                 -10,
@@ -836,12 +843,12 @@ function Room() {
             ].map((x, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FireSuppressionNozzle, {
                     position: [
                         x,
-                        9.9,
+                        12.9,
                         -6
                     ]
                 }, `fire${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 252,
+                    lineNumber: 256,
                     columnNumber: 9
                 }, this)),
             [
@@ -855,12 +862,12 @@ function Room() {
             ].map((x, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FireSuppressionNozzle, {
                     position: [
                         x,
-                        9.9,
+                        12.9,
                         6
                     ]
                 }, `fire2${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 255,
+                    lineNumber: 259,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WarningLabel, {
@@ -872,7 +879,7 @@ function Room() {
                 text: "CAUTION: HIGH VOLTAGE"
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 259,
+                lineNumber: 263,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WarningLabel, {
@@ -889,7 +896,7 @@ function Room() {
                 text: "AUTHORIZED PERSONNEL ONLY"
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 260,
+                lineNumber: 264,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WarningLabel, {
@@ -901,7 +908,7 @@ function Room() {
                 text: "FIRE SUPPRESSION ZONE"
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 261,
+                lineNumber: 265,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ExitSign, {
@@ -917,7 +924,7 @@ function Room() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 264,
+                lineNumber: 268,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ExitSign, {
@@ -933,7 +940,7 @@ function Room() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 265,
+                lineNumber: 269,
                 columnNumber: 7
             }, this),
             [
@@ -958,7 +965,7 @@ function Room() {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 271,
+                                    lineNumber: 275,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -967,13 +974,13 @@ function Room() {
                                     roughness: 0.6
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 272,
+                                    lineNumber: 276,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 270,
+                            lineNumber: 274,
                             columnNumber: 11
                         }, this),
                         Array.from({
@@ -998,26 +1005,26 @@ function Room() {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 277,
+                                        lineNumber: 281,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                         color: 0xb0b4b8
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 278,
+                                        lineNumber: 282,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, j, true, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 276,
+                                lineNumber: 280,
                                 columnNumber: 13
                             }, this))
                     ]
                 }, `vent${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 269,
+                    lineNumber: 273,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
@@ -1037,20 +1044,20 @@ function Room() {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 287,
+                                lineNumber: 291,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0xf0f0f0
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 288,
+                                lineNumber: 292,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 286,
+                        lineNumber: 290,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -1067,32 +1074,32 @@ function Room() {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 291,
+                                lineNumber: 295,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                                 color: 0x00ff88
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 292,
+                                lineNumber: 296,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 290,
+                        lineNumber: 294,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 285,
+                lineNumber: 289,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 192,
+        lineNumber: 196,
         columnNumber: 5
     }, this);
 }
@@ -1121,7 +1128,7 @@ function DataPulse({ curve, color, speed, offset }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 311,
+                lineNumber: 315,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
@@ -1130,13 +1137,13 @@ function DataPulse({ curve, color, speed, offset }) {
                 opacity: 0.9
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 312,
+                lineNumber: 316,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 310,
+        lineNumber: 314,
         columnNumber: 5
     }, this);
 }
@@ -1168,7 +1175,7 @@ function FiberCable({ points, color, pulseCount = 3 }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 324,
+                        lineNumber: 328,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1178,13 +1185,13 @@ function FiberCable({ points, color, pulseCount = 3 }) {
                         clearcoatRoughness: 0.1
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 325,
+                        lineNumber: 329,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 323,
+                lineNumber: 327,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -1196,13 +1203,13 @@ function FiberCable({ points, color, pulseCount = 3 }) {
                     offset: i / pulseCount
                 }, i, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 329,
+                    lineNumber: 333,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 321,
+        lineNumber: 325,
         columnNumber: 5
     }, this);
 }
@@ -1235,7 +1242,7 @@ function CableTray({ z }) {
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                 position: [
                     -3,
-                    8.88,
+                    11.88,
                     z
                 ],
                 children: [
@@ -1247,7 +1254,7 @@ function CableTray({ z }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 345,
+                        lineNumber: 349,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1256,53 +1263,20 @@ function CableTray({ z }) {
                         roughness: 0.25
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 346,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 344,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                position: [
-                    -3,
-                    8.92,
-                    z - 0.33
-                ],
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
-                        args: [
-                            32,
-                            0.12,
-                            0.03
-                        ]
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
                         lineNumber: 350,
                         columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
-                        color: 0x707478,
-                        metalness: 0.85,
-                        roughness: 0.25
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 351,
-                        columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 349,
+                lineNumber: 348,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                 position: [
                     -3,
-                    8.92,
-                    z + 0.33
+                    11.92,
+                    z - 0.33
                 ],
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
@@ -1331,12 +1305,45 @@ function CableTray({ z }) {
                 lineNumber: 353,
                 columnNumber: 7
             }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                position: [
+                    -3,
+                    11.92,
+                    z + 0.33
+                ],
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                        args: [
+                            32,
+                            0.12,
+                            0.03
+                        ]
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 358,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
+                        color: 0x707478,
+                        metalness: 0.85,
+                        roughness: 0.25
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 359,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/datacenter-scene.tsx",
+                lineNumber: 357,
+                columnNumber: 7
+            }, this),
             Array.from({
                 length: 22
             }).map((_, r)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                     position: [
                         -17 + r * 1.5,
-                        8.88,
+                        11.88,
                         z
                     ],
                     children: [
@@ -1348,7 +1355,7 @@ function CableTray({ z }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 360,
+                            lineNumber: 364,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1357,13 +1364,13 @@ function CableTray({ z }) {
                             roughness: 0.3
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 361,
+                            lineNumber: 365,
                             columnNumber: 11
                         }, this)
                     ]
                 }, r, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 359,
+                    lineNumber: 363,
                     columnNumber: 9
                 }, this)),
             singleModeFibers.map((col, fb)=>{
@@ -1373,7 +1380,7 @@ function CableTray({ z }) {
                     const t = fs / 29;
                     const sag = Math.sin(t * Math.PI) * 0.015;
                     const wobble = Math.sin(t * Math.PI * 3 + fb) * 0.008;
-                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 8.92 + sag + wobble, z - 0.22 + fb * 0.035);
+                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 11.92 + sag + wobble, z - 0.22 + fb * 0.035);
                 });
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FiberCable, {
                     points: pts,
@@ -1381,7 +1388,7 @@ function CableTray({ z }) {
                     pulseCount: 5
                 }, `sm${fb}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 372,
+                    lineNumber: 376,
                     columnNumber: 16
                 }, this);
             }),
@@ -1392,7 +1399,7 @@ function CableTray({ z }) {
                     const t = fs / 29;
                     const sag = Math.sin(t * Math.PI) * 0.018;
                     const wobble = Math.sin(t * Math.PI * 2.5 + fb * 1.2) * 0.006;
-                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 8.93 + sag + wobble, z + fb * 0.035);
+                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 11.93 + sag + wobble, z + fb * 0.035);
                 });
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FiberCable, {
                     points: pts,
@@ -1400,7 +1407,7 @@ function CableTray({ z }) {
                     pulseCount: 4
                 }, `mm${fb}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 382,
+                    lineNumber: 386,
                     columnNumber: 16
                 }, this);
             }),
@@ -1410,7 +1417,7 @@ function CableTray({ z }) {
                 }).map((_, fs)=>{
                     const t = fs / 29;
                     const sag = Math.sin(t * Math.PI) * 0.02;
-                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 8.91 + sag, z + 0.18 + cb * 0.04);
+                    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](-17 + t * 34, 11.91 + sag, z + 0.18 + cb * 0.04);
                 });
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CopperCable, {
                     points: pts,
@@ -1419,7 +1426,7 @@ function CableTray({ z }) {
                     thickness: 0.015
                 }, `cu${cb}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 391,
+                    lineNumber: 395,
                     columnNumber: 16
                 }, this);
             }),
@@ -1428,19 +1435,19 @@ function CableTray({ z }) {
             }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CableTie, {
                     position: [
                         -15 + i * 2.5,
-                        8.95,
+                        11.95,
                         z
                     ],
                     width: 0.5
                 }, i, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 395,
+                    lineNumber: 399,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 342,
+        lineNumber: 346,
         columnNumber: 5
     }, this);
 }
@@ -1467,7 +1474,7 @@ function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 408,
+                        lineNumber: 412,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1477,13 +1484,13 @@ function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }) {
                         clearcoat: 0.15
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 409,
+                        lineNumber: 413,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 407,
+                lineNumber: 411,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -1495,13 +1502,13 @@ function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }) {
                     offset: i / pulseCount
                 }, i, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 413,
+                    lineNumber: 417,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 405,
+        lineNumber: 409,
         columnNumber: 5
     }, this);
 }
@@ -1527,7 +1534,7 @@ function PowerCable({ points, thickness = 0.02 }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 424,
+                lineNumber: 428,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1536,13 +1543,13 @@ function PowerCable({ points, thickness = 0.02 }) {
                 metalness: 0.05
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 425,
+                lineNumber: 429,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 423,
+        lineNumber: 427,
         columnNumber: 5
     }, this);
 }
@@ -1566,7 +1573,7 @@ function CableTie({ position, rotation = [
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 434,
+                lineNumber: 438,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -1574,13 +1581,13 @@ function CableTie({ position, rotation = [
                 roughness: 0.9
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 435,
+                lineNumber: 439,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 433,
+        lineNumber: 437,
         columnNumber: 5
     }, this);
 }
@@ -1626,7 +1633,7 @@ function CableBundle({ startPos, endPos, cableCount = 6, colors, isFiber = false
                 pulseCount: 3
             }, i, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 481,
+                lineNumber: 485,
                 columnNumber: 13
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CopperCable, {
                 points: cable.points,
@@ -1635,12 +1642,12 @@ function CableBundle({ startPos, endPos, cableCount = 6, colors, isFiber = false
                 thickness: 0.008
             }, i, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 482,
+                lineNumber: 486,
                 columnNumber: 13
             }, this))
     }, void 0, false, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 478,
+        lineNumber: 482,
         columnNumber: 5
     }, this);
 }
@@ -1698,7 +1705,7 @@ function RackCableSystem({ rackX }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 499,
+                            lineNumber: 503,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -1707,13 +1714,13 @@ function RackCableSystem({ rackX }) {
                             roughness: 0.3
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 500,
+                            lineNumber: 504,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `dring${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 498,
+                    lineNumber: 502,
                     columnNumber: 9
                 }, this)),
             [
@@ -1728,8 +1735,8 @@ function RackCableSystem({ rackX }) {
                     new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX + 0.03, 8.45, 0.62),
                     new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX + 0.02, 8.6, 0.55),
                     new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX, 8.75, 0.35),
-                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX - 0.02, 8.85, 0.1),
-                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX, 8.9, -0.1)
+                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX - 0.02, 10.85, 0.1),
+                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](offsetX, 11.9, -0.1)
                 ];
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FiberCable, {
                     points: pts,
@@ -1737,7 +1744,7 @@ function RackCableSystem({ rackX }) {
                     pulseCount: 5
                 }, `fu${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 515,
+                    lineNumber: 519,
                     columnNumber: 16
                 }, this);
             }),
@@ -1758,7 +1765,7 @@ function RackCableSystem({ rackX }) {
                 bundleRadius: 0.12
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 519,
+                lineNumber: 523,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CableBundle, {
@@ -1778,7 +1785,7 @@ function RackCableSystem({ rackX }) {
                 bundleRadius: 0.12
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 527,
+                lineNumber: 531,
                 columnNumber: 7
             }, this),
             [
@@ -1787,9 +1794,9 @@ function RackCableSystem({ rackX }) {
             ].map((oz, i)=>{
                 const pts = [
                     new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0, 10.3, oz + 0.6),
-                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0.02, 9.7, oz + 0.45),
-                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0, 9.1, oz + 0.2),
-                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0, 8.9, oz)
+                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0.02, 11.0, oz + 0.45),
+                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0, 11.5, oz + 0.2),
+                    new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"](0, 11.9, oz)
                 ];
                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FiberCable, {
                     points: pts,
@@ -1797,7 +1804,7 @@ function RackCableSystem({ rackX }) {
                     pulseCount: 4
                 }, `vt${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 544,
+                    lineNumber: 548,
                     columnNumber: 16
                 }, this);
             }),
@@ -1815,7 +1822,7 @@ function RackCableSystem({ rackX }) {
                     thickness: 0.022
                 }, `pw${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 554,
+                    lineNumber: 558,
                     columnNumber: 16
                 }, this);
             }),
@@ -1830,13 +1837,13 @@ function RackCableSystem({ rackX }) {
                     width: 0.18
                 }, `ct${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 559,
+                    lineNumber: 563,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 495,
+        lineNumber: 499,
         columnNumber: 5
     }, this);
 }
@@ -1864,7 +1871,7 @@ function CrossRackFiber({ rack1X, rack2X }) {
                     pulseCount: 5
                 }, `cross${idx}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 579,
+                    lineNumber: 583,
                     columnNumber: 16
                 }, this);
             }),
@@ -1879,13 +1886,13 @@ function CrossRackFiber({ rack1X, rack2X }) {
                 thickness: 0.014
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 581,
+                lineNumber: 585,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 569,
+        lineNumber: 573,
         columnNumber: 5
     }, this);
 }
@@ -1905,7 +1912,7 @@ function SFPModule({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 601,
+                        lineNumber: 605,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -1914,13 +1921,13 @@ function SFPModule({ position }) {
                         roughness: 0.2
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 602,
+                        lineNumber: 606,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 600,
+                lineNumber: 604,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -1929,6 +1936,11 @@ function SFPModule({ position }) {
                     0,
                     0.042
                 ],
+                rotation: [
+                    Math.PI / 2,
+                    0,
+                    0
+                ],
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("cylinderGeometry", {
                         args: [
@@ -1936,28 +1948,23 @@ function SFPModule({ position }) {
                             0.008,
                             0.01,
                             8
-                        ],
-                        rotation: [
-                            Math.PI / 2,
-                            0,
-                            0
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 606,
+                        lineNumber: 610,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: 0x00ff88
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 607,
+                        lineNumber: 611,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 605,
+                lineNumber: 609,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -1975,26 +1982,26 @@ function SFPModule({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 611,
+                        lineNumber: 615,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                         color: 0x0088ff
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 612,
+                        lineNumber: 616,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 610,
+                lineNumber: 614,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 598,
+        lineNumber: 602,
         columnNumber: 5
     }, this);
 }
@@ -2022,7 +2029,7 @@ function SpinningFan({ position, size = 0.08 }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 628,
+                        lineNumber: 632,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2031,13 +2038,13 @@ function SpinningFan({ position, size = 0.08 }) {
                         roughness: 0.4
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 629,
+                        lineNumber: 633,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 627,
+                lineNumber: 631,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2055,7 +2062,7 @@ function SpinningFan({ position, size = 0.08 }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 633,
+                        lineNumber: 637,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2063,13 +2070,13 @@ function SpinningFan({ position, size = 0.08 }) {
                         side: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DoubleSide"]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 634,
+                        lineNumber: 638,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 632,
+                lineNumber: 636,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2088,7 +2095,7 @@ function SpinningFan({ position, size = 0.08 }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 638,
+                        lineNumber: 642,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2097,19 +2104,19 @@ function SpinningFan({ position, size = 0.08 }) {
                         roughness: 0.2
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 639,
+                        lineNumber: 643,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 637,
+                lineNumber: 641,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 625,
+        lineNumber: 629,
         columnNumber: 5
     }, this);
 }
@@ -2133,7 +2140,7 @@ function RackScrew({ position }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 649,
+                lineNumber: 653,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2142,13 +2149,13 @@ function RackScrew({ position }) {
                 roughness: 0.1
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 650,
+                lineNumber: 654,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 648,
+        lineNumber: 652,
         columnNumber: 5
     }, this);
 }
@@ -2166,7 +2173,7 @@ function BrandStrip({ position, color, width = 0.3 }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 659,
+                lineNumber: 663,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2175,13 +2182,13 @@ function BrandStrip({ position, color, width = 0.3 }) {
                 emissiveIntensity: 0.3
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 660,
+                lineNumber: 664,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 658,
+        lineNumber: 662,
         columnNumber: 5
     }, this);
 }
@@ -2213,7 +2220,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 697,
+                        lineNumber: 701,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -2224,13 +2231,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         clearcoatRoughness: 0.2
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 698,
+                        lineNumber: 702,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 696,
+                lineNumber: 700,
                 columnNumber: 7
             }, this),
             (type === "switch" || type === "srv") && Array.from({
@@ -2250,20 +2257,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 703,
+                            lineNumber: 707,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                             color: 0x080c10
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 704,
+                            lineNumber: 708,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `gr${gi}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 702,
+                    lineNumber: 706,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2281,7 +2288,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 709,
+                        lineNumber: 713,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -2290,13 +2297,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         metalness: metalness - 0.1
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 710,
+                        lineNumber: 714,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 708,
+                lineNumber: 712,
                 columnNumber: 7
             }, this),
             [
@@ -2319,7 +2326,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 716,
+                                    lineNumber: 720,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -2329,13 +2336,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     clearcoat: 0.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 717,
+                                    lineNumber: 721,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 715,
+                            lineNumber: 719,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackScrew, {
@@ -2346,7 +2353,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 719,
+                            lineNumber: 723,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackScrew, {
@@ -2357,13 +2364,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 720,
+                            lineNumber: 724,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `ear${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 714,
+                    lineNumber: 718,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2381,20 +2388,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 725,
+                        lineNumber: 729,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: accentColor
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 726,
+                        lineNumber: 730,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 724,
+                lineNumber: 728,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2412,20 +2419,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 730,
+                        lineNumber: 734,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: accentColor
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 731,
+                        lineNumber: 735,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 729,
+                lineNumber: 733,
                 columnNumber: 7
             }, this),
             type === "switch" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -2444,7 +2451,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         children: "CISCO"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 738,
+                        lineNumber: 742,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
@@ -2461,7 +2468,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         children: "Catalyst 9300-48T"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 744,
+                        lineNumber: 748,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
@@ -2474,7 +2481,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         width: 0.12
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 749,
+                        lineNumber: 753,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2492,7 +2499,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 752,
+                                lineNumber: 756,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2500,13 +2507,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 roughness: 0.95
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 753,
+                                lineNumber: 757,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 751,
+                        lineNumber: 755,
                         columnNumber: 11
                     }, this),
                     Array.from({
@@ -2533,7 +2540,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 764,
+                                            lineNumber: 768,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2541,13 +2548,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                             roughness: 0.9
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 765,
+                                            lineNumber: 769,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 763,
+                                    lineNumber: 767,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -2563,7 +2570,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     size: 0.005
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 768,
+                                    lineNumber: 772,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -2579,13 +2586,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     size: 0.005
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 770,
+                                    lineNumber: 774,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, sp, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 762,
+                            lineNumber: 766,
                             columnNumber: 15
                         }, this);
                     }),
@@ -2599,7 +2606,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             ]
                         }, `sfp${sfp}`, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 776,
+                            lineNumber: 780,
                             columnNumber: 13
                         }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2617,20 +2624,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 780,
+                                lineNumber: 784,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x1a3a5a
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 781,
+                                lineNumber: 785,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 779,
+                        lineNumber: 783,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2648,20 +2655,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 785,
+                                lineNumber: 789,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x004488
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 786,
+                                lineNumber: 790,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 784,
+                        lineNumber: 788,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2679,7 +2686,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 790,
+                                lineNumber: 794,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2687,13 +2694,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 roughness: 0.6
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 791,
+                                lineNumber: 795,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 789,
+                        lineNumber: 793,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2711,7 +2718,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 794,
+                                lineNumber: 798,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
@@ -2720,13 +2727,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 opacity: 0.85
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 795,
+                                lineNumber: 799,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 793,
+                        lineNumber: 797,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -2740,7 +2747,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         rate: 0.5
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 798,
+                        lineNumber: 802,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SpinningFan, {
@@ -2752,7 +2759,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         size: 0.09
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 800,
+                        lineNumber: 804,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SpinningFan, {
@@ -2764,7 +2771,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         size: 0.09
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 801,
+                        lineNumber: 805,
                         columnNumber: 11
                     }, this)
                 ]
@@ -2785,7 +2792,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         children: "FORTINET"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 809,
+                        lineNumber: 813,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
@@ -2802,7 +2809,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         children: "FortiGate 600E"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 815,
+                        lineNumber: 819,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
@@ -2815,7 +2822,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         width: 0.12
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 820,
+                        lineNumber: 824,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2833,20 +2840,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 823,
+                                lineNumber: 827,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                                 color: 0xcc0000
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 824,
+                                lineNumber: 828,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 822,
+                        lineNumber: 826,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2864,7 +2871,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 828,
+                                lineNumber: 832,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2872,13 +2879,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 roughness: 0.9
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 829,
+                                lineNumber: 833,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 827,
+                        lineNumber: 831,
                         columnNumber: 11
                     }, this),
                     Array.from({
@@ -2905,7 +2912,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 840,
+                                            lineNumber: 844,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2913,13 +2920,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                             roughness: 0.8
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 841,
+                                            lineNumber: 845,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 839,
+                                    lineNumber: 843,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -2935,7 +2942,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     size: 0.006
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 843,
+                                    lineNumber: 847,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -2951,13 +2958,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     size: 0.006
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 844,
+                                    lineNumber: 848,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, pp, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 838,
+                            lineNumber: 842,
                             columnNumber: 15
                         }, this);
                     }),
@@ -2971,7 +2978,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             ]
                         }, `fwsfp${sfp}`, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 850,
+                            lineNumber: 854,
                             columnNumber: 13
                         }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -2989,7 +2996,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 854,
+                                lineNumber: 858,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -2997,13 +3004,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 roughness: 0.65
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 855,
+                                lineNumber: 859,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 853,
+                        lineNumber: 857,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -3021,7 +3028,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 858,
+                                lineNumber: 862,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
@@ -3030,13 +3037,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 opacity: 0.88
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 859,
+                                lineNumber: 863,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 857,
+                        lineNumber: 861,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -3054,20 +3061,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 863,
+                                lineNumber: 867,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x0a2a4a
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 864,
+                                lineNumber: 868,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 862,
+                        lineNumber: 866,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -3085,20 +3092,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 868,
+                                lineNumber: 872,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x202020
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 869,
+                                lineNumber: 873,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 867,
+                        lineNumber: 871,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -3107,6 +3114,11 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                             0,
                             0.557
                         ],
+                        rotation: [
+                            Math.PI / 2,
+                            0,
+                            0
+                        ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("cylinderGeometry", {
                                 args: [
@@ -3114,15 +3126,10 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     0.02,
                                     0.01,
                                     12
-                                ],
-                                rotation: [
-                                    Math.PI / 2,
-                                    0,
-                                    0
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 873,
+                                lineNumber: 877,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -3131,13 +3138,13 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                 roughness: 0.15
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 874,
+                                lineNumber: 878,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 872,
+                        lineNumber: 876,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -3151,7 +3158,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         rate: 0.4
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 876,
+                        lineNumber: 880,
                         columnNumber: 11
                     }, this),
                     Array.from({
@@ -3171,20 +3178,20 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 880,
+                                    lineNumber: 884,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                     color: 0x080c10
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 881,
+                                    lineNumber: 885,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, v, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 879,
+                            lineNumber: 883,
                             columnNumber: 13
                         }, this))
                 ]
@@ -3192,58 +3199,131 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
             type === "srv" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.1,
+                        fontSize: 0.11,
                         color: "#007db8",
                         anchorX: "left",
                         anchorY: "middle",
                         position: [
                             -0.98,
                             h / 2 - 0.08,
-                            0.56
+                            0.562
                         ],
                         font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
                         children: "DELL"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 893,
+                        lineNumber: 897,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.05,
+                        fontSize: 0.045,
                         color: "#888888",
                         anchorX: "left",
                         anchorY: "middle",
                         position: [
                             -0.98,
                             h / 2 - 0.17,
-                            0.56
+                            0.562
                         ],
                         font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
                         children: "PowerEdge R750"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 904,
+                        lineNumber: 903,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
                         position: [
-                            -0.55,
+                            -0.45,
                             h / 2 - 0.08,
-                            0.555
+                            0.558
                         ],
                         color: 0x007db8,
-                        width: 0.12
+                        width: 0.15
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 915,
+                        lineNumber: 908,
                         columnNumber: 11
                     }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                        position: [
+                            -0.8,
+                            0.05,
+                            0.548
+                        ],
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                args: [
+                                    0.3,
+                                    0.5,
+                                    0.015
+                                ]
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 912,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                color: 0x06080a,
+                                roughness: 0.9
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 913,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 911,
+                        columnNumber: 11
+                    }, this),
+                    Array.from({
+                        length: 15
+                    }).map((_, vx)=>Array.from({
+                            length: 10
+                        }).map((_, vy)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                position: [
+                                    -0.92 + vx * 0.018,
+                                    -0.15 + vy * 0.045 + vx % 2 * 0.02,
+                                    0.556
+                                ],
+                                rotation: [
+                                    Math.PI / 2,
+                                    0,
+                                    0
+                                ],
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("cylinderGeometry", {
+                                        args: [
+                                            0.007,
+                                            0.007,
+                                            0.004,
+                                            6
+                                        ]
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/datacenter-scene.tsx",
+                                        lineNumber: 918,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                        color: 0x030405
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/datacenter-scene.tsx",
+                                        lineNumber: 919,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, `v${vx}-${vy}`, true, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 917,
+                                columnNumber: 15
+                            }, this))),
                     Array.from({
                         length: 12
                     }).map((_, db)=>{
                         const row = Math.floor(db / 6);
                         const col = db % 6;
-                        const bx = -0.72 + col * 0.24;
+                        const bx = -0.5 + col * 0.22;
                         const by = 0.15 - row * 0.35;
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
                             children: [
@@ -3262,410 +3342,647 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 927,
+                                            lineNumber: 934,
                                             columnNumber: 19
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                            color: 0x606468,
-                                            roughness: 0.35,
-                                            metalness: 0.75
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
+                                            color: 0x3a4048,
+                                            roughness: 0.3,
+                                            metalness: 0.8
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 928,
+                                            lineNumber: 935,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 926,
+                                    lineNumber: 933,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                                     position: [
-                                        bx,
-                                        by + 0.1,
-                                        0.572
+                                        bx - 0.07,
+                                        by,
+                                        0.57
                                     ],
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                             args: [
-                                                0.16,
                                                 0.04,
-                                                0.01
+                                                0.25,
+                                                0.005
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 932,
+                                            lineNumber: 938,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                            color: 0x404448,
-                                            metalness: 0.8,
-                                            roughness: 0.3
+                                            color: 0x15181c
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 933,
+                                            lineNumber: 939,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 931,
+                                    lineNumber: 937,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        bx + 0.07,
+                                        by - 0.08,
+                                        0.57
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.03,
+                                                0.08,
+                                                0.01
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 943,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0x600000
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 944,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 942,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
                                     position: [
-                                        bx + 0.08,
-                                        by + 0.12,
+                                        bx + 0.07,
+                                        by + 0.1,
                                         0.575
                                     ],
                                     baseColor: 0x4488ff,
                                     altColor: 0x081828,
-                                    rate: 6 + Math.random() * 10,
+                                    rate: 4 + Math.random() * 6,
                                     offset: Math.random() * 6,
-                                    size: 0.008
+                                    size: 0.007
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 936,
+                                    lineNumber: 947,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
                                     position: [
-                                        bx + 0.08,
-                                        by + 0.1,
+                                        bx + 0.07,
+                                        by + 0.05,
                                         0.575
                                     ],
                                     baseColor: 0x00ff88,
                                     altColor: 0x081808,
                                     rate: 15 + Math.random() * 20,
                                     offset: Math.random() * 6,
-                                    size: 0.006
+                                    size: 0.005
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 938,
+                                    lineNumber: 949,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, db, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 924,
+                            lineNumber: 931,
                             columnNumber: 15
                         }, this);
                     }),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
-                            0.85,
-                            0.2,
+                            0.88,
+                            0.15,
                             0.555
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                 args: [
-                                    0.06,
-                                    0.045,
+                                    0.15,
+                                    0.25,
                                     0.015
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 945,
+                                lineNumber: 956,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                color: 0x0a0a0a
+                                color: 0x080a0c
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 946,
+                                lineNumber: 957,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 944,
+                        lineNumber: 955,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                        position: [
+                            0.88,
+                            0.2,
+                            0.563
+                        ],
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                args: [
+                                    0.1,
+                                    0.08,
+                                    0.005
+                                ]
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 960,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
+                                color: 0x00aacc,
+                                transparent: true,
+                                opacity: 0.6
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 961,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 959,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
                             0.85,
-                            0.1,
-                            0.555
+                            0,
+                            0.558
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                 args: [
-                                    0.05,
-                                    0.035,
+                                    0.04,
+                                    0.025,
                                     0.015
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 951,
+                                lineNumber: 966,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                color: 0x0066cc
+                                color: 0x0044aa
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 952,
+                                lineNumber: 967,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 950,
+                        lineNumber: 965,
                         columnNumber: 11
                     }, this),
                     [
                         0,
-                        0.06
+                        0.05
                     ].map((offset, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                             position: [
-                                0.85 + offset,
-                                0,
-                                0.555
+                                0.92,
+                                -0.05 + offset,
+                                0.558
                             ],
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                     args: [
-                                        0.04,
-                                        0.02,
+                                        0.035,
+                                        0.015,
                                         0.01
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 958,
+                                    lineNumber: 972,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                    color: 0x303030
+                                    color: 0x1a1a1a
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 959,
+                                    lineNumber: 973,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, `usb${i}`, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 957,
+                            lineNumber: 971,
                             columnNumber: 13
                         }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
-                            0.9,
+                            0.88,
                             -0.15,
-                            0.555
+                            0.558
+                        ],
+                        rotation: [
+                            Math.PI / 2,
+                            0,
+                            0
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("cylinderGeometry", {
                                 args: [
-                                    0.025,
-                                    0.025,
+                                    0.02,
+                                    0.02,
                                     0.01,
                                     12
-                                ],
-                                rotation: [
-                                    Math.PI / 2,
-                                    0,
-                                    0
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 965,
+                                lineNumber: 978,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x404040,
-                                metalness: 0.8,
-                                roughness: 0.2
+                                metalness: 0.8
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 966,
+                                lineNumber: 979,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 964,
+                        lineNumber: 977,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
                         position: [
-                            0.9,
+                            0.88,
                             -0.15,
-                            0.562
+                            0.565
                         ],
                         baseColor: 0x00ff00,
-                        size: 0.01
+                        size: 0.008,
+                        rate: 0
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 968,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true),
-            type === "aruba" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.1,
-                        color: "#ff6600",
-                        anchorX: "left",
-                        anchorY: "middle",
-                        position: [
-                            -0.98,
-                            h / 2 - 0.02,
-                            0.56
-                        ],
-                        font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
-                        children: "ARUBA"
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 976,
+                        lineNumber: 981,
                         columnNumber: 11
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.055,
-                        color: "#ffffff",
-                        anchorX: "left",
-                        anchorY: "middle",
-                        position: [
-                            -0.98,
-                            h / 2 - 0.11,
-                            0.56
-                        ],
-                        font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
-                        children: "ClearPass 7280"
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 987,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
-                        position: [
-                            -0.45,
-                            h / 2 - 0.02,
-                            0.555
-                        ],
-                        color: 0xff6600,
-                        width: 0.15
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 998,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                        position: [
-                            0,
-                            0,
-                            0.545
-                        ],
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
-                                args: [
-                                    1.5,
-                                    h * 0.6,
-                                    0.015
-                                ]
-                            }, void 0, false, {
-                                fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1002,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                color: 0xe0e0e0,
-                                roughness: 0.8
-                            }, void 0, false, {
-                                fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1003,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1001,
-                        columnNumber: 11
-                    }, this),
-                    Array.from({
-                        length: 4
-                    }).map((_, p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
+                    [
+                        -0.8,
+                        -0.6
+                    ].map((px, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
+                            position: [
+                                px,
+                                -0.15,
+                                -0.535
+                            ],
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                                    position: [
-                                        -0.4 + p * 0.2,
-                                        0,
-                                        0.555
-                                    ],
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                             args: [
-                                                0.08,
-                                                0.055,
-                                                0.015
+                                                0.16,
+                                                0.2,
+                                                0.02
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1010,
+                                            lineNumber: 987,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                            color: 0x101010,
-                                            roughness: 0.7
+                                            color: 0x202428
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1011,
+                                            lineNumber: 988,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1009,
+                                    lineNumber: 986,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SpinningFan, {
+                                    position: [
+                                        0,
+                                        0,
+                                        -0.01
+                                    ],
+                                    size: 0.04
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 991,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        0.05,
+                                        0,
+                                        -0.015
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.02,
+                                                0.12,
+                                                0.04
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 994,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0x404448
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 995,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 993,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
                                     position: [
-                                        -0.4 + p * 0.2,
-                                        -0.04,
-                                        0.562
+                                        -0.05,
+                                        0.06,
+                                        -0.015
                                     ],
-                                    baseColor: 0x00ff88,
-                                    altColor: 0x0a1a0a,
-                                    rate: 2 + Math.random() * 3,
-                                    offset: Math.random() * 6,
-                                    size: 0.006
+                                    baseColor: 0x00ff44,
+                                    size: 0.005
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1013,
+                                    lineNumber: 998,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, `psu${i}`, true, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 985,
+                            columnNumber: 13
+                        }, this))
+                ]
+            }, void 0, true),
+            type === "aruba" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
+                        fontSize: 0.11,
+                        color: "#ff6600",
+                        anchorX: "left",
+                        anchorY: "middle",
+                        position: [
+                            -0.98,
+                            h / 2 - 0.025,
+                            0.562
+                        ],
+                        font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
+                        children: "ARUBA"
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1008,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
+                        fontSize: 0.05,
+                        color: "#eeeeee",
+                        anchorX: "left",
+                        anchorY: "middle",
+                        position: [
+                            -0.98,
+                            h / 2 - 0.115,
+                            0.562
+                        ],
+                        font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
+                        children: "ClearPass 7280"
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1014,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
+                        position: [
+                            -0.45,
+                            h / 2 - 0.025,
+                            0.558
+                        ],
+                        color: 0xff6600,
+                        width: 0.15
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1019,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                        position: [
+                            0,
+                            0,
+                            0.546
+                        ],
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                args: [
+                                    1.5,
+                                    h * 0.65,
+                                    0.018
+                                ]
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1023,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                color: 0xc0c4c8,
+                                roughness: 0.8
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1024,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1022,
+                        columnNumber: 11
+                    }, this),
+                    Array.from({
+                        length: 6
+                    }).map((_, p)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        -0.5 + p * 0.16,
+                                        0,
+                                        0.556
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.075,
+                                                0.052,
+                                                0.018
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1031,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0x080808
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1032,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1030,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                                    position: [
+                                        -0.51 + p * 0.16,
+                                        -0.038,
+                                        0.566
+                                    ],
+                                    baseColor: 0x00ff44,
+                                    altColor: 0x001a00,
+                                    rate: 2 + Math.random() * 3,
+                                    offset: Math.random() * 6,
+                                    size: 0.005
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1034,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, p, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1008,
+                            lineNumber: 1029,
                             columnNumber: 13
                         }, this)),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
-                            0.7,
-                            0.02,
-                            0.555
+                            0.55,
+                            0,
+                            0.556
                         ],
-                        baseColor: 0x00ff00,
-                        size: 0.01
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                args: [
+                                    0.22,
+                                    0.12,
+                                    0.01
+                                ]
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1040,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                color: 0x080808
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1041,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1018,
+                        lineNumber: 1039,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                        position: [
+                            0.55,
+                            0,
+                            0.562
+                        ],
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                args: [
+                                    0.2,
+                                    0.1,
+                                    0.002
+                                ]
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1044,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
+                                color: 0x2288ff,
+                                transparent: true,
+                                opacity: 0.9
+                            }, void 0, false, {
+                                fileName: "[project]/components/datacenter-scene.tsx",
+                                lineNumber: 1045,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1043,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
                         position: [
-                            0.7,
-                            -0.02,
-                            0.555
+                            0.8,
+                            0.04,
+                            0.556
                         ],
-                        baseColor: 0xff6600,
-                        rate: 1.5,
-                        size: 0.01
+                        baseColor: 0x00ff00,
+                        size: 0.008
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1019,
+                        lineNumber: 1049,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                        position: [
+                            0.8,
+                            0,
+                            0.556
+                        ],
+                        baseColor: 0xffaa00,
+                        rate: 1.2,
+                        size: 0.008
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1050,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                        position: [
+                            0.8,
+                            -0.04,
+                            0.556
+                        ],
+                        baseColor: 0x00aaff,
+                        rate: 0,
+                        size: 0.008
+                    }, void 0, false, {
+                        fileName: "[project]/components/datacenter-scene.tsx",
+                        lineNumber: 1051,
                         columnNumber: 11
                     }, this)
                 ]
@@ -3676,107 +3993,139 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
                         position: [
                             0,
                             0,
-                            0.545
+                            0.546
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                 args: [
-                                    2.0,
-                                    h * 0.8,
-                                    0.02
+                                    2.08,
+                                    h * 0.9,
+                                    0.022
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1028,
+                                lineNumber: 1060,
                                 columnNumber: 13
                             }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                color: 0x0a0c10,
-                                roughness: 0.85
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
+                                color: 0x121418,
+                                roughness: 0.6,
+                                metalness: 0.8
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1029,
+                                lineNumber: 1061,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1027,
+                        lineNumber: 1059,
                         columnNumber: 11
                     }, this),
                     Array.from({
                         length: 24
                     }).map((_, pp)=>{
-                        const px = -0.85 + pp * 0.075;
+                        const px = -0.92 + pp * 0.08;
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                                     position: [
                                         px,
-                                        0,
-                                        0.555
+                                        -0.02,
+                                        0.558
                                     ],
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                             args: [
-                                                0.055,
-                                                0.055,
+                                                0.052,
+                                                0.065,
                                                 0.015
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1038,
+                                            lineNumber: 1071,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                            color: 0x151820,
-                                            roughness: 0.6
+                                            color: 0x050608,
+                                            roughness: 0.8
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1039,
+                                            lineNumber: 1072,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1037,
+                                    lineNumber: 1070,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                                     position: [
                                         px,
-                                        0.055,
-                                        0.555
+                                        -0.02,
+                                        0.562
                                     ],
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                             args: [
-                                                0.04,
-                                                0.02,
-                                                0.002
+                                                0.038,
+                                                0.045,
+                                                0.01
                                             ]
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1043,
+                                            lineNumber: 1076,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                            color: 0xf0f0f0
+                                            color: 0x0a0c10
                                         }, void 0, false, {
                                             fileName: "[project]/components/datacenter-scene.tsx",
-                                            lineNumber: 1044,
+                                            lineNumber: 1077,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1042,
+                                    lineNumber: 1075,
+                                    columnNumber: 17
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        px,
+                                        0.06,
+                                        0.558
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.045,
+                                                0.025,
+                                                0.003
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1081,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0xf8f9fa
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1082,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1080,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, pp, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1036,
+                            lineNumber: 1068,
                             columnNumber: 15
                         }, this);
                     })
@@ -3785,191 +4134,330 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
             type === "ups" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.12,
+                        fontSize: 0.13,
                         color: "#00aa44",
                         anchorX: "left",
                         anchorY: "middle",
                         position: [
                             -0.95,
                             h / 2 - 0.1,
-                            0.56
+                            0.562
                         ],
                         font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
                         children: "APC"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1056,
+                        lineNumber: 1094,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Text"], {
-                        fontSize: 0.05,
-                        color: "#888888",
+                        fontSize: 0.055,
+                        color: "#aaaaaa",
                         anchorX: "left",
                         anchorY: "middle",
                         position: [
                             -0.95,
-                            h / 2 - 0.2,
-                            0.56
+                            h / 2 - 0.22,
+                            0.562
                         ],
                         font: "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf",
-                        children: "Smart-UPS 3000VA"
+                        children: "Smart-UPS SRT 3000VA"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1067,
+                        lineNumber: 1100,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BrandStrip, {
                         position: [
                             -0.5,
                             h / 2 - 0.1,
-                            0.555
+                            0.558
                         ],
                         color: 0x00aa44,
-                        width: 0.12
+                        width: 0.15
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1078,
+                        lineNumber: 1105,
                         columnNumber: 11
                     }, this),
+                    Array.from({
+                        length: 12
+                    }).map((_, vx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                            position: [
+                                -0.95 + vx * 0.08,
+                                -0.1,
+                                0.552
+                            ],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                    args: [
+                                        0.04,
+                                        0.4,
+                                        0.015
+                                    ]
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1110,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                    color: 0x06080a
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1111,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, `upsv${vx}`, true, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 1109,
+                            columnNumber: 13
+                        }, this)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
-                            -0.5,
+                            0.2,
                             0.1,
                             0.555
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                 args: [
-                                    0.4,
-                                    0.25,
+                                    0.38,
+                                    0.28,
                                     0.02
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1082,
+                                lineNumber: 1117,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                color: 0x0a0a0a,
-                                roughness: 0.5
+                                color: 0x040506,
+                                roughness: 0.6
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1083,
+                                lineNumber: 1118,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1081,
+                        lineNumber: 1116,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                         position: [
-                            -0.5,
+                            0.2,
                             0.1,
                             0.566
                         ],
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
                                 args: [
-                                    0.35,
-                                    0.2,
+                                    0.34,
+                                    0.22,
                                     0.005
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1086,
+                                lineNumber: 1121,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
-                                color: 0x00ff88,
+                                color: 0x00ffaa,
                                 transparent: true,
-                                opacity: 0.7
+                                opacity: 0.75
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1087,
+                                lineNumber: 1122,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1085,
+                        lineNumber: 1120,
                         columnNumber: 11
                     }, this),
+                    [
+                        -0.08,
+                        0,
+                        0.08
+                    ].map((ox, bi)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                            position: [
+                                0.2 + ox,
+                                -0.08,
+                                0.56
+                            ],
+                            rotation: [
+                                Math.PI / 2,
+                                0,
+                                0
+                            ],
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("cylinderGeometry", {
+                                    args: [
+                                        0.02,
+                                        0.02,
+                                        0.01,
+                                        8
+                                    ]
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1127,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                    color: 0x2a2a2a
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1128,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, `btn${bi}`, true, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 1126,
+                            columnNumber: 13
+                        }, this)),
                     Array.from({
                         length: 5
-                    }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
-                            position: [
-                                -0.1 + i * 0.08,
-                                0.2,
-                                0.555
-                            ],
-                            baseColor: 0x00ff00,
-                            altColor: 0x002200,
-                            rate: 0.5,
-                            offset: i * 0.3,
-                            size: 0.012
-                        }, `bat${i}`, false, {
+                    }).map((_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                                    position: [
+                                        0.5,
+                                        0.2 - i * 0.04,
+                                        0.558
+                                    ],
+                                    baseColor: i < 3 ? 0x00ff00 : i === 3 ? 0xffaa00 : 0xff0000,
+                                    altColor: 0x001100,
+                                    rate: i < 2 ? 0 : 0.5,
+                                    offset: i * 0.3,
+                                    size: 0.01
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1136,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
+                                    position: [
+                                        0.55,
+                                        0.2 - i * 0.04,
+                                        0.558
+                                    ],
+                                    baseColor: 0x00ff00,
+                                    altColor: 0x002200,
+                                    rate: 0,
+                                    size: 0.01
+                                }, void 0, false, {
+                                    fileName: "[project]/components/datacenter-scene.tsx",
+                                    lineNumber: 1138,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, `bat${i}`, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1092,
+                            lineNumber: 1134,
                             columnNumber: 13
                         }, this)),
                     Array.from({
                         length: 8
-                    }).map((_, o)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
-                            position: [
-                                0.4 + o % 4 * 0.15,
-                                0.1 - Math.floor(o / 4) * 0.2,
-                                0.555
-                            ],
+                    }).map((_, o)=>{
+                        const ox = 0.7 + o % 2 * 0.18;
+                        const oy = 0.15 - Math.floor(o / 2) * 0.15;
+                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
-                                    args: [
-                                        0.1,
-                                        0.08,
-                                        0.02
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        ox,
+                                        oy,
+                                        0.558
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.12,
+                                                0.1,
+                                                0.015
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1149,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0x181a1c
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1150,
+                                            columnNumber: 19
+                                        }, this)
                                     ]
-                                }, void 0, false, {
+                                }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1098,
-                                    columnNumber: 15
+                                    lineNumber: 1148,
+                                    columnNumber: 17
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
-                                    color: 0x202020,
-                                    roughness: 0.6
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
+                                    position: [
+                                        ox,
+                                        oy,
+                                        0.566
+                                    ],
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("boxGeometry", {
+                                            args: [
+                                                0.06,
+                                                0.08,
+                                                0.005
+                                            ]
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1153,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
+                                            color: 0x040404
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/datacenter-scene.tsx",
+                                            lineNumber: 1154,
+                                            columnNumber: 19
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1099,
-                                    columnNumber: 15
+                                    lineNumber: 1152,
+                                    columnNumber: 17
                                 }, this)
                             ]
                         }, `out${o}`, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1097,
-                            columnNumber: 13
-                        }, this)),
+                            lineNumber: 1147,
+                            columnNumber: 15
+                        }, this);
+                    }),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SpinningFan, {
                         position: [
-                            0.8,
-                            0.15,
-                            0.555
+                            -0.7,
+                            0,
+                            -0.53
                         ],
-                        size: 0.1
+                        size: 0.12
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1104,
+                        lineNumber: 1161,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SpinningFan, {
                         position: [
-                            0.8,
-                            -0.15,
-                            0.555
+                            -0.4,
+                            0,
+                            -0.53
                         ],
-                        size: 0.1
+                        size: 0.12
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1105,
+                        lineNumber: 1162,
                         columnNumber: 11
                     }, this)
                 ]
@@ -3977,7 +4465,7 @@ function RackDevice({ y, h, type, section, label, onHover, onClick }) {
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 689,
+        lineNumber: 693,
         columnNumber: 5
     }, this);
 }
@@ -4088,7 +4576,7 @@ function ServerRack({ x, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1133,
+                            lineNumber: 1190,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4098,13 +4586,13 @@ function ServerRack({ x, onHover, onClick }) {
                             clearcoat: 0.5
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1134,
+                            lineNumber: 1191,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `fp${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1132,
+                    lineNumber: 1189,
                     columnNumber: 9
                 }, this)),
             [
@@ -4126,7 +4614,7 @@ function ServerRack({ x, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1140,
+                            lineNumber: 1197,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4136,13 +4624,13 @@ function ServerRack({ x, onHover, onClick }) {
                             clearcoat: 0.5
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1141,
+                            lineNumber: 1198,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `tb${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1139,
+                    lineNumber: 1196,
                     columnNumber: 9
                 }, this)),
             [
@@ -4165,7 +4653,7 @@ function ServerRack({ x, onHover, onClick }) {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1148,
+                                    lineNumber: 1205,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4175,13 +4663,13 @@ function ServerRack({ x, onHover, onClick }) {
                                     clearcoat: 0.6
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1149,
+                                    lineNumber: 1206,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1147,
+                            lineNumber: 1204,
                             columnNumber: 11
                         }, this),
                         Array.from({
@@ -4201,7 +4689,7 @@ function ServerRack({ x, onHover, onClick }) {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 1153,
+                                        lineNumber: 1210,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -4210,19 +4698,19 @@ function ServerRack({ x, onHover, onClick }) {
                                         roughness: 0.1
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 1154,
+                                        lineNumber: 1211,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, u, true, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1152,
+                                lineNumber: 1209,
                                 columnNumber: 13
                             }, this))
                     ]
                 }, `fr${ri}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1146,
+                    lineNumber: 1203,
                     columnNumber: 9
                 }, this)),
             [
@@ -4243,7 +4731,7 @@ function ServerRack({ x, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1162,
+                            lineNumber: 1219,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4252,13 +4740,13 @@ function ServerRack({ x, onHover, onClick }) {
                             metalness: 0.9
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1163,
+                            lineNumber: 1220,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `rr${ri}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1161,
+                    lineNumber: 1218,
                     columnNumber: 9
                 }, this)),
             [
@@ -4279,7 +4767,7 @@ function ServerRack({ x, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1169,
+                            lineNumber: 1226,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4290,13 +4778,13 @@ function ServerRack({ x, onHover, onClick }) {
                             opacity: 0.88
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1170,
+                            lineNumber: 1227,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `sp${si}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1168,
+                    lineNumber: 1225,
                     columnNumber: 9
                 }, this)),
             [
@@ -4319,20 +4807,20 @@ function ServerRack({ x, onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1176,
+                                lineNumber: 1233,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                 color: 0x111820
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1177,
+                                lineNumber: 1234,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, `pf${si}-${pi}`, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1175,
+                        lineNumber: 1232,
                         columnNumber: 11
                     }, this))),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -4350,7 +4838,7 @@ function ServerRack({ x, onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1183,
+                        lineNumber: 1240,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4359,13 +4847,13 @@ function ServerRack({ x, onHover, onClick }) {
                         metalness: 0.65
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1184,
+                        lineNumber: 1241,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1182,
+                lineNumber: 1239,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -4387,20 +4875,20 @@ function ServerRack({ x, onHover, onClick }) {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1189,
+                                    lineNumber: 1246,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                     color: 0x18242e
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1190,
+                                    lineNumber: 1247,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1188,
+                            lineNumber: 1245,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -4416,13 +4904,13 @@ function ServerRack({ x, onHover, onClick }) {
                             size: 0.005
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1192,
+                            lineNumber: 1249,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `pdu${o}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1187,
+                    lineNumber: 1244,
                     columnNumber: 9
                 }, this)),
             [
@@ -4447,7 +4935,7 @@ function ServerRack({ x, onHover, onClick }) {
                                     ]
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1199,
+                                    lineNumber: 1256,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4456,13 +4944,13 @@ function ServerRack({ x, onHover, onClick }) {
                                     metalness: 0.5
                                 }, void 0, false, {
                                     fileName: "[project]/components/datacenter-scene.tsx",
-                                    lineNumber: 1200,
+                                    lineNumber: 1257,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1198,
+                            lineNumber: 1255,
                             columnNumber: 11
                         }, this),
                         Array.from({
@@ -4482,26 +4970,26 @@ function ServerRack({ x, onHover, onClick }) {
                                         ]
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 1204,
+                                        lineNumber: 1261,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
                                         color: 0x090e14
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 1205,
+                                        lineNumber: 1262,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, s, true, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1203,
+                                lineNumber: 1260,
                                 columnNumber: 13
                             }, this))
                     ]
                 }, `bl${bi}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1197,
+                    lineNumber: 1254,
                     columnNumber: 9
                 }, this)),
             Array.from({
@@ -4523,7 +5011,7 @@ function ServerRack({ x, onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1213,
+                            lineNumber: 1270,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -4532,13 +5020,13 @@ function ServerRack({ x, onHover, onClick }) {
                             roughness: 0.3
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1214,
+                            lineNumber: 1271,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `dr${r}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1212,
+                    lineNumber: 1269,
                     columnNumber: 9
                 }, this)),
             devs.map((d, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackDevice, {
@@ -4551,13 +5039,13 @@ function ServerRack({ x, onHover, onClick }) {
                     onClick: onClick
                 }, i, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1219,
+                    lineNumber: 1276,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1129,
+        lineNumber: 1186,
         columnNumber: 5
     }, this);
 }
@@ -4581,20 +5069,24 @@ function useCanvasTex(w, h, draw) {
         w,
         h
     ]);
+    const lastDraw = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(0);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$b389eeca$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"])({
         "useCanvasTex.useFrame": ({ clock })=>{
-            if (canvasRef.current && texRef.current) {
-                const ctx = canvasRef.current.getContext("2d");
-                if (ctx) {
-                    draw(ctx, clock.elapsedTime);
-                    texRef.current.needsUpdate = true;
+            if (clock.elapsedTime - lastDraw.current > 0.066) {
+                if (canvasRef.current && texRef.current) {
+                    const ctx = canvasRef.current.getContext("2d");
+                    if (ctx) {
+                        draw(ctx, clock.elapsedTime);
+                        texRef.current.needsUpdate = true;
+                    }
                 }
+                lastDraw.current = clock.elapsedTime;
             }
         }
     }["useCanvasTex.useFrame"]);
     return texRef.current;
 }
-_s7(useCanvasTex, "gbj9pqMYeH8Ugw9lPvtxWfAEkxM=", false, function() {
+_s7(useCanvasTex, "JT0FTSqLn7QEkkqYaWDD7Op9XQk=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$events$2d$b389eeca$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__D__as__useFrame$3e$__["useFrame"]
     ];
@@ -4619,7 +5111,7 @@ function WallMonitor({ position, size, section, label, draw, onHover, onClick })
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1275,
+                        lineNumber: 1337,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -4629,13 +5121,13 @@ function WallMonitor({ position, size, section, label, draw, onHover, onClick })
                         clearcoat: 0.4
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1276,
+                        lineNumber: 1338,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1274,
+                lineNumber: 1336,
                 columnNumber: 7
             }, this),
             tex && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -4652,7 +5144,7 @@ function WallMonitor({ position, size, section, label, draw, onHover, onClick })
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1280,
+                        lineNumber: 1342,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -4662,19 +5154,19 @@ function WallMonitor({ position, size, section, label, draw, onHover, onClick })
                         emissiveIntensity: 1.5
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1281,
+                        lineNumber: 1343,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1279,
+                lineNumber: 1341,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1273,
+        lineNumber: 1335,
         columnNumber: 5
     }, this);
 }
@@ -4997,7 +5489,7 @@ function WallMonitors({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1486,
+                        lineNumber: 1548,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -5005,13 +5497,13 @@ function WallMonitors({ onHover, onClick }) {
                         roughness: 0.8
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1487,
+                        lineNumber: 1549,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1485,
+                lineNumber: 1547,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5031,7 +5523,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1491,
+                lineNumber: 1553,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5051,7 +5543,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1492,
+                lineNumber: 1554,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5071,7 +5563,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1493,
+                lineNumber: 1555,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5091,7 +5583,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1496,
+                lineNumber: 1558,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5111,7 +5603,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1497,
+                lineNumber: 1559,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5131,7 +5623,7 @@ function WallMonitors({ onHover, onClick }) {
                 onClick: onClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1498,
+                lineNumber: 1560,
                 columnNumber: 7
             }, this),
             [
@@ -5174,7 +5666,7 @@ function WallMonitors({ onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1503,
+                            lineNumber: 1565,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -5183,19 +5675,19 @@ function WallMonitors({ onHover, onClick }) {
                             metalness: 0.3
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1504,
+                            lineNumber: 1566,
                             columnNumber: 11
                         }, this)
                     ]
                 }, `bezel${i}`, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1502,
+                    lineNumber: 1564,
                     columnNumber: 9
                 }, this))
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1483,
+        lineNumber: 1545,
         columnNumber: 5
     }, this);
 }
@@ -5217,7 +5709,7 @@ function CoffeeMug({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1516,
+                        lineNumber: 1578,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5226,13 +5718,13 @@ function CoffeeMug({ position }) {
                         clearcoat: 1.0
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1517,
+                        lineNumber: 1579,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1515,
+                lineNumber: 1577,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5257,7 +5749,7 @@ function CoffeeMug({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1520,
+                        lineNumber: 1582,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5266,13 +5758,13 @@ function CoffeeMug({ position }) {
                         clearcoat: 1.0
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1521,
+                        lineNumber: 1583,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1519,
+                lineNumber: 1581,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5291,7 +5783,7 @@ function CoffeeMug({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1524,
+                        lineNumber: 1586,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5299,13 +5791,13 @@ function CoffeeMug({ position }) {
                         roughness: 0.02
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1525,
+                        lineNumber: 1587,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1523,
+                lineNumber: 1585,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5327,7 +5819,7 @@ function CoffeeMug({ position }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1528,
+                        lineNumber: 1590,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5336,13 +5828,13 @@ function CoffeeMug({ position }) {
                         clearcoat: 1.0
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1529,
+                        lineNumber: 1591,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1527,
+                lineNumber: 1589,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -5356,13 +5848,13 @@ function CoffeeMug({ position }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1531,
+                lineNumber: 1593,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1514,
+        lineNumber: 1576,
         columnNumber: 5
     }, this);
 }
@@ -5514,7 +6006,7 @@ function Workstation({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1626,
+                        lineNumber: 1688,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5524,13 +6016,13 @@ function Workstation({ onHover, onClick }) {
                         clearcoat: 0.4
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1627,
+                        lineNumber: 1689,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1625,
+                lineNumber: 1687,
                 columnNumber: 7
             }, this),
             [
@@ -5566,7 +6058,7 @@ function Workstation({ onHover, onClick }) {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1632,
+                            lineNumber: 1694,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5575,13 +6067,13 @@ function Workstation({ onHover, onClick }) {
                             metalness: 0.7
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1633,
+                            lineNumber: 1695,
                             columnNumber: 11
                         }, this)
                     ]
                 }, i, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1631,
+                    lineNumber: 1693,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5599,7 +6091,7 @@ function Workstation({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1638,
+                        lineNumber: 1700,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5608,13 +6100,13 @@ function Workstation({ onHover, onClick }) {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1639,
+                        lineNumber: 1701,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1637,
+                lineNumber: 1699,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
@@ -5639,7 +6131,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1644,
+                                lineNumber: 1706,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5648,13 +6140,13 @@ function Workstation({ onHover, onClick }) {
                                 metalness: 0.7
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1645,
+                                lineNumber: 1707,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1643,
+                        lineNumber: 1705,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5672,7 +6164,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1648,
+                                lineNumber: 1710,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5681,13 +6173,13 @@ function Workstation({ onHover, onClick }) {
                                 metalness: 0.7
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1649,
+                                lineNumber: 1711,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1647,
+                        lineNumber: 1709,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5707,13 +6199,13 @@ function Workstation({ onHover, onClick }) {
                         onClick: onClick
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1651,
+                        lineNumber: 1713,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1642,
+                lineNumber: 1704,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
@@ -5743,7 +6235,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1656,
+                                lineNumber: 1718,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5752,13 +6244,13 @@ function Workstation({ onHover, onClick }) {
                                 metalness: 0.7
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1657,
+                                lineNumber: 1719,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1655,
+                        lineNumber: 1717,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitor, {
@@ -5778,13 +6270,13 @@ function Workstation({ onHover, onClick }) {
                         onClick: onClick
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1659,
+                        lineNumber: 1721,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1654,
+                lineNumber: 1716,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5802,7 +6294,7 @@ function Workstation({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1663,
+                        lineNumber: 1725,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5811,13 +6303,13 @@ function Workstation({ onHover, onClick }) {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1664,
+                        lineNumber: 1726,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1662,
+                lineNumber: 1724,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5840,7 +6332,7 @@ function Workstation({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1668,
+                        lineNumber: 1730,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5849,13 +6341,13 @@ function Workstation({ onHover, onClick }) {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1669,
+                        lineNumber: 1731,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1667,
+                lineNumber: 1729,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CoffeeMug, {
@@ -5866,7 +6358,7 @@ function Workstation({ onHover, onClick }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1672,
+                lineNumber: 1734,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
@@ -5887,7 +6379,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1676,
+                                lineNumber: 1738,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5896,13 +6388,13 @@ function Workstation({ onHover, onClick }) {
                                 metalness: 0.7
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1677,
+                                lineNumber: 1739,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1675,
+                        lineNumber: 1737,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5920,7 +6412,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1680,
+                                lineNumber: 1742,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -5931,13 +6423,13 @@ function Workstation({ onHover, onClick }) {
                                 clearcoat: 1.0
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1681,
+                                lineNumber: 1743,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1679,
+                        lineNumber: 1741,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -5947,7 +6439,7 @@ function Workstation({ onHover, onClick }) {
                         distance: 1.5
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1683,
+                        lineNumber: 1745,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5965,7 +6457,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1685,
+                                lineNumber: 1747,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhongMaterial", {
@@ -5974,13 +6466,13 @@ function Workstation({ onHover, onClick }) {
                                 emissiveIntensity: 0.35
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1686,
+                                lineNumber: 1748,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1684,
+                        lineNumber: 1746,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -5998,7 +6490,7 @@ function Workstation({ onHover, onClick }) {
                                 ]
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1689,
+                                lineNumber: 1751,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhongMaterial", {
@@ -6007,13 +6499,13 @@ function Workstation({ onHover, onClick }) {
                                 emissiveIntensity: 0.2
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 1690,
+                                lineNumber: 1752,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1688,
+                        lineNumber: 1750,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -6025,7 +6517,7 @@ function Workstation({ onHover, onClick }) {
                         baseColor: 0x00ff88
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1692,
+                        lineNumber: 1754,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LED, {
@@ -6037,13 +6529,13 @@ function Workstation({ onHover, onClick }) {
                         baseColor: 0x00ff88
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1693,
+                        lineNumber: 1755,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1674,
+                lineNumber: 1736,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -6057,13 +6549,13 @@ function Workstation({ onHover, onClick }) {
                 distance: 10
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1696,
+                lineNumber: 1758,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1623,
+        lineNumber: 1685,
         columnNumber: 5
     }, this);
 }
@@ -6078,7 +6570,7 @@ function Chair() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
         position: [
             7.5,
-            0.75,
+            1.2,
             3.5
         ],
         rotation: [
@@ -6086,6 +6578,7 @@ function Chair() {
             Math.PI,
             0
         ],
+        scale: 1.6,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
                 children: [
@@ -6097,7 +6590,7 @@ function Chair() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1706,
+                        lineNumber: 1768,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -6106,13 +6599,13 @@ function Chair() {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1707,
+                        lineNumber: 1769,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1705,
+                lineNumber: 1767,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6135,7 +6628,7 @@ function Chair() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1710,
+                        lineNumber: 1772,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -6144,13 +6637,13 @@ function Chair() {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1711,
+                        lineNumber: 1773,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1709,
+                lineNumber: 1771,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6169,7 +6662,7 @@ function Chair() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1714,
+                        lineNumber: 1776,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -6178,13 +6671,13 @@ function Chair() {
                         metalness: 0.7
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1715,
+                        lineNumber: 1777,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1713,
+                lineNumber: 1775,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6203,7 +6696,7 @@ function Chair() {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1718,
+                        lineNumber: 1780,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -6212,13 +6705,13 @@ function Chair() {
                         metalness: 0.4
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 1719,
+                        lineNumber: 1781,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 1717,
+                lineNumber: 1779,
                 columnNumber: 7
             }, this),
             Array.from({
@@ -6240,7 +6733,7 @@ function Chair() {
                             ]
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1725,
+                            lineNumber: 1787,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshPhysicalMaterial", {
@@ -6249,20 +6742,20 @@ function Chair() {
                             metalness: 0.2
                         }, void 0, false, {
                             fileName: "[project]/components/datacenter-scene.tsx",
-                            lineNumber: 1726,
+                            lineNumber: 1788,
                             columnNumber: 13
                         }, this)
                     ]
                 }, wi, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 1724,
+                    lineNumber: 1786,
                     columnNumber: 11
                 }, this);
             })
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1704,
+        lineNumber: 1766,
         columnNumber: 5
     }, this);
 }
@@ -6610,10 +7103,11 @@ function LebanonTrafficMap({ onHover, onClick }) {
     const tex = useCanvasTex(1024, 768, drawMap);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("group", {
         position: [
-            8.4,
+            14.0,
             5.5,
             -12.7
         ],
+        scale: 1.2,
         onPointerOver: ()=>onHover?.("Lebanon Internet Traffic"),
         onPointerOut: ()=>onHover?.(null),
         onClick: ()=>onClick?.("contact"),
@@ -6633,7 +7127,7 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2002,
+                        lineNumber: 2065,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -6641,13 +7135,13 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         roughness: 0.7
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2003,
+                        lineNumber: 2066,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2001,
+                lineNumber: 2064,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6665,7 +7159,7 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2008,
+                        lineNumber: 2071,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -6674,13 +7168,13 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         metalness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2009,
+                        lineNumber: 2072,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2007,
+                lineNumber: 2070,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6698,20 +7192,20 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2014,
+                        lineNumber: 2077,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: 0x00ffe7
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2015,
+                        lineNumber: 2078,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2013,
+                lineNumber: 2076,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6729,20 +7223,20 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2018,
+                        lineNumber: 2081,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: 0x00ffe7
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2019,
+                        lineNumber: 2082,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2017,
+                lineNumber: 2080,
                 columnNumber: 7
             }, this),
             tex && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6759,7 +7253,7 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2025,
+                        lineNumber: 2088,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -6769,13 +7263,13 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         emissiveIntensity: 1.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2026,
+                        lineNumber: 2089,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2024,
+                lineNumber: 2087,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6793,20 +7287,20 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2032,
+                        lineNumber: 2095,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: 0x00ff88
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2033,
+                        lineNumber: 2096,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2031,
+                lineNumber: 2094,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6824,20 +7318,20 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2036,
+                        lineNumber: 2099,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshBasicMaterial", {
                         color: 0x0088ff
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2037,
+                        lineNumber: 2100,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2035,
+                lineNumber: 2098,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6855,7 +7349,7 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2042,
+                        lineNumber: 2105,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -6866,13 +7360,13 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         opacity: 0.9
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2043,
+                        lineNumber: 2106,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2041,
+                lineNumber: 2104,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("mesh", {
@@ -6890,7 +7384,7 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2048,
+                        lineNumber: 2111,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("meshStandardMaterial", {
@@ -6899,19 +7393,19 @@ function LebanonTrafficMap({ onHover, onClick }) {
                         roughness: 0.3
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2049,
+                        lineNumber: 2112,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2047,
+                lineNumber: 2110,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 1994,
+        lineNumber: 2056,
         columnNumber: 5
     }, this);
 }
@@ -6984,26 +7478,34 @@ function Particles() {
                         attach: "attributes-position",
                         count: count,
                         array: pos,
-                        itemSize: 3
+                        itemSize: 3,
+                        args: [
+                            pos,
+                            3
+                        ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2113,
+                        lineNumber: 2176,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("bufferAttribute", {
                         attach: "attributes-size",
                         count: count,
                         array: sizes,
-                        itemSize: 1
+                        itemSize: 1,
+                        args: [
+                            sizes,
+                            1
+                        ]
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2114,
+                        lineNumber: 2177,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2112,
+                lineNumber: 2175,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointsMaterial", {
@@ -7015,13 +7517,13 @@ function Particles() {
                 sizeAttenuation: true
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2116,
+                lineNumber: 2179,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2111,
+        lineNumber: 2174,
         columnNumber: 5
     }, this);
 }
@@ -7081,15 +7583,19 @@ function NetworkFlowParticles() {
                     attach: "attributes-position",
                     count: count,
                     array: pos,
-                    itemSize: 3
+                    itemSize: 3,
+                    args: [
+                        pos,
+                        3
+                    ]
                 }, void 0, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 2164,
+                    lineNumber: 2227,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2163,
+                lineNumber: 2226,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointsMaterial", {
@@ -7100,13 +7606,13 @@ function NetworkFlowParticles() {
                 blending: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AdditiveBlending"]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2166,
+                lineNumber: 2229,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2162,
+        lineNumber: 2225,
         columnNumber: 5
     }, this);
 }
@@ -7136,7 +7642,7 @@ function Lights() {
                 intensity: 1.0
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2186,
+                lineNumber: 2249,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("hemisphereLight", {
@@ -7145,7 +7651,7 @@ function Lights() {
                 intensity: 0.7
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2187,
+                lineNumber: 2250,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -7158,12 +7664,12 @@ function Lights() {
                 ],
                 castShadow: true,
                 "shadow-mapSize": [
-                    2048,
-                    2048
+                    1024,
+                    1024
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2189,
+                lineNumber: 2252,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -7176,7 +7682,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2190,
+                lineNumber: 2253,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("directionalLight", {
@@ -7189,7 +7695,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2191,
+                lineNumber: 2254,
                 columnNumber: 7
             }, this),
             [
@@ -7210,7 +7716,7 @@ function Lights() {
                     ]
                 }, `fl${i}`, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 2194,
+                    lineNumber: 2257,
                     columnNumber: 9
                 }, this)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -7225,7 +7731,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2197,
+                lineNumber: 2260,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -7239,7 +7745,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2198,
+                lineNumber: 2261,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -7254,7 +7760,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2199,
+                lineNumber: 2262,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pointLight", {
@@ -7268,7 +7774,7 @@ function Lights() {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2200,
+                lineNumber: 2263,
                 columnNumber: 7
             }, this)
         ]
@@ -7291,7 +7797,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2209,
+                lineNumber: 2272,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("fog", {
@@ -7303,36 +7809,36 @@ function SceneContent({ onHover, onSectionClick }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2210,
+                lineNumber: 2273,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Lights, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2211,
+                lineNumber: 2274,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Floor, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2212,
+                lineNumber: 2275,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Room, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2213,
+                lineNumber: 2276,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CableTray, {
                 z: 0
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2214,
+                lineNumber: 2277,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CableTray, {
                 z: -3
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2215,
+                lineNumber: 2278,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ServerRack, {
@@ -7341,7 +7847,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2216,
+                lineNumber: 2279,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ServerRack, {
@@ -7350,7 +7856,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2217,
+                lineNumber: 2280,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ServerRack, {
@@ -7359,28 +7865,28 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2218,
+                lineNumber: 2281,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackCableSystem, {
                 rackX: -11
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2220,
+                lineNumber: 2283,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackCableSystem, {
                 rackX: -8
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2221,
+                lineNumber: 2284,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(RackCableSystem, {
                 rackX: -5
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2222,
+                lineNumber: 2285,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CrossRackFiber, {
@@ -7388,7 +7894,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 rack2X: -8
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2224,
+                lineNumber: 2287,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CrossRackFiber, {
@@ -7396,7 +7902,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 rack2X: -5
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2225,
+                lineNumber: 2288,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(WallMonitors, {
@@ -7404,7 +7910,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2226,
+                lineNumber: 2289,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Workstation, {
@@ -7412,12 +7918,12 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2227,
+                lineNumber: 2290,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Chair, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2228,
+                lineNumber: 2291,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LebanonTrafficMap, {
@@ -7425,17 +7931,17 @@ function SceneContent({ onHover, onSectionClick }) {
                 onClick: onSectionClick
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2229,
+                lineNumber: 2292,
                 columnNumber: 3
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Particles, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2230,
+                lineNumber: 2293,
                 columnNumber: 3
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(NetworkFlowParticles, {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2231,
+                lineNumber: 2294,
                 columnNumber: 3
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$OrbitControls$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["OrbitControls"], {
@@ -7451,7 +7957,7 @@ function SceneContent({ onHover, onSectionClick }) {
                 ]
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2232,
+                lineNumber: 2295,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$postprocessing$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["EffectComposer"], {
@@ -7461,12 +7967,12 @@ function SceneContent({ onHover, onSectionClick }) {
                     luminanceSmoothing: 0.5
                 }, void 0, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 2234,
+                    lineNumber: 2297,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2233,
+                lineNumber: 2296,
                 columnNumber: 7
             }, this)
         ]
@@ -7516,19 +8022,19 @@ function BootLoader({ onComplete }) {
                         children: "."
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2261,
+                        lineNumber: 2324,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2262,
+                        lineNumber: 2325,
                         columnNumber: 9
                     }, this),
                     "YASSIN"
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2260,
+                lineNumber: 2323,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7536,7 +8042,7 @@ function BootLoader({ onComplete }) {
                 children: "Network Engineer · Developer · Educator"
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2265,
+                lineNumber: 2328,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7548,12 +8054,12 @@ function BootLoader({ onComplete }) {
                     }
                 }, void 0, false, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 2267,
+                    lineNumber: 2330,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2266,
+                lineNumber: 2329,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7565,13 +8071,13 @@ function BootLoader({ onComplete }) {
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2269,
+                lineNumber: 2332,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2259,
+        lineNumber: 2322,
         columnNumber: 5
     }, this);
 }
@@ -7594,14 +8100,14 @@ function TopBar() {
                         children: "."
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2279,
+                        lineNumber: 2342,
                         columnNumber: 17
                     }, this),
                     "YASSIN"
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2278,
+                lineNumber: 2341,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7616,13 +8122,13 @@ function TopBar() {
                                 children: "ONLINE"
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 2283,
+                                lineNumber: 2346,
                                 columnNumber: 19
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2282,
+                        lineNumber: 2345,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7634,13 +8140,13 @@ function TopBar() {
                                 children: "A · B · C ACTIVE"
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 2286,
+                                lineNumber: 2349,
                                 columnNumber: 18
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2285,
+                        lineNumber: 2348,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7652,25 +8158,25 @@ function TopBar() {
                                 children: "▌"
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 2289,
+                                lineNumber: 2352,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2288,
+                        lineNumber: 2351,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2281,
+                lineNumber: 2344,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2277,
+        lineNumber: 2340,
         columnNumber: 5
     }, this);
 }
@@ -7717,7 +8223,7 @@ function SideNav({ active, onClick }) {
                         className: `h-[1px] bg-[#00ffe7] transition-all duration-300 ${active === item.id ? "w-8" : "w-[18px]"}`
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2311,
+                        lineNumber: 2374,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7725,18 +8231,18 @@ function SideNav({ active, onClick }) {
                         children: item.label
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2312,
+                        lineNumber: 2375,
                         columnNumber: 11
                     }, this)
                 ]
             }, item.id, true, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2310,
+                lineNumber: 2373,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2308,
+        lineNumber: 2371,
         columnNumber: 5
     }, this);
 }
@@ -7760,7 +8266,7 @@ function Panel({ section, onClose }) {
                                         children: data.ey
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 2328,
+                                        lineNumber: 2391,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7768,13 +8274,13 @@ function Panel({ section, onClose }) {
                                         children: data.ti
                                     }, void 0, false, {
                                         fileName: "[project]/components/datacenter-scene.tsx",
-                                        lineNumber: 2329,
+                                        lineNumber: 2392,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 2327,
+                                lineNumber: 2390,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7783,13 +8289,13 @@ function Panel({ section, onClose }) {
                                 children: "[ CLOSE ]"
                             }, void 0, false, {
                                 fileName: "[project]/components/datacenter-scene.tsx",
-                                lineNumber: 2331,
+                                lineNumber: 2394,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2326,
+                        lineNumber: 2389,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7799,7 +8305,7 @@ function Panel({ section, onClose }) {
                         className: "jsx-8da4d65017f33ba6" + " " + "flex-1 overflow-y-auto p-6"
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2335,
+                        lineNumber: 2398,
                         columnNumber: 11
                     }, this)
                 ]
@@ -7811,7 +8317,7 @@ function Panel({ section, onClose }) {
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2323,
+        lineNumber: 2386,
         columnNumber: 5
     }, this);
 }
@@ -7851,7 +8357,7 @@ function Tooltip({ label }) {
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2372,
+        lineNumber: 2435,
         columnNumber: 5
     }, this);
 }
@@ -7865,20 +8371,20 @@ function CameraHint() {
             "DRAG · ORBIT",
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2386,
+                lineNumber: 2449,
                 columnNumber: 7
             }, this),
             "SCROLL · ZOOM",
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2388,
+                lineNumber: 2451,
                 columnNumber: 7
             }, this),
             "CLICK · EXPLORE"
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2384,
+        lineNumber: 2447,
         columnNumber: 5
     }, this);
 }
@@ -7940,7 +8446,7 @@ function Cursor({ hovering }) {
                 }
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2409,
+                lineNumber: 2472,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7956,7 +8462,7 @@ function Cursor({ hovering }) {
                 }
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2413,
+                lineNumber: 2476,
                 columnNumber: 7
             }, this)
         ]
@@ -7985,17 +8491,21 @@ function DatacenterScene() {
                 hovering: !!hovered
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2435,
+                lineNumber: 2498,
                 columnNumber: 7
             }, this),
             booting && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BootLoader, {
                 onComplete: handleBootComplete
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2436,
+                lineNumber: 2499,
                 columnNumber: 19
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$fiber$2f$dist$2f$react$2d$three$2d$fiber$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["Canvas"], {
+                dpr: [
+                    1,
+                    1.5
+                ],
                 camera: {
                     fov: 52,
                     near: 0.1,
@@ -8010,7 +8520,8 @@ function DatacenterScene() {
                 gl: {
                     antialias: true,
                     toneMapping: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ACESFilmicToneMapping"],
-                    toneMappingExposure: 1.1
+                    toneMappingExposure: 1.1,
+                    powerPreference: "high-performance"
                 },
                 style: {
                     opacity: booting ? 0 : 1,
@@ -8018,29 +8529,43 @@ function DatacenterScene() {
                 },
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Suspense"], {
                     fallback: null,
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneContent, {
-                        onHover: setHovered,
-                        onSectionClick: setActiveSection
-                    }, void 0, false, {
-                        fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2439,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$BakeShadows$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["BakeShadows"], {}, void 0, false, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 2502,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SceneContent, {
+                            onHover: setHovered,
+                            onSectionClick: setActiveSection
+                        }, void 0, false, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 2503,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$react$2d$three$2f$drei$2f$core$2f$Preload$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Preload"], {
+                            all: true
+                        }, void 0, false, {
+                            fileName: "[project]/components/datacenter-scene.tsx",
+                            lineNumber: 2504,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
                     fileName: "[project]/components/datacenter-scene.tsx",
-                    lineNumber: 2438,
+                    lineNumber: 2501,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/datacenter-scene.tsx",
-                lineNumber: 2437,
+                lineNumber: 2500,
                 columnNumber: 7
             }, this),
             showUI && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(TopBar, {}, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2444,
+                        lineNumber: 2509,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SideNav, {
@@ -8048,7 +8573,7 @@ function DatacenterScene() {
                         onClick: setActiveSection
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2445,
+                        lineNumber: 2510,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Panel, {
@@ -8056,19 +8581,19 @@ function DatacenterScene() {
                         onClose: ()=>setActiveSection(null)
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2446,
+                        lineNumber: 2511,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Tooltip, {
                         label: hovered
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2447,
+                        lineNumber: 2512,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CameraHint, {}, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2448,
+                        lineNumber: 2513,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8078,7 +8603,7 @@ function DatacenterScene() {
                         }
                     }, void 0, false, {
                         fileName: "[project]/components/datacenter-scene.tsx",
-                        lineNumber: 2449,
+                        lineNumber: 2514,
                         columnNumber: 11
                     }, this)
                 ]
@@ -8086,7 +8611,7 @@ function DatacenterScene() {
         ]
     }, void 0, true, {
         fileName: "[project]/components/datacenter-scene.tsx",
-        lineNumber: 2434,
+        lineNumber: 2497,
         columnNumber: 5
     }, this);
 }

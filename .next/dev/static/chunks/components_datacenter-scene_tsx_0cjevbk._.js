@@ -12,7 +12,7 @@ __turbopack_context__.v((parentImport) => {
   "static/chunks/node_modules_troika-three-text_dist_troika-three-text_esm_0ph2c2t.js",
   "static/chunks/node_modules_postprocessing_build_index_0j26pce.js",
   "static/chunks/node_modules_n8ao_dist_N8AO_0vl2rec.js",
-  "static/chunks/node_modules_05d2kjd._.js",
+  "static/chunks/node_modules_0u.-vja._.js",
   "static/chunks/components_datacenter-scene_tsx_0vct3tr._.js"
 ].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
         return parentImport("[project]/components/datacenter-scene.tsx [app-client] (ecmascript, next/dynamic entry)");

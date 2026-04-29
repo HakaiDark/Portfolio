@@ -65,7 +65,7 @@ function WallMonitor({
         fontSize={0.06}
         color="#8aaaba"
         anchorX="center"
-        anchorY="center"
+        anchorY="middle"
         position={[0, 0, 0.03]}
       >
         {title}

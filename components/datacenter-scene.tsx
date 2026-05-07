@@ -67,7 +67,7 @@ about: {
   },
 }
 
-// LED Component with blinking
+// LED Component with blinking (Staticized for performance)
 function LED({
   position,
   baseColor,
@@ -83,19 +83,9 @@ function LED({
   offset?: number
   size?: number
 }) {
-  const ref = useRef<THREE.Mesh>(null)
-  const isBase = useRef(true)
-  useFrame(({ clock }) => {
-    if (ref.current && rate > 0) {
-      const on = Math.sin(clock.elapsedTime * rate + offset) > 0.18
-      if (on !== isBase.current) {
-        ;(ref.current.material as THREE.MeshBasicMaterial).color.setHex(on ? baseColor : altColor)
-        isBase.current = on
-      }
-    }
-  })
+  // Blinking removed to save 400+ useFrame callbacks
   return (
-    <mesh ref={ref} position={position} scale={[size, size, size]} geometry={ledGeom}>
+    <mesh position={position} scale={[size, size, size]} geometry={ledGeom}>
       <meshBasicMaterial color={baseColor} />
     </mesh>
   )
@@ -305,27 +295,7 @@ function Room() {
   )
 }
 
-// Animated data pulse on fiber
-function DataPulse({ curve, color, speed, offset }: { curve: THREE.CatmullRomCurve3; color: number; speed: number; offset: number }) {
-  const ref = useRef<THREE.Mesh>(null)
-  const pts = useMemo(() => curve.getPoints(200), [curve])
-  useFrame(({ clock }) => {
-    if (ref.current) {
-      const t = ((clock.elapsedTime * speed + offset) % 1)
-      const index = Math.floor(t * 200)
-      if (pts[index]) {
-        ref.current.position.copy(pts[index])
-      }
-    }
-  })
-  return (
-    <mesh ref={ref} geometry={pulseGeom} scale={[0.025, 0.025, 0.025]}>
-      <meshBasicMaterial color={color} transparent opacity={0.9} />
-    </mesh>
-  )
-}
 
-// Fiber cable with animated data flow
 function FiberCable({ points, color, pulseCount = 3 }: { points: THREE.Vector3[]; color: number; pulseCount?: number }) {
   const curve = useMemo(() => new THREE.CatmullRomCurve3(points), [points])
   return (
@@ -335,10 +305,7 @@ function FiberCable({ points, color, pulseCount = 3 }: { points: THREE.Vector3[]
         <tubeGeometry args={[curve, 24, 0.012, 5, false]} />
         <meshPhysicalMaterial color={color} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
       </mesh>
-      {/* Data pulses */}
-      {Array.from({ length: pulseCount }).map((_, i) => (
-        <DataPulse key={i} curve={curve} color={0xffffff} speed={0.3} offset={i / pulseCount} />
-      ))}
+      {/* Data pulses - disabled for performance */}
     </group>
   )
 }
@@ -419,10 +386,7 @@ function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }: { poi
         <tubeGeometry args={[curve, 24, thickness, 5, false]} />
         <meshPhysicalMaterial color={color} roughness={0.7} metalness={0.05} clearcoat={0.15} />
       </mesh>
-      {/* Data pulses - subtle and fast */}
-      {Array.from({ length: pulseCount }).map((_, i) => (
-        <DataPulse key={i} curve={curve} color={0x00ff88} speed={0.6 + Math.random() * 0.3} offset={i / pulseCount} />
-      ))}
+      {/* Data pulses - disabled for performance */}
     </group>
   )
 }
@@ -1335,7 +1299,7 @@ function useCanvasTex(w: number, h: number, draw: (ctx: CanvasRenderingContext2D
   const lastDraw = useRef(0)
 
   useFrame(({ clock }) => {
-    if (clock.elapsedTime - lastDraw.current > 0.066) { // 15 FPS cap
+    if (clock.elapsedTime - lastDraw.current > 0.1) { // 10 FPS cap
       if (canvasRef.current && tex) {
         const ctx = canvasRef.current.getContext("2d")
         if (ctx) {
@@ -2153,121 +2117,7 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
   )
 }
 
-// Dust mote particles - realistic floating dust in datacenter
-function Particles() {
-  const ref = useRef<THREE.Points>(null)
-  const vels = useRef<THREE.Vector3[]>([])
-  const phases = useRef<number[]>([])
-  const count = 300
 
-  const pos = useMemo(() => {
-    const p = new Float32Array(count * 3)
-    const v: THREE.Vector3[] = []
-    const ph: number[] = []
-    for (let i = 0; i < count; i++) {
-      p[i * 3] = (Math.random() - 0.5) * 40
-      p[i * 3 + 1] = Math.random() * 9.5
-      p[i * 3 + 2] = (Math.random() - 0.5) * 22
-      v.push(new THREE.Vector3(
-        (Math.random() - 0.5) * 0.008, 
-        (Math.random() - 0.5) * 0.004 + 0.002, // slight upward drift from heat
-        (Math.random() - 0.5) * 0.008
-      ))
-      ph.push(Math.random() * Math.PI * 2)
-    }
-    vels.current = v
-    phases.current = ph
-    return p
-  }, [])
-  
-  const sizes = useMemo(() => {
-    const s = new Float32Array(count)
-    for (let i = 0; i < count; i++) {
-      s[i] = 0.02 + Math.random() * 0.04
-    }
-    return s
-  }, [])
-
-  useFrame(({ clock }) => {
-    if (ref.current) {
-      const p = ref.current.geometry.attributes.position.array as Float32Array
-      const v = vels.current
-      const ph = phases.current
-      const t = clock.elapsedTime
-      for (let i = 0; i < count; i++) {
-        // Gentle sinusoidal drift for realistic floating motion
-        const wobble = Math.sin(t * 0.5 + ph[i]) * 0.003
-        p[i * 3] += v[i].x + wobble
-        p[i * 3 + 1] += v[i].y + Math.sin(t * 0.3 + ph[i]) * 0.001
-        p[i * 3 + 2] += v[i].z + Math.cos(t * 0.4 + ph[i]) * 0.002
-        if (Math.abs(p[i * 3]) > 20) v[i].x *= -1
-        if (p[i * 3 + 1] > 9.5 || p[i * 3 + 1] < 0.5) v[i].y *= -1
-        if (Math.abs(p[i * 3 + 2]) > 11) v[i].z *= -1
-      }
-      ref.current.geometry.attributes.position.needsUpdate = true
-    }
-  })
-
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} args={[pos, 3]} />
-        <bufferAttribute attach="attributes-size" count={count} array={sizes} itemSize={1} args={[sizes, 1]} />
-      </bufferGeometry>
-      <pointsMaterial color={0xffffff} size={0.03} transparent opacity={0.25} blending={THREE.AdditiveBlending} sizeAttenuation />
-    </points>
-  )
-}
-
-// Data flow visualization - network packets moving through the air
-function NetworkFlowParticles() {
-  const ref = useRef<THREE.Points>(null)
-  const vels = useRef<THREE.Vector3[]>([])
-  const count = 50
-
-  const pos = useMemo(() => {
-    const p = new Float32Array(count * 3)
-    const v: THREE.Vector3[] = []
-    for (let i = 0; i < count; i++) {
-      // Start near rack area
-      p[i * 3] = -12 + Math.random() * 8
-      p[i * 3 + 1] = 3 + Math.random() * 5
-      p[i * 3 + 2] = -2 + Math.random() * 4
-      // Move towards monitors/workstation
-      v.push(new THREE.Vector3(0.05 + Math.random() * 0.03, (Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02))
-    }
-    vels.current = v
-    return p
-  }, [])
-
-  useFrame(() => {
-    if (ref.current) {
-      const p = ref.current.geometry.attributes.position.array as Float32Array
-      const v = vels.current
-      for (let i = 0; i < count; i++) {
-        p[i * 3] += v[i].x
-        p[i * 3 + 1] += v[i].y
-        p[i * 3 + 2] += v[i].z
-        // Reset when reaching destination
-        if (p[i * 3] > 15) {
-          p[i * 3] = -12 + Math.random() * 2
-          p[i * 3 + 1] = 3 + Math.random() * 5
-          p[i * 3 + 2] = -2 + Math.random() * 4
-        }
-      }
-      ref.current.geometry.attributes.position.needsUpdate = true
-    }
-  })
-
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={pos} itemSize={3} args={[pos, 3]} />
-      </bufferGeometry>
-      <pointsMaterial color={0x00ffe7} size={0.08} transparent opacity={0.7} blending={THREE.AdditiveBlending} />
-    </points>
-  )
-}
 
 // Lighting - Realistic datacenter with bright overhead fluorescents
 function Lights() {
@@ -2328,8 +2178,6 @@ const SceneContent = memo(function SceneContent({ onHover, onSectionClick }: { o
       <Workstation onHover={onHover} onClick={onSectionClick} />
       <Chair />
   <LebanonTrafficMap onHover={onHover} onClick={onSectionClick} />
-  <Particles />
-  <NetworkFlowParticles />
       <OrbitControls enableDamping dampingFactor={0.07} maxPolarAngle={Math.PI / 2.05} minDistance={4} maxDistance={30} target={[0, 3, 0]} />
       <EffectComposer>
         <Bloom intensity={0.15} luminanceThreshold={0.95} luminanceSmoothing={0.5} />
@@ -2567,7 +2415,7 @@ export default function DatacenterScene() {
     <div className="w-full h-screen bg-[#020608] overflow-hidden cursor-none">
       <Cursor hovering={!!hovered} />
       {booting && <BootLoader onComplete={handleBootComplete} />}
-      <Canvas camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows={{ type: THREE.PCFShadowMap }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
+      <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }} camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows={{ type: THREE.PCFShadowMap }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
         <Suspense fallback={null}>
           <SceneContent onHover={setHovered} onSectionClick={setActiveSection} />
         </Suspense>

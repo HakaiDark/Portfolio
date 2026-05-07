@@ -1,8 +1,8 @@
 "use client"
 
-import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from "react"
+import { Suspense, useRef, useState, useEffect, useMemo, useCallback, memo } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls, Text, BakeShadows, Preload } from "@react-three/drei"
+import { OrbitControls, Text } from "@react-three/drei"
 import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
 
@@ -303,11 +303,14 @@ function Room() {
 // Animated data pulse on fiber
 function DataPulse({ curve, color, speed, offset }: { curve: THREE.CatmullRomCurve3; color: number; speed: number; offset: number }) {
   const ref = useRef<THREE.Mesh>(null)
+  const pts = useMemo(() => curve.getPoints(200), [curve])
   useFrame(({ clock }) => {
     if (ref.current) {
       const t = ((clock.elapsedTime * speed + offset) % 1)
-      const pos = curve.getPoint(t)
-      ref.current.position.copy(pos)
+      const index = Math.floor(t * 200)
+      if (pts[index]) {
+        ref.current.position.copy(pts[index])
+      }
     }
   })
   return (
@@ -1282,34 +1285,35 @@ function ServerRack({ x, onHover, onClick }: { x: number; onHover?: (l: string |
 // Canvas texture hook - optimized for performance
 function useCanvasTex(w: number, h: number, draw: (ctx: CanvasRenderingContext2D, t: number) => void) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const texRef = useRef<THREE.CanvasTexture | null>(null)
+  const [tex, setTex] = useState<THREE.CanvasTexture | null>(null)
 
   useEffect(() => {
     const c = document.createElement("canvas")
     c.width = w
     c.height = h
     canvasRef.current = c
-    texRef.current = new THREE.CanvasTexture(c)
-    texRef.current.magFilter = THREE.LinearFilter
-    texRef.current.minFilter = THREE.LinearFilter
+    const t = new THREE.CanvasTexture(c)
+    t.magFilter = THREE.LinearFilter
+    t.minFilter = THREE.LinearFilter
+    setTex(t)
   }, [w, h])
 
   const lastDraw = useRef(0)
 
   useFrame(({ clock }) => {
-    if (clock.elapsedTime - lastDraw.current > 0.066) { // ~15 FPS
-      if (canvasRef.current && texRef.current) {
+    if (clock.elapsedTime - lastDraw.current > 0.033) { // 30 FPS cap
+      if (canvasRef.current && tex) {
         const ctx = canvasRef.current.getContext("2d")
         if (ctx) {
           draw(ctx, clock.elapsedTime)
-          texRef.current.needsUpdate = true
+          tex.needsUpdate = true
         }
       }
       lastDraw.current = clock.elapsedTime
     }
   })
 
-  return texRef.current
+  return tex
 }
 
 // Wall monitor
@@ -2054,8 +2058,8 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
   
   return (
     <group 
-      position={[14.0, 5.5, -12.7]} 
-      scale={1.2}
+      position={[10.0, 5.5, -12.7]} 
+      scale={0.8}
       onPointerOver={() => onHover?.("Lebanon Internet Traffic")} 
       onPointerOut={() => onHover?.(null)} 
       onClick={() => onClick?.("contact")}
@@ -2086,7 +2090,7 @@ function LebanonTrafficMap({ onHover, onClick }: { onHover?: (l: string | null) 
       {tex && (
         <mesh position={[0, 0, 0.055]}>
           <planeGeometry args={[7.0, 5.2]} />
-          <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={1.3} />
+          <meshStandardMaterial map={tex} emissiveMap={tex} emissive={0xffffff} emissiveIntensity={0.5} />
         </mesh>
       )}
       
@@ -2249,7 +2253,7 @@ function Lights() {
       <ambientLight color={0xf8faff} intensity={1.0} />
       <hemisphereLight color={0xffffff} groundColor={0xe0e4e8} intensity={0.7} />
       {/* Main overhead directional - simulates fluorescent ceiling */}
-      <directionalLight color={0xffffff} intensity={1.4} position={[0, 14, 2]} castShadow shadow-mapSize={[1024, 1024]} />
+      <directionalLight color={0xffffff} intensity={1.4} position={[0, 14, 2]} />
       <directionalLight color={0xf8f8ff} intensity={0.8} position={[8, 12, 6]} />
       <directionalLight color={0xf8f8ff} intensity={0.6} position={[-8, 12, -4]} />
       {/* Overhead fluorescent row lights */}
@@ -2266,7 +2270,7 @@ function Lights() {
 }
 
 // Scene content
-function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null) => void; onSectionClick: (s: string) => void }) {
+const SceneContent = memo(function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null) => void; onSectionClick: (s: string) => void }) {
   return (
     <>
       <color attach="background" args={[0xe8ecf0]} />
@@ -2298,7 +2302,7 @@ function SceneContent({ onHover, onSectionClick }: { onHover: (l: string | null)
       </EffectComposer>
     </>
   )
-}
+})
 
 // Boot loader
 function BootLoader({ onComplete }: { onComplete: () => void }) {
@@ -2455,27 +2459,59 @@ function CameraHint() {
 }
 
 // Custom cursor
+// Custom cursor
 function Cursor({ hovering }: { hovering: boolean }) {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [ringPos, setRingPos] = useState({ x: 0, y: 0 })
+  const dotRef = useRef<HTMLDivElement>(null)
+  const ringRef = useRef<HTMLDivElement>(null)
+  
   useEffect(() => {
-    const h = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY })
-    window.addEventListener("mousemove", h)
-    return () => window.removeEventListener("mousemove", h)
+    let mouseX = window.innerWidth / 2
+    let mouseY = window.innerHeight / 2
+    let ringX = mouseX
+    let ringY = mouseY
+    let rafId: number
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX
+      mouseY = e.clientY
+    }
+    
+    const animate = () => {
+      ringX += (mouseX - ringX) * 0.15
+      ringY += (mouseY - ringY) * 0.15
+      
+      if (dotRef.current) {
+        dotRef.current.style.left = `${mouseX}px`
+        dotRef.current.style.top = `${mouseY}px`
+      }
+      if (ringRef.current) {
+        ringRef.current.style.left = `${ringX}px`
+        ringRef.current.style.top = `${ringY}px`
+      }
+      
+      rafId = requestAnimationFrame(animate)
+    }
+    
+    window.addEventListener("mousemove", handleMouseMove)
+    rafId = requestAnimationFrame(animate)
+    
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
-  useEffect(() => {
-    const iv = setInterval(() => setRingPos((p) => ({ x: p.x + (pos.x - p.x) * 0.1, y: p.y + (pos.y - p.y) * 0.1 })), 16)
-    return () => clearInterval(iv)
-  }, [pos])
+
   return (
     <>
       <div
+        ref={dotRef}
         className="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100"
-        style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)", width: hovering ? 20 : 10, height: hovering ? 20 : 10, background: hovering ? "#fff" : "#00ffe7", boxShadow: hovering ? "0 0 16px #fff" : "0 0 10px #00ffe7" }}
+        style={{ transform: "translate(-50%, -50%)", width: hovering ? 20 : 10, height: hovering ? 20 : 10, background: hovering ? "#fff" : "#00ffe7", boxShadow: hovering ? "0 0 16px #fff" : "0 0 10px #00ffe7" }}
       />
       <div
+        ref={ringRef}
         className="fixed pointer-events-none z-[9998] rounded-full border transition-all duration-200"
-        style={{ left: ringPos.x, top: ringPos.y, transform: "translate(-50%, -50%)", width: hovering ? 46 : 30, height: hovering ? 46 : 30, borderColor: hovering ? "#fff" : "#00ffe7", opacity: hovering ? 0.8 : 0.4 }}
+        style={{ transform: "translate(-50%, -50%)", width: hovering ? 46 : 30, height: hovering ? 46 : 30, borderColor: hovering ? "#fff" : "#00ffe7", opacity: hovering ? 0.8 : 0.4 }}
       />
     </>
   )
@@ -2497,11 +2533,9 @@ export default function DatacenterScene() {
     <div className="w-full h-screen bg-[#020608] overflow-hidden cursor-none">
       <Cursor hovering={!!hovered} />
       {booting && <BootLoader onComplete={handleBootComplete} />}
-      <Canvas dpr={[1, 1.5]} camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1, powerPreference: "high-performance" }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
+      <Canvas camera={{ fov: 52, near: 0.1, far: 200, position: [6, 5, 10] }} shadows={{ type: THREE.PCFShadowMap }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.1 }} style={{ opacity: booting ? 0 : 1, transition: "opacity 0.8s" }}>
         <Suspense fallback={null}>
-          <BakeShadows />
           <SceneContent onHover={setHovered} onSectionClick={setActiveSection} />
-          <Preload all />
         </Suspense>
       </Canvas>
       {showUI && (

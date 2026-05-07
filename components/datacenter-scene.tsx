@@ -2,9 +2,14 @@
 
 import { Suspense, useRef, useState, useEffect, useMemo, useCallback, memo } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { OrbitControls, Text } from "@react-three/drei"
+import { OrbitControls, Text, Instances, Instance } from "@react-three/drei"
 import { EffectComposer, Bloom } from "@react-three/postprocessing"
 import * as THREE from "three"
+
+const ledGeom = new THREE.SphereGeometry(1, 6, 6)
+const pulseGeom = new THREE.SphereGeometry(1, 8, 8)
+const screwGeom = new THREE.CylinderGeometry(0.012, 0.012, 0.008, 6)
+const screwMat = new THREE.MeshStandardMaterial({ color: 0x505458, metalness: 0.9, roughness: 0.1 })
 
 // Content data matching the reference
 const SECTIONS: Record<string, { ey: string; ti: string; body: string }> = {
@@ -90,8 +95,7 @@ function LED({
     }
   })
   return (
-    <mesh ref={ref} position={position}>
-      <sphereGeometry args={[size, 6, 6]} />
+    <mesh ref={ref} position={position} scale={[size, size, size]} geometry={ledGeom}>
       <meshBasicMaterial color={baseColor} />
     </mesh>
   )
@@ -107,14 +111,15 @@ function Floor() {
         <meshStandardMaterial color={0xd8dce0} roughness={0.7} metalness={0.05} />
       </mesh>
       {/* Raised floor tiles - perforated metal look */}
-      {Array.from({ length: 16 }).map((_, fx) =>
-        Array.from({ length: 11 }).map((_, fz) => (
-          <mesh key={`t-${fx}-${fz}`} position={[(fx - 7.5) * 2, 0.02, (fz - 5) * 2]} receiveShadow>
-            <boxGeometry args={[1.92, 0.05, 1.92]} />
-            <meshStandardMaterial color={0xc8ccd0} roughness={0.6} metalness={0.15} />
-          </mesh>
-        ))
-      )}
+      <Instances receiveShadow>
+        <boxGeometry args={[1.92, 0.05, 1.92]} />
+        <meshStandardMaterial color={0xc8ccd0} roughness={0.6} metalness={0.15} />
+        {Array.from({ length: 16 }).map((_, fx) =>
+          Array.from({ length: 11 }).map((_, fz) => (
+            <Instance key={`t-${fx}-${fz}`} position={[(fx - 7.5) * 2, 0.02, (fz - 5) * 2]} />
+          ))
+        )}
+      </Instances>
       {/* Subtle tile gap grid - dark lines between tiles */}
       <gridHelper args={[60, 30, 0x909498, 0xa0a4a8]} position={[0, 0.03, 0]} />
       {/* Perforated vent tiles in cold aisle */}
@@ -314,8 +319,7 @@ function DataPulse({ curve, color, speed, offset }: { curve: THREE.CatmullRomCur
     }
   })
   return (
-    <mesh ref={ref}>
-      <sphereGeometry args={[0.025, 8, 8]} />
+    <mesh ref={ref} geometry={pulseGeom} scale={[0.025, 0.025, 0.025]}>
       <meshBasicMaterial color={color} transparent opacity={0.9} />
     </mesh>
   )
@@ -328,7 +332,7 @@ function FiberCable({ points, color, pulseCount = 3 }: { points: THREE.Vector3[]
     <group>
       {/* Fiber jacket */}
       <mesh>
-        <tubeGeometry args={[curve, 32, 0.012, 8, false]} />
+        <tubeGeometry args={[curve, 24, 0.012, 5, false]} />
         <meshPhysicalMaterial color={color} roughness={0.25} clearcoat={1.0} clearcoatRoughness={0.1} />
       </mesh>
       {/* Data pulses */}
@@ -412,7 +416,7 @@ function CopperCable({ points, color, pulseCount = 2, thickness = 0.012 }: { poi
     <group>
       {/* Cable jacket with realistic PVC look */}
       <mesh>
-        <tubeGeometry args={[curve, 48, thickness, 8, false]} />
+        <tubeGeometry args={[curve, 24, thickness, 5, false]} />
         <meshPhysicalMaterial color={color} roughness={0.7} metalness={0.05} clearcoat={0.15} />
       </mesh>
       {/* Data pulses - subtle and fast */}
@@ -428,7 +432,7 @@ function PowerCable({ points, thickness = 0.02 }: { points: THREE.Vector3[]; thi
   const curve = useMemo(() => new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5), [points])
   return (
     <mesh>
-      <tubeGeometry args={[curve, 32, thickness, 8, false]} />
+      <tubeGeometry args={[curve, 24, thickness, 6, false]} />
       <meshPhysicalMaterial color={0x0a0a0a} roughness={0.85} metalness={0.05} />
     </mesh>
   )
@@ -652,10 +656,7 @@ function SpinningFan({ position, size = 0.08 }: { position: [number, number, num
 // Rack mounting screw
 function RackScrew({ position }: { position: [number, number, number] }) {
   return (
-    <mesh position={position}>
-      <cylinderGeometry args={[0.012, 0.012, 0.008, 6]} />
-      <meshStandardMaterial color={0x505458} metalness={0.9} roughness={0.1} />
-    </mesh>
+    <mesh position={position} geometry={screwGeom} material={screwMat} />
   )
 }
 
@@ -760,6 +761,17 @@ function RackDevice({
             <meshStandardMaterial color={0x08090c} roughness={0.95} />
           </mesh>
           {/* 48x RJ45 ports - dual row, dual LED each */}
+          <Instances>
+            <boxGeometry args={[0.048, 0.052, 0.022]} />
+            <meshStandardMaterial color={0x040507} roughness={0.9} />
+            {Array.from({ length: 48 }).map((_, sp) => {
+              const row = Math.floor(sp / 24)
+              const col = sp % 24
+              const px = -0.7 + col * 0.058
+              const py = 0.09 - row * 0.14
+              return <Instance key={sp} position={[px, py, 0.557]} />
+            })}
+          </Instances>
           {Array.from({ length: 48 }).map((_, sp) => {
             const row = Math.floor(sp / 24)
             const col = sp % 24
@@ -767,10 +779,6 @@ function RackDevice({
             const py = 0.09 - row * 0.14
             return (
               <group key={sp}>
-                <mesh position={[px, py, 0.557]}>
-                  <boxGeometry args={[0.048, 0.052, 0.022]} />
-                  <meshStandardMaterial color={0x040507} roughness={0.9} />
-                </mesh>
                 {/* Link LED - green */}
                 <LED position={[px - 0.014, py - 0.032, 0.568]} baseColor={0x00ff44} altColor={0x001a00} rate={1.2 + (sp % 7) * 0.5} offset={sp * 0.13} size={0.005} />
                 {/* Activity LED - amber */}
@@ -836,6 +844,17 @@ function RackDevice({
             <meshStandardMaterial color={0x0c0e12} roughness={0.9} />
           </mesh>
           {/* 16x GbE copper ports - 2 rows of 8 */}
+          <Instances>
+            <boxGeometry args={[0.078, 0.058, 0.022]} />
+            <meshStandardMaterial color={0x060810} roughness={0.8} />
+            {Array.from({ length: 16 }).map((_, pp) => {
+              const row = Math.floor(pp / 8)
+              const col = pp % 8
+              const px = -0.84 + col * 0.125
+              const py = 0.115 - row * 0.175
+              return <Instance key={pp} position={[px, py, 0.558]} />
+            })}
+          </Instances>
           {Array.from({ length: 16 }).map((_, pp) => {
             const row = Math.floor(pp / 8)
             const col = pp % 8
@@ -843,10 +862,6 @@ function RackDevice({
             const py = 0.115 - row * 0.175
             return (
               <group key={pp}>
-                <mesh position={[px, py, 0.558]}>
-                  <boxGeometry args={[0.078, 0.058, 0.022]} />
-                  <meshStandardMaterial color={0x060810} roughness={0.8} />
-                </mesh>
                 <LED position={[px - 0.022, py + 0.037, 0.569]} baseColor={0x00ff00} altColor={0x001800} rate={1.5 + (pp % 5) * 0.7} offset={pp * 0.2} size={0.006} />
                 <LED position={[px + 0.022, py + 0.037, 0.569]} baseColor={0xffaa00} altColor={0x150800} rate={7 + (pp % 9) * 1.5} offset={pp * 0.15} size={0.006} />
               </group>
@@ -882,12 +897,13 @@ function RackDevice({
           </mesh>
           <LED position={[0.93, 0, 0.564]} baseColor={0x00ff00} size={0.009} rate={0.4} />
           {/* ASIC vent slats */}
-          {Array.from({ length: 5 }).map((_, v) => (
-            <mesh key={v} position={[0.93, -h / 2 + 0.06 + v * 0.055, -0.535]}>
-              <boxGeometry args={[0.15, 0.016, 0.01]} />
-              <meshStandardMaterial color={0x080c10} />
-            </mesh>
-          ))}
+          <Instances>
+            <boxGeometry args={[0.15, 0.016, 0.01]} />
+            <meshStandardMaterial color={0x080c10} />
+            {Array.from({ length: 5 }).map((_, v) => (
+              <Instance key={v} position={[0.93, -h / 2 + 0.06 + v * 0.055, -0.535]} />
+            ))}
+          </Instances>
         </>
       )}
 
@@ -915,16 +931,50 @@ function RackDevice({
             <boxGeometry args={[0.3, 0.5, 0.015]} />
             <meshStandardMaterial color={0x06080a} roughness={0.9} />
           </mesh>
-          {Array.from({ length: 15 }).map((_, vx) =>
-            Array.from({ length: 10 }).map((_, vy) => (
-              <mesh key={`v${vx}-${vy}`} position={[-0.92 + vx * 0.018, -0.15 + vy * 0.045 + (vx % 2) * 0.02, 0.556]} rotation={[Math.PI / 2, 0, 0]}>
-                <cylinderGeometry args={[0.007, 0.007, 0.004, 6]} />
-                <meshStandardMaterial color={0x030405} />
-              </mesh>
-            ))
-          )}
+          <Instances>
+            <cylinderGeometry args={[0.007, 0.007, 0.004, 6]} />
+            <meshStandardMaterial color={0x030405} />
+            {Array.from({ length: 15 }).map((_, vx) =>
+              Array.from({ length: 10 }).map((_, vy) => (
+                <Instance key={`v${vx}-${vy}`} position={[-0.92 + vx * 0.018, -0.15 + vy * 0.045 + (vx % 2) * 0.02, 0.556]} rotation={[Math.PI / 2, 0, 0]} />
+              ))
+            )}
+          </Instances>
 
           {/* Drive bays - 12x 3.5" hot-swap SAS */}
+          <Instances>
+            <boxGeometry args={[0.2, 0.28, 0.03]} />
+            <meshPhysicalMaterial color={0x3a4048} roughness={0.3} metalness={0.8} />
+            {Array.from({ length: 12 }).map((_, db) => {
+              const row = Math.floor(db / 6)
+              const col = db % 6
+              const bx = -0.5 + col * 0.22
+              const by = 0.15 - row * 0.35
+              return <Instance key={`db${db}`} position={[bx, by, 0.555]} />
+            })}
+          </Instances>
+          <Instances>
+            <boxGeometry args={[0.04, 0.25, 0.005]} />
+            <meshStandardMaterial color={0x15181c} />
+            {Array.from({ length: 12 }).map((_, db) => {
+              const row = Math.floor(db / 6)
+              const col = db % 6
+              const bx = -0.5 + col * 0.22
+              const by = 0.15 - row * 0.35
+              return <Instance key={`dl${db}`} position={[bx - 0.07, by, 0.57]} />
+            })}
+          </Instances>
+          <Instances>
+            <boxGeometry args={[0.03, 0.08, 0.01]} />
+            <meshStandardMaterial color={0x600000} />
+            {Array.from({ length: 12 }).map((_, db) => {
+              const row = Math.floor(db / 6)
+              const col = db % 6
+              const bx = -0.5 + col * 0.22
+              const by = 0.15 - row * 0.35
+              return <Instance key={`dr${db}`} position={[bx + 0.07, by - 0.08, 0.57]} />
+            })}
+          </Instances>
           {Array.from({ length: 12 }).map((_, db) => {
             const row = Math.floor(db / 6)
             const col = db % 6
@@ -932,20 +982,6 @@ function RackDevice({
             const by = 0.15 - row * 0.35
             return (
               <group key={db}>
-                {/* Drive caddy */}
-                <mesh position={[bx, by, 0.555]}>
-                  <boxGeometry args={[0.2, 0.28, 0.03]} />
-                  <meshPhysicalMaterial color={0x3a4048} roughness={0.3} metalness={0.8} />
-                </mesh>
-                <mesh position={[bx - 0.07, by, 0.57]}>
-                  <boxGeometry args={[0.04, 0.25, 0.005]} />
-                  <meshStandardMaterial color={0x15181c} />
-                </mesh>
-                {/* Drive release button */}
-                <mesh position={[bx + 0.07, by - 0.08, 0.57]}>
-                  <boxGeometry args={[0.03, 0.08, 0.01]} />
-                  <meshStandardMaterial color={0x600000} />
-                </mesh>
                 {/* Status LED */}
                 <LED position={[bx + 0.07, by + 0.1, 0.575]} baseColor={0x4488ff} altColor={0x081828} rate={4 + Math.random() * 6} offset={Math.random() * 6} size={0.007} />
                 {/* Activity LED */}
@@ -1065,28 +1101,21 @@ function RackDevice({
           </mesh>
           
           {/* 24 keystone patch ports */}
-          {Array.from({ length: 24 }).map((_, pp) => {
-            const px = -0.92 + pp * 0.08
-            return (
-              <group key={pp}>
-                {/* Keystone jack opening */}
-                <mesh position={[px, -0.02, 0.558]}>
-                  <boxGeometry args={[0.052, 0.065, 0.015]} />
-                  <meshStandardMaterial color={0x050608} roughness={0.8} />
-                </mesh>
-                {/* RJ45 inner contact area */}
-                <mesh position={[px, -0.02, 0.562]}>
-                  <boxGeometry args={[0.038, 0.045, 0.01]} />
-                  <meshStandardMaterial color={0x0a0c10} />
-                </mesh>
-                {/* Port number label (white stripe) */}
-                <mesh position={[px, 0.06, 0.558]}>
-                  <boxGeometry args={[0.045, 0.025, 0.003]} />
-                  <meshStandardMaterial color={0xf8f9fa} />
-                </mesh>
-              </group>
-            )
-          })}
+          <Instances>
+            <boxGeometry args={[0.052, 0.065, 0.015]} />
+            <meshStandardMaterial color={0x050608} roughness={0.8} />
+            {Array.from({ length: 24 }).map((_, pp) => <Instance key={`a${pp}`} position={[-0.92 + pp * 0.08, -0.02, 0.558]} />)}
+          </Instances>
+          <Instances>
+            <boxGeometry args={[0.038, 0.045, 0.01]} />
+            <meshStandardMaterial color={0x0a0c10} />
+            {Array.from({ length: 24 }).map((_, pp) => <Instance key={`b${pp}`} position={[-0.92 + pp * 0.08, -0.02, 0.562]} />)}
+          </Instances>
+          <Instances>
+            <boxGeometry args={[0.045, 0.025, 0.003]} />
+            <meshStandardMaterial color={0xf8f9fa} />
+            {Array.from({ length: 24 }).map((_, pp) => <Instance key={`c${pp}`} position={[-0.92 + pp * 0.08, 0.06, 0.558]} />)}
+          </Instances>
         </>
       )}
 
@@ -1108,12 +1137,13 @@ function RackDevice({
           <BrandStrip position={[-0.5, h / 2 - 0.1, 0.558]} color={0x00aa44} width={0.15} />
           
           {/* Front battery bank vent slots */}
-          {Array.from({ length: 12 }).map((_, vx) => (
-            <mesh key={`upsv${vx}`} position={[-0.95 + vx * 0.08, -0.1, 0.552]}>
-              <boxGeometry args={[0.04, 0.4, 0.015]} />
-              <meshStandardMaterial color={0x06080a} />
-            </mesh>
-          ))}
+          <Instances>
+            <boxGeometry args={[0.04, 0.4, 0.015]} />
+            <meshStandardMaterial color={0x06080a} />
+            {Array.from({ length: 12 }).map((_, vx) => (
+              <Instance key={`upsv${vx}`} position={[-0.95 + vx * 0.08, -0.1, 0.552]} />
+            ))}
+          </Instances>
           
           {/* LCD Status Control Panel */}
           <mesh position={[0.2, 0.1, 0.555]}>
@@ -1143,22 +1173,24 @@ function RackDevice({
           ))}
           
           {/* Outlet banks */}
-          {Array.from({ length: 8 }).map((_, o) => {
-            const ox = 0.7 + (o % 2) * 0.18
-            const oy = 0.15 - Math.floor(o / 2) * 0.15
-            return (
-              <group key={`out${o}`}>
-                <mesh position={[ox, oy, 0.558]}>
-                  <boxGeometry args={[0.12, 0.1, 0.015]} />
-                  <meshStandardMaterial color={0x181a1c} />
-                </mesh>
-                <mesh position={[ox, oy, 0.566]}>
-                  <boxGeometry args={[0.06, 0.08, 0.005]} />
-                  <meshStandardMaterial color={0x040404} />
-                </mesh>
-              </group>
-            )
-          })}
+          <Instances>
+            <boxGeometry args={[0.12, 0.1, 0.015]} />
+            <meshStandardMaterial color={0x181a1c} />
+            {Array.from({ length: 8 }).map((_, o) => {
+              const ox = 0.7 + (o % 2) * 0.18
+              const oy = 0.15 - Math.floor(o / 2) * 0.15
+              return <Instance key={`outa${o}`} position={[ox, oy, 0.558]} />
+            })}
+          </Instances>
+          <Instances>
+            <boxGeometry args={[0.06, 0.08, 0.005]} />
+            <meshStandardMaterial color={0x040404} />
+            {Array.from({ length: 8 }).map((_, o) => {
+              const ox = 0.7 + (o % 2) * 0.18
+              const oy = 0.15 - Math.floor(o / 2) * 0.15
+              return <Instance key={`outb${o}`} position={[ox, oy, 0.566]} />
+            })}
+          </Instances>
           
           {/* Rear exhaust cooling fans */}
           <SpinningFan position={[-0.7, 0, -0.53]} size={0.12} />
@@ -1208,12 +1240,13 @@ function ServerRack({ x, onHover, onClick }: { x: number; onHover?: (l: string |
             <boxGeometry args={[0.055, 10.2, 0.05]} />
             <meshPhysicalMaterial color={0x2a3a4a} roughness={0.3} metalness={0.9} clearcoat={0.6} />
           </mesh>
-          {Array.from({ length: 42 }).map((_, u) => (
-            <mesh key={u} position={[rx, -4.9 + u * 0.245, 0.588]}>
-              <boxGeometry args={[0.016, 0.01, 0.007]} />
-              <meshStandardMaterial color={0x404850} metalness={0.95} roughness={0.1} />
-            </mesh>
-          ))}
+          <Instances>
+            <boxGeometry args={[0.016, 0.01, 0.007]} />
+            <meshStandardMaterial color={0x404850} metalness={0.95} roughness={0.1} />
+            {Array.from({ length: 42 }).map((_, u) => (
+              <Instance key={u} position={[rx, -4.9 + u * 0.245, 0.588]} />
+            ))}
+          </Instances>
         </group>
       ))}
       {/* Rear rails */}
@@ -1230,14 +1263,15 @@ function ServerRack({ x, onHover, onClick }: { x: number; onHover?: (l: string |
           <meshPhysicalMaterial color={0x0a1218} roughness={0.6} metalness={0.4} transparent opacity={0.88} />
         </mesh>
       ))}
-      {[-1.26, 1.26].map((sx, si) =>
-        Array.from({ length: 28 }).map((_, pi) => (
-          <mesh key={`pf${si}-${pi}`} position={[sx, -4.2 + pi * 0.31, 0]}>
-            <boxGeometry args={[0.014, 0.04, 1.3]} />
-            <meshStandardMaterial color={0x111820} />
-          </mesh>
-        ))
-      )}
+      <Instances>
+        <boxGeometry args={[0.014, 0.04, 1.3]} />
+        <meshStandardMaterial color={0x111820} />
+        {[-1.26, 1.26].map((sx, si) =>
+          Array.from({ length: 28 }).map((_, pi) => (
+            <Instance key={`pf${si}-${pi}`} position={[sx, -4.2 + pi * 0.31, 0]} />
+          ))
+        )}
+      </Instances>
       {/* Vertical PDU strip */}
       <mesh position={[1.08, 0, -0.38]}>
         <boxGeometry args={[0.05, 9.8, 0.05]} />
@@ -1301,7 +1335,7 @@ function useCanvasTex(w: number, h: number, draw: (ctx: CanvasRenderingContext2D
   const lastDraw = useRef(0)
 
   useFrame(({ clock }) => {
-    if (clock.elapsedTime - lastDraw.current > 0.033) { // 30 FPS cap
+    if (clock.elapsedTime - lastDraw.current > 0.066) { // 15 FPS cap
       if (canvasRef.current && tex) {
         const ctx = canvasRef.current.getContext("2d")
         if (ctx) {

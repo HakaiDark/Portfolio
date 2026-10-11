@@ -99,7 +99,7 @@ export function RackSection({ className = "", overlay }: { className?: string; o
         <div className="h-full w-full bg-[#0b0e11]" />
       )}
       {overlay}
-      {showBoot && visible && <BootSequence signals={boot} reducedMotion={reducedMotion} onDone={() => setBootDone(true)} />}
+      {showBoot && visible && <BootSequence signals={boot} reducedMotion={reducedMotion} rain={quality === "high"} onDone={() => setBootDone(true)} />}
     </div>
   )
 }

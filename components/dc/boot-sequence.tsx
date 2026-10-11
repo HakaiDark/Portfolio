@@ -73,7 +73,18 @@ function MatrixRain({ burst }: { burst: boolean }) {
  * are tied to real loading progress, ending in ACCESS GRANTED. Skippable; returning
  * visitors get a one-line reconnect; reduced motion drops the rain and typing.
  */
-export function BootSequence({ signals, reducedMotion, onDone }: { signals: BootSignals; reducedMotion: boolean; onDone: () => void }) {
+export function BootSequence({
+  signals,
+  reducedMotion,
+  rain = true,
+  onDone,
+}: {
+  signals: BootSignals
+  reducedMotion: boolean
+  /** glyph rain behind the terminal; off on weaker devices so loading gets the whole CPU */
+  rain?: boolean
+  onDone: () => void
+}) {
   const sig = useRef(signals)
   sig.current = signals
   const [lines, setLines] = useState<Line[]>([])
@@ -174,7 +185,7 @@ export function BootSequence({ signals, reducedMotion, onDone }: { signals: Boot
       aria-live="polite"
       aria-label={granted ? "Access granted" : "Loading the data centre"}
     >
-      {!reducedMotion && <MatrixRain burst={granted} />}
+      {rain && !reducedMotion && <MatrixRain burst={granted} />}
       <div className="relative w-full max-w-[680px] px-6">
         <div className="rounded-lg border border-[#1fd46f]/25 bg-black/70 p-5 font-mono text-[12px] leading-[1.9] text-[#3ee07a] shadow-[0_0_60px_rgba(31,212,111,0.12)] backdrop-blur-sm md:text-[13px]">
           {lines.map((l, i) => (

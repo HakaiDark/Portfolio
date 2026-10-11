@@ -265,6 +265,28 @@ function CameraRig({
       : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
   }, [])
 
+  // Touch: a two-finger gesture on the rack belongs to the 3D view. Without this, iOS Safari
+  // pinch-zooms the whole page (it doesn't fully honour `touch-action: pan-y`) or claims the
+  // gesture for scrolling and cancels the pointers before the pinch reaches camera-controls.
+  // One finger is never touched, so it keeps scrolling the page.
+  useEffect(() => {
+    const el = gl.domElement
+    const multi = (e: TouchEvent) => {
+      if (e.touches.length >= 2 && e.cancelable) e.preventDefault()
+    }
+    const gesture = (e: Event) => e.preventDefault() // Safari's own pinch events
+    el.addEventListener("touchstart", multi, { passive: false })
+    el.addEventListener("touchmove", multi, { passive: false })
+    el.addEventListener("gesturestart", gesture)
+    el.addEventListener("gesturechange", gesture)
+    return () => {
+      el.removeEventListener("touchstart", multi)
+      el.removeEventListener("touchmove", multi)
+      el.removeEventListener("gesturestart", gesture)
+      el.removeEventListener("gesturechange", gesture)
+    }
+  }, [gl])
+
   // Mouse wheel / trackpad: zooms the rack only while the page is at the top. Fully zoomed out,
   // scrolling down hands over to the page, so visitors who just scroll never get stuck here.
   useEffect(() => {

@@ -68,10 +68,8 @@ export interface DeviceConfig {
   ha?: { u: number; v: number }
   /** key into content/rack-cards.ts; omit for decorative devices */
   cardId?: string
-  /** hotspot position on the faceplate (texture fractions) */
+  /** hotspot position on the faceplate (texture fractions); down the rack they alternate left/right, on plain panel rather than logos */
   hotspot?: { u: number; v: number }
-  /** phones: alternate position so the stacked buttons zig-zag left/right instead of forming one column */
-  hotspotPhone?: { u: number; v: number }
 }
 
 const grid = (
@@ -137,7 +135,7 @@ export const devices: Record<string, DeviceConfig> = {
     console: { u: 160 / 1280, v: 85 / 125 },
     ha: { u: 225 / 1280, v: 87 / 125 },
     cardId: "fortigate",
-    hotspot: { u: 0.08, v: 0.32 },
+    hotspot: { u: 0.93, v: 0.5 },
   },
 
   "fortiswitch-448e": {
@@ -165,7 +163,7 @@ export const devices: Record<string, DeviceConfig> = {
       { u: 178 / 2000, v: 59 / 188, color: "green", mode: "steady" },
     ],
     cardId: "fortiswitch",
-    hotspot: { u: 0.045, v: 0.5 },
+    hotspot: { u: 0.965, v: 0.55 },
   },
 
   "catalyst-9300": {
@@ -185,7 +183,6 @@ export const devices: Record<string, DeviceConfig> = {
     ],
     cardId: "catalyst",
     hotspot: { u: 0.035, v: 0.55 },
-    hotspotPhone: { u: 0.905, v: 0.5 },
   },
 
   "fortimanager-400g": {
@@ -202,8 +199,7 @@ export const devices: Record<string, DeviceConfig> = {
       [0, 1].map((r) => ({ u: (302 + c * 316) / 1272, v: (147 + r * 82) / 256, color: "blue" as const, mode: "link" as const }))
     ),
     cardId: "fortimanager",
-    hotspot: { u: 0.09, v: 0.16 },
-    hotspotPhone: { u: 0.88, v: 0.16 },
+    hotspot: { u: 0.04, v: 0.62 },
   },
 
   "fortianalyzer-400e": {
@@ -227,7 +223,7 @@ export const devices: Record<string, DeviceConfig> = {
       ...[0, 1, 2, 3].map((c) => ({ u: (415 + c * 345) / 1527, v: 84 / 138, color: "blue" as const, mode: "link" as const })),
     ],
     cardId: "fortianalyzer",
-    hotspot: { u: 0.5, v: 0.24 },
+    hotspot: { u: 0.8, v: 0.25 },
   },
 
   "proliant-dl360": {

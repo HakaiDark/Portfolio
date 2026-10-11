@@ -369,14 +369,12 @@ function HotspotButton({ label, active, glyph = "+", onClick }: { label: string;
 function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: string) => void }) {
   const [ax, ay, az] = ACCESS_POINT.position
   const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
-  const portrait = useThree((s) => s.size.width < s.size.height)
   return (
     <>
       {mountedDevices()
         .filter((d) => d.hotspot && d.cfg.hotspot)
         .map((d) => {
-          const spot = (portrait && d.cfg.hotspotPhone) || d.cfg.hotspot!
-          const [x, y] = facePoint(d.cfg, spot.u, spot.v)
+          const [x, y] = facePoint(d.cfg, d.cfg.hotspot!.u, d.cfg.hotspot!.v)
           return (
             <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03]} center zIndexRange={[30, 0]}>
               <HotspotButton label={`About ${d.cfg.name}`} active={activeStop === d.key} onClick={() => onStop(d.key)} />
@@ -386,8 +384,7 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
       <Html position={[ax, ay - 0.06, az]} center zIndexRange={[30, 0]}>
         <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
       </Html>
-      {/* phones: lower right of the screen, clear of the FortiAnalyzer button just above it */}
-      <Html position={portrait ? [lx + 0.07, ly - 0.03, lz + 0.03] : [lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={[30, 0]}>
+      <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={[30, 0]}>
         <HotspotButton label="Open the console terminal" glyph=">_" active={activeStop === "terminal"} onClick={() => onStop("terminal")} />
       </Html>
     </>

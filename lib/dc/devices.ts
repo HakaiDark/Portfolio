@@ -70,6 +70,8 @@ export interface DeviceConfig {
   cardId?: string
   /** hotspot position on the faceplate (texture fractions) */
   hotspot?: { u: number; v: number }
+  /** phones: alternate position so the stacked buttons zig-zag left/right instead of forming one column */
+  hotspotPhone?: { u: number; v: number }
 }
 
 const grid = (
@@ -183,6 +185,7 @@ export const devices: Record<string, DeviceConfig> = {
     ],
     cardId: "catalyst",
     hotspot: { u: 0.035, v: 0.55 },
+    hotspotPhone: { u: 0.905, v: 0.5 },
   },
 
   "fortimanager-400g": {
@@ -200,6 +203,7 @@ export const devices: Record<string, DeviceConfig> = {
     ),
     cardId: "fortimanager",
     hotspot: { u: 0.09, v: 0.16 },
+    hotspotPhone: { u: 0.88, v: 0.16 },
   },
 
   "fortianalyzer-400e": {

@@ -47,6 +47,15 @@ export function RackSection({ className = "", overlay }: { className?: string; o
   const [quality, setQuality] = useState<Quality | null>(null)
   const [capture, setCapture] = useState(false)
   const [bootDone, setBootDone] = useState(false)
+  // pause rendering while the hero is scrolled out of view (smooth scrolling, less battery)
+  const [onScreen, setOnScreen] = useState(true)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(([e]) => setOnScreen(e.isIntersecting), { threshold: 0 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
   const [boot, setBoot] = useState<BootSignals>({ engine: false, progress: 0, assets: false, ready: false })
   const reducedMotion = useReducedMotion()
 
@@ -93,7 +102,7 @@ export function RackSection({ className = "", overlay }: { className?: string; o
         <StaticRack />
       ) : visible && quality ? (
         <WebGLBoundary onError={onError}>
-          <RackScene quality={quality} reducedMotion={reducedMotion} signals={signals} />
+          <RackScene quality={quality} reducedMotion={reducedMotion} signals={signals} active={onScreen} />
         </WebGLBoundary>
       ) : (
         <div className="h-full w-full bg-[#0b0e11]" />

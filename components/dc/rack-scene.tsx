@@ -20,7 +20,6 @@ import { Laptop } from "./laptop"
 import { Mug } from "./mug"
 import { AccessPoint } from "./access-point"
 import { TerminalOverlay } from "./terminal-overlay"
-import { PhotoMode, type PhotoStatus } from "./photo-mode"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -253,7 +252,8 @@ function CameraRig({
     const az = c.azimuthAngle
     if (az > maxAz * 0.55) dir.current = -1
     if (az < minAz * 0.55) dir.current = 1
-    c.rotate(dir.current * dt * 0.06, 0, false)
+    // cap dt: after the loop was paused (hero off screen) the first delta can be seconds long
+    c.rotate(dir.current * Math.min(dt, 0.05) * 0.06, 0, false)
   })
 
   return (
@@ -394,8 +394,6 @@ function Scene({
   traffic,
   setTraffic,
   cardOpen,
-  photoEnabled,
-  onPhotoStatus,
   onAssets,
   onReady,
 }: {
@@ -410,8 +408,6 @@ function Scene({
   traffic: boolean
   setTraffic: (on: boolean) => void
   cardOpen: boolean
-  photoEnabled: boolean
-  onPhotoStatus: (s: PhotoStatus) => void
   onAssets: () => void
   onReady: () => void
 }) {
@@ -445,7 +441,6 @@ function Scene({
           <ToneMapping mode={ToneMappingMode.AGX} />
         </EffectComposer>
       ) : null}
-      {quality === "high" && <PhotoMode enabled={photoEnabled} background={BG} onStatus={onPhotoStatus} />}
     </>
   )
 }
@@ -465,10 +460,13 @@ export default function RackScene({
   quality,
   reducedMotion,
   signals,
+  active = true,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
   signals?: RackSceneSignals
+  /** false while the hero is scrolled out of view: the render loop pauses */
+  active?: boolean
 }) {
   const { progress } = useProgress()
   const sigRef = useRef(signals)
@@ -488,8 +486,6 @@ export default function RackScene({
   const [cardOpen, setCardOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [traffic, setTraffic] = useState(false)
-  const [photoOn, setPhotoOn] = useState(true)
-  const [photo, setPhoto] = useState<PhotoStatus>({ state: "idle" })
   const [interacted, setInteracted] = useState(false)
   const [dpr, setDpr] = useState(quality === "high" ? 1.75 : 1.25)
   const capture = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
@@ -529,7 +525,7 @@ export default function RackScene({
     <div className="relative h-full w-full overflow-hidden" style={{ background: BG }}>
       <Canvas
         dpr={[1, dpr]}
-        frameloop={running ? "always" : "never"}
+        frameloop={running && active ? "always" : "never"}
         shadows="percentage"
         camera={{ fov: 40, near: 0.02, far: 40, position: [0.78, 1.62, 1.85] }}
         gl={{
@@ -558,8 +554,6 @@ export default function RackScene({
           traffic={traffic}
           setTraffic={setTraffic}
           cardOpen={!!card}
-          photoEnabled={photoOn && !traffic && !terminalOpen}
-          onPhotoStatus={setPhoto}
           onAssets={onAssets}
           onReady={onReady}
         />
@@ -578,28 +572,8 @@ export default function RackScene({
           <span className={`h-1.5 w-1.5 rounded-full ${traffic ? "bg-[#5ff4ff] motion-safe:animate-pulse" : "bg-white/40"}`} />
           Live traffic
         </button>
-        {quality === "high" && (
-          <button
-            type="button"
-            onClick={() => setPhotoOn((p) => !p)}
-            aria-pressed={photoOn}
-            title="When the camera is still, render a photoreal image with real light bounces"
-            className={`flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
-              photoOn ? "border-white/40 bg-white/10 text-white" : "border-white/15 bg-black/45 text-white/60 hover:border-white/40"
-            }`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${photoOn ? "bg-white" : "bg-white/40"}`} />
-            Photo mode
-          </button>
-        )}
       </div>
 
-      {/* photo mode progress */}
-      {quality === "high" && photoOn && photo.state !== "idle" && (
-        <div className="pointer-events-none absolute right-4 top-[6.5rem] z-20 rounded-full border border-white/10 bg-black/45 px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] text-white/70 uppercase backdrop-blur-md">
-          {photo.state === "building" ? "Preparing photo mode…" : `Photo · ${photo.samples} samples`}
-        </div>
-      )}
 
       {/* camera stops */}
       <nav

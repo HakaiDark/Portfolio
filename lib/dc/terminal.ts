@@ -129,8 +129,8 @@ export function runCommand(raw: string): CommandResult {
       return {
         lines: [
           { text: "Cyber Attacks on Connected and Autonomous Vehicles (CAVs) · 2022", href: "https://medium.com/@eng.compyassin/cyber-attack-on-cavs-235210f9ae62", kind: "link" },
-          { text: "Quality of Experience of CAVEs · 2022" },
-          { text: "FlappyBird Learns How To Beat Itself Using NEAT · 2022" },
+          { text: "Quality of Experience of CAVEs · 2022", href: "https://medium.com/@eng.compyassin/quality-of-experience-and-performance-aspects-of-caves-f52bd0874e7d", kind: "link" },
+          { text: "FlappyBird Learns How To Beat Itself Using NEAT · 2022", href: "https://medium.com/@eng.compyassin/flappy-bird-beats-itself-using-neat-8aec1f140ea3", kind: "link" },
         ],
       }
     case "contact":

@@ -203,7 +203,6 @@ export function ContactSection() {
       </div>
       <footer className="mt-12 flex flex-wrap justify-between gap-2 font-mono text-[11px] text-white/35">
         <span>© {new Date().getFullYear()} {profile.name}</span>
-        <span>Built with Next.js, Three.js and a path tracer</span>
       </footer>
     </section>
   )

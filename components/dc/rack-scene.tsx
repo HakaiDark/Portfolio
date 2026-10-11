@@ -257,24 +257,66 @@ function CameraRig({
 }
 
 /** Mounted once everything inside Suspense has loaded: precompile shaders so the first frame doesn't hitch. */
+const yieldToBrowser = () => new Promise<void>((r) => setTimeout(r, 0))
+
+/**
+ * Mounted once everything inside Suspense has loaded. While the render loop is still paused it
+ * prepares the GPU in small steps (shaders, then textures a few at a time, then one warm-up
+ * frame) so the loading screen never stalls on one long block of work.
+ */
 function SceneReady({ onAssets, onReady }: { onAssets: () => void; onReady: () => void }) {
   const gl = useThree((s) => s.gl)
   const scene = useThree((s) => s.scene)
   const camera = useThree((s) => s.camera)
+  const get = useThree((s) => s.get)
   useEffect(() => {
     onAssets()
     let done = false
     const finish = () => {
       if (done) return
       done = true
-      // next frame, or a timer if frames are paused (background tab)
-      const t = setTimeout(onReady, 120)
-      requestAnimationFrame(() => {
-        clearTimeout(t)
-        onReady()
-      })
+      onReady()
     }
-    gl.compileAsync(scene, camera).then(finish, finish)
+    ;(async () => {
+      const mark = (name: string, start: number) => performance.measure(`dc:${name}`, { start, end: performance.now() })
+      let t = performance.now()
+      try {
+        await gl.compileAsync(scene, camera)
+      } catch {
+        /* fall through: shaders compile on first render instead */
+      }
+      mark("compileAsync", t)
+      await yieldToBrowser()
+
+      t = performance.now()
+      const textures = new Set<THREE.Texture>()
+      scene.traverse((o) => {
+        const m = (o as THREE.Mesh).material as THREE.Material | THREE.Material[] | undefined
+        for (const mat of Array.isArray(m) ? m : m ? [m] : []) {
+          for (const v of Object.values(mat)) if ((v as THREE.Texture)?.isTexture) textures.add(v as THREE.Texture)
+        }
+      })
+      let i = 0
+      for (const tex of textures) {
+        if (done) return
+        gl.initTexture(tex)
+        if (++i % 4 === 0) await yieldToBrowser()
+      }
+      mark("textures", t)
+      await yieldToBrowser()
+
+      // warm-up in two halves: first a plain render (uploads geometry, draws the shadow map),
+      // then a full frame (post-processing targets and their shaders)
+      t = performance.now()
+      gl.render(scene, camera)
+      mark("warmup:scene", t)
+      await yieldToBrowser()
+      t = performance.now()
+      get().advance(performance.now())
+      mark("warmup:frame", t)
+      await yieldToBrowser()
+      finish()
+    })()
     const t = setTimeout(finish, 8000) // never hold the loading screen forever
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -416,7 +458,13 @@ export default function RackScene({
   useEffect(() => sigRef.current?.onEngine?.(), [])
   useEffect(() => sigRef.current?.onProgress?.(progress), [progress])
   const onAssets = useCallback(() => sigRef.current?.onAssets?.(), [])
-  const onReady = useCallback(() => sigRef.current?.onReady?.(), [])
+  // the render loop stays paused until SceneReady has warmed the GPU up in small steps
+  const capture0 = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
+  const [running, setRunning] = useState(capture0)
+  const onReady = useCallback(() => {
+    setRunning(true)
+    sigRef.current?.onReady?.()
+  }, [])
   const stops = useStops()
   const [stopId, setStopId] = useState("overview")
   const [cardOpen, setCardOpen] = useState(false)
@@ -463,6 +511,7 @@ export default function RackScene({
     <div className="relative h-full w-full overflow-hidden" style={{ background: BG }}>
       <Canvas
         dpr={[1, dpr]}
+        frameloop={running ? "always" : "never"}
         shadows="percentage"
         camera={{ fov: 40, near: 0.02, far: 40, position: [0.78, 1.62, 1.85] }}
         gl={{

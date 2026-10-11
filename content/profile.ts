@@ -142,6 +142,6 @@ export const education = [
 
 export const publications = [
   { title: "Cyber Attacks on Connected and Autonomous Vehicles (CAVs)", year: "2022", href: "https://medium.com/@eng.compyassin/cyber-attack-on-cavs-235210f9ae62" },
-  { title: "Quality of Experience of CAVEs", year: "2022" },
-  { title: "FlappyBird Learns How To Beat Itself Using NEAT", year: "2022" },
+  { title: "Quality of Experience of CAVEs", year: "2022", href: "https://medium.com/@eng.compyassin/quality-of-experience-and-performance-aspects-of-caves-f52bd0874e7d" },
+  { title: "FlappyBird Learns How To Beat Itself Using NEAT", year: "2022", href: "https://medium.com/@eng.compyassin/flappy-bird-beats-itself-using-neat-8aec1f140ea3" },
 ]

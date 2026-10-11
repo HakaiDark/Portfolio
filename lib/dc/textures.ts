@@ -1,6 +1,7 @@
 // Procedural canvas textures for the data-centre scene.
 // Everything here is drawn at runtime, so it costs no download bytes.
 import * as THREE from "three"
+import { timed } from "./perf"
 
 export function rng(seed: number) {
   let a = seed >>> 0
@@ -28,7 +29,7 @@ function canvasTex(
   c.width = w
   c.height = h
   const ctx = c.getContext("2d")!
-  draw(ctx, w, h)
+  timed("tex:" + key.split("-")[0], () => draw(ctx, w, h))
   const t = new THREE.CanvasTexture(c)
   if (opts.srgb !== false) t.colorSpace = THREE.SRGBColorSpace
   if (opts.repeat) {
@@ -40,16 +41,40 @@ function canvasTex(
   return t
 }
 
-function noise(ctx: CanvasRenderingContext2D, w: number, h: number, amount: number, seed: number) {
-  const img = ctx.getImageData(0, 0, w, h)
-  const r = rng(seed)
+let noiseTile: HTMLCanvasElement | null = null
+/** One small grain tile, generated once and reused by every texture. */
+function getNoiseTile() {
+  if (noiseTile) return noiseTile
+  const s = 128
+  const c = document.createElement("canvas")
+  c.width = c.height = s
+  const ctx = c.getContext("2d")!
+  const img = ctx.createImageData(s, s)
+  const r = rng(1)
   for (let i = 0; i < img.data.length; i += 4) {
-    const n = (r() - 0.5) * amount
-    img.data[i] += n
-    img.data[i + 1] += n
-    img.data[i + 2] += n
+    const v = r() > 0.5 ? 255 : 0
+    img.data[i] = img.data[i + 1] = img.data[i + 2] = v
+    img.data[i + 3] = Math.round(r() * 255)
   }
   ctx.putImageData(img, 0, 0)
+  noiseTile = c
+  return c
+}
+
+/**
+ * Fine surface grain. Paints a tiled noise pattern instead of touching every pixel
+ * (getImageData over large canvases blocked the main thread during loading).
+ */
+function noise(ctx: CanvasRenderingContext2D, w: number, h: number, amount: number, seed: number) {
+  const pattern = ctx.createPattern(getNoiseTile(), "repeat")
+  if (!pattern) return
+  const offset = (seed * 37) % 128
+  ctx.save()
+  ctx.globalAlpha = Math.min(1, amount / 160)
+  ctx.translate(-offset, -offset)
+  ctx.fillStyle = pattern
+  ctx.fillRect(offset, offset, w, h)
+  ctx.restore()
 }
 
 /** Brushed-metal roughness map (linear). Horizontal streaks. */

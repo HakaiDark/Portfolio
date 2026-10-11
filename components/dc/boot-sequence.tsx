@@ -21,10 +21,12 @@ const SESSION_KEY = "dc-boot-seen"
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
 /** Matrix-style glyph rain on a canvas. */
-function MatrixRain({ burst }: { burst: boolean }) {
+function MatrixRain({ burst, paused }: { burst: boolean; paused: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const burstRef = useRef(burst)
   burstRef.current = burst
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
   useEffect(() => {
     const c = ref.current
     if (!c) return
@@ -46,7 +48,7 @@ function MatrixRain({ burst }: { burst: boolean }) {
     let last = 0
     const tick = (t: number) => {
       raf = requestAnimationFrame(tick)
-      if (t - last < 33) return
+      if (t - last < 33 || pausedRef.current) return
       last = t
       ctx.fillStyle = burstRef.current ? "rgba(2,8,6,0.18)" : "rgba(2,8,6,0.1)"
       ctx.fillRect(0, 0, c.clientWidth, c.clientHeight)
@@ -65,7 +67,8 @@ function MatrixRain({ burst }: { burst: boolean }) {
       window.removeEventListener("resize", resize)
     }
   }, [])
-  return <canvas ref={ref} className="absolute inset-0 h-full w-full opacity-35" aria-hidden />
+  // fades out (on the compositor, so it stays smooth) while the GPU warm-up blocks the main thread
+  return <canvas ref={ref} className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${paused ? "opacity-0" : "opacity-35"}`} aria-hidden />
 }
 
 /**
@@ -185,7 +188,7 @@ export function BootSequence({
       aria-live="polite"
       aria-label={granted ? "Access granted" : "Loading the data centre"}
     >
-      {rain && !reducedMotion && <MatrixRain burst={granted} />}
+      {rain && !reducedMotion && <MatrixRain burst={granted} paused={signals.assets && !signals.ready} />}
       <div className="relative w-full max-w-[680px] px-6">
         <div className="rounded-lg border border-[#1fd46f]/25 bg-black/70 p-5 font-mono text-[12px] leading-[1.9] text-[#3ee07a] shadow-[0_0_60px_rgba(31,212,111,0.12)] backdrop-blur-sm md:text-[13px]">
           {lines.map((l, i) => (

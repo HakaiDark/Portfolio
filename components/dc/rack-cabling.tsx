@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { useLayoutEffect, useMemo, useRef } from "react"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 import { buildHeroCables, CABLE_COLORS, type CableColor, type CableSet, type Plug } from "@/lib/dc/cables"
 import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
 import { Leds, type LedPoint } from "./leds"
+import { timed } from "@/lib/dc/perf"
 
 const PLUG_GEO: Record<Plug["kind"], THREE.BufferGeometry> = {
   rj45: new THREE.BoxGeometry(0.0118, 0.0088, 0.022),
@@ -125,8 +126,8 @@ function PacketFlow({ paths }: { paths: CableSet["paths"] }) {
 const LED_COLORS = { green: "#3dff6e", amber: "#ffb020", blue: "#4aa3ff" } as const
 
 export function RackCabling({ quality, animate, traffic }: { quality: "high" | "low"; animate: boolean; traffic: boolean }) {
-  const cables = useMemo(() => buildHeroCables(quality), [quality])
-  useEffect(() => () => cables.tubes.forEach((t) => t.geometry.dispose()), [cables])
+  const cables = useMemo(() => timed("cables", () => buildHeroCables(quality)), [quality])
+  // geometry is cached for the page's lifetime (see buildHeroCables), so it isn't disposed on unmount
 
   const plugGroups = useMemo(() => {
     const groups = new Map<string, Plug[]>()

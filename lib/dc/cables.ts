@@ -71,7 +71,18 @@ function bundleSlot(side: 1 | -1, i: number): [number, number] {
   return [side * (0.305 + Math.cos(a) * r * 0.7), 0.035 + Math.sin(a) * r]
 }
 
+const cableCache = new Map<string, CableSet>()
+
+/** Cached: React can mount the cabling more than once while assets are still loading. */
 export function buildHeroCables(quality: "high" | "low"): CableSet {
+  const hit = cableCache.get(quality)
+  if (hit) return hit
+  const set = createHeroCables(quality)
+  cableCache.set(quality, set)
+  return set
+}
+
+function createHeroCables(quality: "high" | "low"): CableSet {
   const r = rng(2024)
   const byColor = new Map<CableColor, THREE.BufferGeometry[]>()
   const plugs: Plug[] = []

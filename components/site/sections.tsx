@@ -187,7 +187,7 @@ export function ContactSection() {
             <Mail className="h-4 w-4" aria-hidden />
             {profile.email}
           </a>
-          <PhoneActions showNumber />
+          <PhoneActions />
           <a href={profile.links.cv} download className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm text-white/90 hover:border-white/60">
             <Download className="h-4 w-4" aria-hidden />
             Download CV

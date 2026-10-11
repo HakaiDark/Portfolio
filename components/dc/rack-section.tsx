@@ -56,6 +56,8 @@ export function RackSection({ className = "", overlay }: { className?: string; o
     io.observe(el)
     return () => io.disconnect()
   }, [])
+  // phones: the name card slides away once the visitor starts exploring the rack
+  const [exploring, setExploring] = useState(false)
   const [boot, setBoot] = useState<BootSignals>({ engine: false, progress: 0, assets: false, ready: false })
   const reducedMotion = useReducedMotion()
 
@@ -84,6 +86,7 @@ export function RackSection({ className = "", overlay }: { className?: string; o
   const signals = useMemo<RackSceneSignals>(
     () => ({
       onEngine: () => setBoot((b) => ({ ...b, engine: true })),
+      onExplore: () => setExploring(true),
       onProgress: (progress) => setBoot((b) => ({ ...b, progress })),
       onAssets: () => setBoot((b) => ({ ...b, assets: true, progress: 100 })),
       onReady: () => setBoot((b) => ({ ...b, ready: true })),
@@ -107,7 +110,27 @@ export function RackSection({ className = "", overlay }: { className?: string; o
       ) : (
         <div className="h-full w-full bg-[#0b0e11]" />
       )}
-      {overlay}
+      {overlay && (
+        <div
+          // positioned so the slide doesn't re-anchor the absolutely positioned card
+          className={`pointer-events-none absolute inset-x-0 top-0 z-[35] transition-[opacity,transform] duration-300 ease-out ${
+            exploring ? "max-md:-translate-y-6 max-md:opacity-0 max-md:[&_*]:pointer-events-none" : ""
+          }`}
+        >
+          {overlay}
+        </div>
+      )}
+      {overlay && exploring && (
+        <button
+          type="button"
+          onClick={() => setExploring(false)}
+          className="absolute top-3 left-3 z-[36] flex items-center gap-2 rounded-full border border-white/15 bg-[#0b0e11]/80 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md md:hidden"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-[#3ee07a]" aria-hidden />
+          Mohammad Yassin
+          <span className="text-white/50" aria-hidden>▾</span>
+        </button>
+      )}
       {showBoot && visible && <BootSequence signals={boot} reducedMotion={reducedMotion} rain={quality === "high"} onDone={() => setBootDone(true)} />}
     </div>
   )

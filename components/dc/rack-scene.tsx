@@ -245,6 +245,15 @@ function CameraRig({
   const minAz = shiftedLeft ? -SHIFTED_AZIMUTH_LIMIT : -AZIMUTH_LIMIT
   const maxAz = shiftedRight ? SHIFTED_AZIMUTH_LIMIT : AZIMUTH_LIMIT
 
+  // Phones: one finger always scrolls the page (no fight between scrolling and turning);
+  // two fingers turn and zoom. Mouse/trackpad devices keep one-finger/drag orbit.
+  const touchActions = useMemo(() => {
+    const coarse = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
+    return coarse
+      ? { one: ACTION.NONE, two: ACTION.TOUCH_DOLLY_ROTATE, three: ACTION.NONE }
+      : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
+  }, [])
+
   useFrame((_, dt) => {
     const c = ref.current
     if (!c || !autoRotate) return
@@ -269,7 +278,7 @@ function CameraRig({
       maxDistance={2.2}
       dollyToCursor={false}
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.NONE }}
-      touches={{ one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }}
+      touches={touchActions}
     />
   )
 }
@@ -451,6 +460,8 @@ function Scene({
 
 export interface RackSceneSignals {
   onEngine?: () => void
+  /** the visitor started exploring (stop, hotspot or camera gesture) */
+  onExplore?: () => void
   onProgress?: (progress: number) => void
   onAssets?: () => void
   onReady?: () => void
@@ -492,12 +503,16 @@ export default function RackScene({
   const terminalTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const stop = stops.find((s) => s.id === stopId) ?? stops[0]
-  const onInteract = useCallback(() => setInteracted(true), [])
+  const onInteract = useCallback(() => {
+    setInteracted(true)
+    sigRef.current?.onExplore?.()
+  }, [])
 
   const goTo = useCallback(
     (id: string) => {
       const s = stops.find((x) => x.id === id) ?? stops[0]
       setInteracted(true)
+      sigRef.current?.onExplore?.()
       setStopId(s.id)
       setCardOpen(!!s.cardId)
       clearTimeout(terminalTimer.current)
@@ -597,9 +612,14 @@ export default function RackScene({
       </nav>
 
       {!interacted && (
-        <p className="pointer-events-none absolute inset-x-0 bottom-[4.75rem] z-10 px-6 text-center max-md:hidden font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase md:bottom-[5.5rem]">
-          Drag sideways to look around · tap <span className="text-[#00ffe7]">+</span> for details
-        </p>
+        <>
+          <p className="pointer-events-none absolute inset-x-0 bottom-[5.5rem] z-10 px-6 text-center font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase max-md:hidden">
+            Drag to look around · tap <span className="text-[#00ffe7]">+</span> for details
+          </p>
+          <p className="pointer-events-none absolute bottom-[5.1rem] left-4 z-10 max-w-[55%] font-mono text-[9px] leading-relaxed tracking-[0.18em] text-white/65 uppercase md:hidden">
+            Two fingers to turn · tap <span className="text-[#00ffe7]">+</span> for details
+          </p>
+        </>
       )}
 
       <InfoCard card={card} onClose={close} />

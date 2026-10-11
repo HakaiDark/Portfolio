@@ -1,4 +1,4 @@
-import { ArrowDown, Download, Mail } from "lucide-react"
+import { ArrowDown, Download, Github, Mail } from "lucide-react"
 import { profile } from "@/content/profile"
 import { PhoneActions } from "./phone-actions"
 
@@ -30,8 +30,9 @@ export function HeroOverlay() {
           <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" className={outline}>
             LinkedIn
           </a>
-          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className={`${outline} max-sm:hidden`}>
-            GitHub
+          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className={outline} aria-label="GitHub">
+            <Github className="h-3.5 w-3.5 md:h-4 md:w-4" aria-hidden />
+            <span className="hidden sm:inline">GitHub</span>
           </a>
           <a href={`mailto:${profile.email}`} className={outline} aria-label={`Email ${profile.email}`}>
             <Mail className="h-3.5 w-3.5 md:h-4 md:w-4" aria-hidden />

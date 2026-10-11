@@ -19,6 +19,7 @@ import { InfoCard } from "./info-card"
 import { Laptop } from "./laptop"
 import { AccessPoint } from "./access-point"
 import { TerminalOverlay } from "./terminal-overlay"
+import { PhotoMode, type PhotoStatus } from "./photo-mode"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -297,6 +298,8 @@ function Scene({
   traffic,
   setTraffic,
   cardOpen,
+  photoEnabled,
+  onPhotoStatus,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -309,6 +312,8 @@ function Scene({
   traffic: boolean
   setTraffic: (on: boolean) => void
   cardOpen: boolean
+  photoEnabled: boolean
+  onPhotoStatus: (s: PhotoStatus) => void
 }) {
   return (
     <>
@@ -338,6 +343,7 @@ function Scene({
           <ToneMapping mode={ToneMappingMode.AGX} />
         </EffectComposer>
       ) : null}
+      {quality === "high" && <PhotoMode enabled={photoEnabled} background={BG} onStatus={onPhotoStatus} />}
     </>
   )
 }
@@ -361,6 +367,8 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
   const [cardOpen, setCardOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [traffic, setTraffic] = useState(false)
+  const [photoOn, setPhotoOn] = useState(true)
+  const [photo, setPhoto] = useState<PhotoStatus>({ state: "idle" })
   const [interacted, setInteracted] = useState(false)
   const [dpr, setDpr] = useState(quality === "high" ? 1.75 : 1.25)
   const capture = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
@@ -428,23 +436,48 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
           traffic={traffic}
           setTraffic={setTraffic}
           cardOpen={!!card}
+          photoEnabled={photoOn && !traffic && !terminalOpen}
+          onPhotoStatus={setPhoto}
         />
       </Canvas>
 
       <Loader />
 
-      {/* live traffic toggle */}
-      <button
-        type="button"
-        onClick={() => setTraffic((t) => !t)}
-        aria-pressed={traffic}
-        className={`absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
-          traffic ? "border-[#5ff4ff] bg-[#5ff4ff]/15 text-[#5ff4ff]" : "border-white/15 bg-black/45 text-white/75 hover:border-white/40"
-        }`}
-      >
-        <span className={`h-1.5 w-1.5 rounded-full ${traffic ? "bg-[#5ff4ff] motion-safe:animate-pulse" : "bg-white/40"}`} />
-        Live traffic
-      </button>
+      {/* view toggles */}
+      <div className="absolute right-4 top-4 z-20 flex flex-col items-end gap-2">
+        <button
+          type="button"
+          onClick={() => setTraffic((t) => !t)}
+          aria-pressed={traffic}
+          className={`flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
+            traffic ? "border-[#5ff4ff] bg-[#5ff4ff]/15 text-[#5ff4ff]" : "border-white/15 bg-black/45 text-white/75 hover:border-white/40"
+          }`}
+        >
+          <span className={`h-1.5 w-1.5 rounded-full ${traffic ? "bg-[#5ff4ff] motion-safe:animate-pulse" : "bg-white/40"}`} />
+          Live traffic
+        </button>
+        {quality === "high" && (
+          <button
+            type="button"
+            onClick={() => setPhotoOn((p) => !p)}
+            aria-pressed={photoOn}
+            title="When the camera is still, render a photoreal image with real light bounces"
+            className={`flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
+              photoOn ? "border-white/40 bg-white/10 text-white" : "border-white/15 bg-black/45 text-white/60 hover:border-white/40"
+            }`}
+          >
+            <span className={`h-1.5 w-1.5 rounded-full ${photoOn ? "bg-white" : "bg-white/40"}`} />
+            Photo mode
+          </button>
+        )}
+      </div>
+
+      {/* photo mode progress */}
+      {quality === "high" && photoOn && photo.state !== "idle" && (
+        <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-full border border-white/10 bg-black/45 px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] text-white/70 uppercase backdrop-blur-md">
+          {photo.state === "building" ? "Preparing photo mode…" : `Photo · ${photo.samples} samples`}
+        </div>
+      )}
 
       {/* camera stops */}
       <nav

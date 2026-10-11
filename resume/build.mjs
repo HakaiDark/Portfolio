@@ -41,8 +41,9 @@ function print(html, out) {
 
 const privateFile = path.join(dir, "private.json")
 // strip a UTF-8 BOM (Windows editors / PowerShell add one)
-const priv = existsSync(privateFile) ? JSON.parse(readFileSync(privateFile, "utf8").replace(/^﻿/, "")) : {}
-const withPhone = (phone) => template.replaceAll("{{CONTACT_PHONE}}", phone ? ` | ${phone}` : "")
+const rawPriv = existsSync(privateFile) ? readFileSync(privateFile, "utf8") : ""
+const priv = rawPriv ? JSON.parse(rawPriv.charCodeAt(0) === 0xfeff ? rawPriv.slice(1) : rawPriv) : {}
+const withPhone = (phone) => template.replaceAll("{{CONTACT_PHONE}}", phone ? ` | WhatsApp: ${phone}` : "")
 
 // public copy carries the phone only when private.json sets "onPublicCv": true
 print(withPhone(priv.onPublicCv ? priv.phone : ""), path.join(root, "public", "Mohammad-Yassin-Resume.pdf"))

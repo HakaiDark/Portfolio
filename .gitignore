@@ -16,3 +16,7 @@ linkedin-profile.md
 resume/private.json
 resume/private/
 resume/.build-*.html
+
+# Local tooling output / editor config
+.shots/
+.claude/

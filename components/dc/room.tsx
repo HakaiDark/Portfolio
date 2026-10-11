@@ -1,6 +1,7 @@
 "use client"
 
 import { useLayoutEffect, useMemo, useRef } from "react"
+import { MeshReflectorMaterial } from "@react-three/drei"
 import * as THREE from "three"
 import type { RackSlot } from "@/lib/dc/devices"
 import { assetLabel, cabinetInterior, floorTile, perforationAlpha } from "@/lib/dc/textures"
@@ -124,7 +125,7 @@ function Cabinets({ quality }: { quality: "high" | "low" }) {
   )
 }
 
-function Floor() {
+function Floor({ quality }: { quality: "high" | "low" }) {
   const plain = useMemo(() => {
     const t = floorTile(false).clone()
     t.wrapS = t.wrapT = THREE.RepeatWrapping
@@ -143,7 +144,25 @@ function Floor() {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[18, 18]} />
-        <meshStandardMaterial map={plain} roughness={0.62} metalness={0.05} />
+        {quality === "high" ? (
+          // satin vinyl tiles: soft, blurred reflections of the racks and lights
+          <MeshReflectorMaterial
+            map={plain}
+            resolution={512}
+            blur={[400, 120]}
+            mixBlur={1}
+            mixStrength={0.9}
+            mixContrast={1}
+            depthScale={1}
+            minDepthThreshold={0.6}
+            maxDepthThreshold={1.6}
+            roughness={0.55}
+            metalness={0.05}
+            mirror={0}
+          />
+        ) : (
+          <meshStandardMaterial map={plain} roughness={0.6} metalness={0.05} />
+        )}
       </mesh>
       {/* perforated cold-aisle tiles: two tiles wide in front of the racks */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.0015, 0.6]} receiveShadow>
@@ -174,13 +193,51 @@ function Overhead({ quality }: { quality: "high" | "low" }) {
     for (let x = -7; x <= 7; x += 2.4) xs.push(x)
     return xs
   }, [])
+  const rowSign = useMemo(() => assetLabel("ROW C · CORE"), [])
   return (
     <group>
       {/* ceiling */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, CEILING_Y, 0]}>
         <planeGeometry args={[18, 18]} />
-        <meshStandardMaterial color="#202326" roughness={0.9} />
+        <meshStandardMaterial color="#9aa0a6" roughness={0.9} />
       </mesh>
+      {/* fire suppression: red sprinkler main with pendant heads */}
+      <mesh position={[0, 2.93, 1.75]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.024, 0.024, 16, 12]} />
+        <meshStandardMaterial color="#a8241c" roughness={0.45} metalness={0.3} />
+      </mesh>
+      {fixtures.map((x) => (
+        <group key={`spr${x}`} position={[x + 0.6, 2.88, 1.75]}>
+          <mesh>
+            <cylinderGeometry args={[0.008, 0.008, 0.08, 8]} />
+            <meshStandardMaterial color="#a8241c" roughness={0.45} />
+          </mesh>
+          <mesh position={[0, -0.05, 0]}>
+            <cylinderGeometry args={[0.016, 0.006, 0.02, 10]} />
+            <meshStandardMaterial color="#c9a24a" metalness={0.8} roughness={0.3} />
+          </mesh>
+        </group>
+      ))}
+      {/* smoke detectors */}
+      {fixtures.map((x) => (
+        <mesh key={`smk${x}`} position={[x - 0.9, CEILING_Y - 0.015, 0.9]}>
+          <cylinderGeometry args={[0.06, 0.065, 0.03, 24]} />
+          <meshStandardMaterial color="#eeeeec" roughness={0.6} />
+        </mesh>
+      ))}
+      {/* row sign hanging from the ladder */}
+      <group position={[-1.75, 2.18, 0.08]}>
+        <mesh>
+          <boxGeometry args={[0.52, 0.13, 0.006]} />
+          <meshStandardMaterial map={rowSign} roughness={0.6} />
+        </mesh>
+        {[-0.2, 0.2].map((cx) => (
+          <mesh key={cx} position={[cx, 0.12, 0]}>
+            <cylinderGeometry args={[0.002, 0.002, 0.11, 6]} />
+            <meshStandardMaterial color="#8a8d91" metalness={0.8} roughness={0.4} />
+          </mesh>
+        ))}
+      </group>
       {/* cable ladder above the hero row */}
       {[-0.47, -0.17].map((z) => (
         <mesh key={z} position={[0, 2.37, z]} castShadow={quality === "high"}>
@@ -254,7 +311,7 @@ const RIGHT_RACK: RackSlot[] = [
 export function Room({ quality }: { quality: "high" | "low" }) {
   return (
     <group>
-      <Floor />
+      <Floor quality={quality} />
       <Cabinets quality={quality} />
       <Overhead quality={quality} />
       <group position={[-0.74, 0, 0]}>

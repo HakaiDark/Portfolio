@@ -375,6 +375,49 @@ export function cableManagerFront() {
   })
 }
 
+/** UPS front bezel (3U): vents, LCD panel, buttons. Returns colour + emissive maps. */
+export function upsFront(units: number) {
+  const w = 1024
+  const h = Math.round((w * units * 0.04445) / 0.4826)
+  const lcd = { x: w * 0.06, y: h * 0.28, w: w * 0.2, h: h * 0.3 }
+  const color = canvasTex(`ups-${units}`, w, h, (ctx) => {
+    ctx.fillStyle = "#121315"
+    ctx.fillRect(0, 0, w, h)
+    noise(ctx, w, h, 8, 77)
+    // vent field
+    ctx.fillStyle = "#050506"
+    for (let x = w * 0.33; x < w * 0.95; x += 12)
+      for (let y = h * 0.12; y < h * 0.88; y += 12) ctx.fillRect(x, y, 7, 7)
+    // control panel
+    ctx.fillStyle = "#1d1f22"
+    ctx.fillRect(w * 0.04, h * 0.14, w * 0.26, h * 0.72)
+    ctx.fillStyle = "#0a0f12"
+    ctx.fillRect(lcd.x, lcd.y, lcd.w, lcd.h)
+    ctx.fillStyle = "#2b2e33"
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath()
+      ctx.arc(w * 0.08 + i * 40, h * 0.74, 9, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    ctx.fillStyle = "#cfd2d6"
+    ctx.font = "bold 20px sans-serif"
+    ctx.fillText("Smart-UPS 3000", w * 0.06, h * 0.22)
+  })
+  const emissive = canvasTex(`ups-e-${units}`, w, h, (ctx) => {
+    ctx.fillStyle = "#000"
+    ctx.fillRect(0, 0, w, h)
+    ctx.fillStyle = "#4fa3ff"
+    ctx.font = "bold 22px monospace"
+    ctx.fillText("ONLINE  LOAD 38%", lcd.x + 10, lcd.y + 30)
+    ctx.fillText("BATT 100%  14 min", lcd.x + 10, lcd.y + 60)
+    ctx.fillStyle = "#33ff66"
+    ctx.beginPath()
+    ctx.arc(w * 0.08, h * 0.74, 5, 0, Math.PI * 2)
+    ctx.fill()
+  })
+  return { color, emissive }
+}
+
 /** Small printed asset label for cabinet doors. */
 export function assetLabel(text: string) {
   return canvasTex(`lbl-${text}`, 256, 64, (ctx, w, h) => {

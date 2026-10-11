@@ -1,12 +1,12 @@
 // Rack hardware configuration.
 //
-// To add a device (e.g. an Aruba AP or a FortiGate):
-//   1. Put its front-panel photo in public/3d/devices/ as WebP (straight-on, cropped to the faceplate).
+// To add a device:
+//   1. Put a straight-on photo of its faceplate in public/3d/devices/ as WebP (plus a ~1024px "-1k" copy).
 //   2. Add an entry to `devices` below: rack units, depth, texture paths, ports, and a `cardId`.
 //   3. Add the card text to content/rack-cards.ts under the same `cardId`.
 //   4. Mount it in `heroRack` at a free rack unit.
 //
-// Port positions are fractions of the front texture: u = 0 (left) .. 1 (right), v = 0 (top) .. 1 (bottom).
+// Positions on a faceplate are fractions of its texture: u = 0 (left) .. 1 (right), v = 0 (top) .. 1 (bottom).
 
 export const U = 0.04445 // one rack unit in metres
 export const PANEL_WIDTH = 0.4826 // 19-inch faceplate incl. ears
@@ -33,9 +33,19 @@ export interface PortGrid {
   led?: { du: number; dv: number }
 }
 
+export interface StatusLed {
+  u: number
+  v: number
+  color: "green" | "amber" | "blue"
+  /** "link" flickers with traffic, "steady" stays lit */
+  mode: "link" | "steady"
+}
+
 export interface DeviceConfig {
   id: string
   name: string
+  /** short label for the camera-stop buttons */
+  short: string
   vendor: string
   rackUnits: number
   /** chassis depth in metres */
@@ -46,33 +56,92 @@ export interface DeviceConfig {
     frontLow?: string
     top?: string
   }
+  /** the photo already includes the rack ears (servers with handles) */
+  faceIncludesEars?: boolean
   /** colour of the sheet-metal chassis */
   chassisColor: string
   ports: PortGrid[]
+  leds?: StatusLed[]
+  /** console port, where the engineer's laptop is plugged in */
+  console?: { u: number; v: number }
+  /** HA heartbeat port; two stacked units of the same model get a short cable between them */
+  ha?: { u: number; v: number }
   /** key into content/rack-cards.ts; omit for decorative devices */
   cardId?: string
   /** hotspot position on the faceplate (texture fractions) */
   hotspot?: { u: number; v: number }
 }
 
-const fsRow = (u0: number, patched: number[]): PortGrid => ({
-  kind: "rj45",
-  u0,
-  v0: 72 / 188,
-  du: 65 / 2000,
-  dv: 58 / 188,
-  cols: 6,
-  rows: 2,
-  w: 54 / 2000,
-  h: 40 / 188,
+const grid = (
+  kind: PortKind,
+  imgW: number,
+  imgH: number,
+  x0: number,
+  y0: number,
+  pitchX: number,
+  pitchY: number,
+  cols: number,
+  rows: number,
+  portW: number,
+  portH: number,
+  patched: number[],
+  led?: { dx: number; dy: number }
+): PortGrid => ({
+  kind,
+  u0: x0 / imgW,
+  v0: y0 / imgH,
+  du: pitchX / imgW,
+  dv: pitchY / imgH,
+  cols,
+  rows,
+  w: portW / imgW,
+  h: portH / imgH,
   patched,
-  led: { du: -20 / 2000, dv: 24 / 188 },
+  led: led ? { du: led.dx / imgW, dv: led.dy / imgH } : undefined,
 })
 
+// FortiSwitch 448E texture is 2000 x 188 (display scale of the 2046 x 192 source)
+const fsRow = (x0: number, patched: number[]) => grid("rj45", 2000, 188, x0, 72, 65, 58, 6, 2, 54, 40, patched, { dx: -20, dy: 24 })
+// FortiGate 601F texture is 1280 x 125
+const fgRj = (x0: number, patched: number[]) => grid("rj45", 1280, 125, x0, 47, 41.5, 40, 4, 2, 34, 26, patched, { dx: -13, dy: -18 })
+// Catalyst 9300 texture is 1200 x 118
+const c9Row = (x0: number, patched: number[]) => grid("rj45", 1200, 118, x0, 43, 37, 35, 6, 2, 30, 22, patched)
+
 export const devices: Record<string, DeviceConfig> = {
+  "fortigate-601f": {
+    id: "fortigate-601f",
+    name: "FortiGate 601F",
+    short: "FortiGate",
+    vendor: "Fortinet",
+    rackUnits: 1,
+    depth: 0.49,
+    textures: { front: "/3d/devices/fortigate-601f-front.webp", frontLow: "/3d/devices/fortigate-601f-front-1k.webp" },
+    chassisColor: "#dcdde0",
+    ports: [
+      // MGMT (top) / HA (bottom); the HA heartbeat cable between the pair is drawn separately
+      grid("rj45", 1280, 125, 225, 47, 0, 40, 1, 2, 34, 26, [0]),
+      fgRj(288, [0, 1, 2, 4, 5]),
+      fgRj(470, [0, 4]),
+      grid("sfp", 1280, 125, 728, 45, 43, 45, 4, 2, 36, 24, [0, 1, 2, 3], { dx: 0, dy: -22 }),
+      grid("sfp", 1280, 125, 908, 45, 43, 45, 2, 2, 36, 24, [0]),
+      grid("sfp", 1280, 125, 1008, 45, 42, 45, 2, 2, 36, 24, []),
+    ],
+    leds: [
+      { u: 50 / 1280, v: 64 / 125, color: "green", mode: "steady" },
+      { u: 50 / 1280, v: 75 / 125, color: "green", mode: "steady" },
+      { u: 50 / 1280, v: 87 / 125, color: "green", mode: "link" },
+      { u: 50 / 1280, v: 99 / 125, color: "green", mode: "steady" },
+    ],
+    console: { u: 160 / 1280, v: 85 / 125 },
+    ha: { u: 225 / 1280, v: 87 / 125 },
+    cardId: "fortigate",
+    hotspot: { u: 0.08, v: 0.32 },
+  },
+
   "fortiswitch-448e": {
     id: "fortiswitch-448e",
     name: "FortiSwitch 448E",
+    short: "FortiSwitch",
     vendor: "Fortinet",
     rackUnits: 1,
     depth: 0.39,
@@ -83,111 +152,155 @@ export const devices: Record<string, DeviceConfig> = {
     },
     chassisColor: "#d9dadc",
     ports: [
-      fsRow(235 / 2000, [0, 1, 2, 3, 4, 6, 7, 9, 10, 11]),
-      fsRow(643 / 2000, [0, 1, 2, 3, 5, 6, 7, 8]),
-      fsRow(1063 / 2000, [0, 2, 3, 4, 6, 8]),
-      fsRow(1470 / 2000, [1, 3]),
-      {
-        kind: "sfp",
-        u0: 1880 / 2000,
-        v0: 75 / 188,
-        du: 68 / 2000,
-        dv: 54 / 188,
-        cols: 2,
-        rows: 2,
-        w: 58 / 2000,
-        h: 34 / 188,
-        patched: [0, 1, 2],
-        led: { du: 0, dv: -26 / 188 },
-      },
+      fsRow(235, [0, 1, 2, 3, 4, 6, 7, 9, 10, 11]),
+      fsRow(643, [0, 1, 2, 3, 5, 6, 7, 8]),
+      fsRow(1063, [0, 2, 3, 4, 6, 8]),
+      fsRow(1470, [1, 3]),
+      grid("sfp", 2000, 188, 1880, 75, 68, 54, 2, 2, 58, 34, [0, 1, 2], { dx: 0, dy: -26 }),
     ],
-    cardId: "fortinet",
+    leds: [
+      { u: 178 / 2000, v: 30 / 188, color: "green", mode: "steady" },
+      { u: 178 / 2000, v: 59 / 188, color: "green", mode: "steady" },
+    ],
+    cardId: "fortiswitch",
     hotspot: { u: 0.045, v: 0.5 },
   },
 
+  "catalyst-9300": {
+    id: "catalyst-9300",
+    name: "Cisco Catalyst 9300",
+    short: "Catalyst",
+    vendor: "Cisco",
+    rackUnits: 1,
+    depth: 0.45,
+    textures: { front: "/3d/devices/catalyst-9300-front.webp", frontLow: "/3d/devices/catalyst-9300-front-1k.webp" },
+    chassisColor: "#c3c5c8",
+    // mid-migration: a few legacy ports still patched
+    ports: [c9Row(48, [0, 1, 3, 6, 7]), c9Row(284, [2, 8]), c9Row(530, [0]), c9Row(775, [])],
+    leds: [
+      { u: 88 / 1200, v: 14 / 118, color: "green", mode: "steady" },
+      { u: 104 / 1200, v: 14 / 118, color: "amber", mode: "steady" },
+    ],
+    cardId: "catalyst",
+    hotspot: { u: 0.035, v: 0.55 },
+  },
+
+  "fortimanager-400g": {
+    id: "fortimanager-400g",
+    name: "FortiManager 400G",
+    short: "FortiManager",
+    vendor: "Fortinet",
+    rackUnits: 2,
+    depth: 0.66,
+    textures: { front: "/3d/devices/fortimanager-400g-front.webp", frontLow: "/3d/devices/fortimanager-400g-front-1k.webp" },
+    chassisColor: "#dcdcd8",
+    ports: [],
+    leds: [0, 1, 2, 3].flatMap((c) =>
+      [0, 1].map((r) => ({ u: (302 + c * 316) / 1272, v: (147 + r * 82) / 256, color: "blue" as const, mode: "link" as const }))
+    ),
+    cardId: "fortimanager",
+    hotspot: { u: 0.09, v: 0.16 },
+  },
+
+  "fortianalyzer-400e": {
+    id: "fortianalyzer-400e",
+    name: "FortiAnalyzer 400E",
+    short: "FortiAnalyzer",
+    vendor: "Fortinet",
+    rackUnits: 1,
+    depth: 0.65,
+    textures: { front: "/3d/devices/fortianalyzer-400e-front.webp", frontLow: "/3d/devices/fortianalyzer-400e-front-1k.webp" },
+    faceIncludesEars: true,
+    chassisColor: "#1d1f22",
+    ports: [],
+    leds: [
+      ...[1293, 1314, 1334, 1355].map((x, i) => ({
+        u: x / 1527,
+        v: 57 / 138,
+        color: "green" as const,
+        mode: i === 1 || i === 2 ? ("link" as const) : ("steady" as const),
+      })),
+      ...[0, 1, 2, 3].map((c) => ({ u: (415 + c * 345) / 1527, v: 84 / 138, color: "blue" as const, mode: "link" as const })),
+    ],
+    cardId: "fortianalyzer",
+    hotspot: { u: 0.5, v: 0.24 },
+  },
+
+  "proliant-dl360": {
+    id: "proliant-dl360",
+    name: "HPE ProLiant DL360 Gen10",
+    short: "Servers",
+    vendor: "HPE",
+    rackUnits: 1,
+    depth: 0.7,
+    textures: { front: "/3d/devices/proliant-dl360-front.webp", frontLow: "/3d/devices/proliant-dl360-front-1k.webp" },
+    faceIncludesEars: true,
+    chassisColor: "#b9bcc0",
+    ports: [],
+    leds: [
+      ...[197, 386, 762, 955].map((x) => ({ u: x / 1156, v: 33 / 105, color: "green" as const, mode: "link" as const })),
+      { u: 1076 / 1156, v: 56 / 105, color: "green", mode: "steady" },
+    ],
+    cardId: "servers",
+    hotspot: { u: 0.06, v: 0.5 },
+  },
+
+  // Kept for reference; swapped out for the FortiGate in the hero rack.
   "cisco-secure-firewall-6100": {
     id: "cisco-secure-firewall-6100",
     name: "Cisco Secure Firewall 6100",
+    short: "Cisco 6100",
     vendor: "Cisco",
     rackUnits: 2,
     depth: 0.74,
-    textures: {
-      front: "/3d/devices/cisco-6100-front.webp",
-      frontLow: "/3d/devices/cisco-6100-front-1k.webp",
-    },
+    textures: { front: "/3d/devices/cisco-6100-front.webp", frontLow: "/3d/devices/cisco-6100-front-1k.webp" },
     chassisColor: "#c9cacd",
-    ports: [
-      {
-        kind: "sfp",
-        u0: 865 / 1924,
-        v0: 258 / 390,
-        du: 65 / 1924,
-        dv: 64 / 390,
-        cols: 6,
-        rows: 2,
-        w: 56 / 1924,
-        h: 40 / 390,
-        patched: [0, 1, 2, 3, 6, 7, 8],
-        led: { du: 0, dv: -36 / 390 },
-      },
-      {
-        kind: "qsfp",
-        u0: 1300 / 1924,
-        v0: 327 / 390,
-        du: 85 / 1924,
-        dv: 0,
-        cols: 4,
-        rows: 1,
-        w: 74 / 1924,
-        h: 30 / 390,
-        patched: [0, 1],
-        led: { du: -20 / 1924, dv: -36 / 390 },
-      },
-      {
-        kind: "rj45",
-        u0: 1097 / 1924,
-        v0: 87 / 390,
-        du: 65 / 1924,
-        dv: 53 / 390,
-        cols: 4,
-        rows: 2,
-        w: 52 / 1924,
-        h: 38 / 390,
-        patched: [0, 1, 4],
-        led: { du: 0, dv: -26 / 390 },
-      },
-    ],
-    cardId: "cisco",
-    hotspot: { u: 0.29, v: 0.62 },
+    ports: [grid("sfp", 1924, 390, 865, 258, 65, 64, 6, 2, 56, 40, [0, 1, 2, 3, 6, 7, 8], { dx: 0, dy: -36 })],
   },
 }
 
-/** Mounted equipment in the hero rack. `u` is the lowest rack unit the device occupies (1 = bottom). */
+/** Mounted equipment in the hero rack. `u` is the lowest rack unit the item occupies (1 = bottom). */
 export type RackSlot =
-  | { kind: "device"; id: string; u: number }
+  /** `hotspot: false` for the second unit of a pair */
+  | { kind: "device"; id: string; u: number; hotspot?: boolean; tag?: string }
   /** jacks are patched automatically to the switch ports below it */
   | { kind: "patch-panel"; u: number; ports: number }
   | { kind: "cable-manager"; u: number }
   | { kind: "server"; u: number; units: number; variant: number }
   | { kind: "blank"; u: number; units: number }
+  /** cantilever shelf; `laptop` puts the engineer's laptop on it, consoled into the FortiGate */
+  | { kind: "shelf"; u: number; laptop?: boolean }
+  | { kind: "ups"; u: number; units: number }
 
 export const RACK_UNITS = 42
 
 export const heroRack: RackSlot[] = [
-  { kind: "patch-panel", u: 34, ports: 24 },
-  { kind: "cable-manager", u: 33 },
-  { kind: "device", id: "fortiswitch-448e", u: 32 },
-  { kind: "cable-manager", u: 31 },
-  { kind: "blank", u: 30, units: 1 },
-  { kind: "device", id: "cisco-secure-firewall-6100", u: 28 },
-  { kind: "blank", u: 26, units: 2 },
-  { kind: "server", u: 24, units: 2, variant: 0 },
-  { kind: "server", u: 23, units: 1, variant: 1 },
-  { kind: "server", u: 22, units: 1, variant: 1 },
-  { kind: "blank", u: 20, units: 2 },
-  { kind: "server", u: 18, units: 2, variant: 2 },
+  { kind: "blank", u: 41, units: 2 },
+  { kind: "patch-panel", u: 40, ports: 24 },
+  { kind: "cable-manager", u: 39 },
+  { kind: "device", id: "fortiswitch-448e", u: 38 },
+  { kind: "cable-manager", u: 37 },
+  { kind: "device", id: "catalyst-9300", u: 36 },
+  { kind: "blank", u: 35, units: 1 },
+  { kind: "device", id: "fortigate-601f", u: 34, tag: "FGT-01 · primary" },
+  { kind: "device", id: "fortigate-601f", u: 33, hotspot: false, tag: "FGT-02 · HA secondary" },
+  { kind: "blank", u: 32, units: 1 },
+  { kind: "device", id: "fortimanager-400g", u: 30 },
+  { kind: "device", id: "fortianalyzer-400e", u: 29 },
+  // U23–U28 left open: headroom for the laptop screen
+  { kind: "shelf", u: 22, laptop: true },
+  { kind: "device", id: "proliant-dl360", u: 20 },
+  { kind: "device", id: "proliant-dl360", u: 19, hotspot: false },
+  { kind: "device", id: "proliant-dl360", u: 18, hotspot: false },
+  { kind: "blank", u: 15, units: 3 },
+  { kind: "server", u: 13, units: 2, variant: 0 },
+  { kind: "blank", u: 4, units: 9 },
+  { kind: "ups", u: 1, units: 3 },
 ]
 
 /** Rack-unit index to height (metres) of the bottom of that unit, above the floor. */
 export const RACK_BASE = 0.1
 export const unitY = (u: number) => RACK_BASE + (u - 1) * U
+
+/** Where the Aruba AP hangs (ceiling, above the cold aisle in front of the rack). */
+export const ACCESS_POINT = { position: [0.05, 2.98, 0.95] as [number, number, number], cardId: "wireless" }

@@ -3,21 +3,25 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { CameraControls, CameraControlsImpl, Html, PerformanceMonitor, useProgress } from "@react-three/drei"
-import { Bloom, EffectComposer, N8AO, ToneMapping, Vignette } from "@react-three/postprocessing"
-import { ToneMappingMode } from "postprocessing"
+import { Bloom, DepthOfField, EffectComposer, N8AO, Noise, ToneMapping, Vignette } from "@react-three/postprocessing"
+import { BlendFunction, ToneMappingMode } from "postprocessing"
 import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js"
-import { heroRack } from "@/lib/dc/devices"
-import { FACE_Z, faceSize, mountedDevices } from "@/lib/dc/layout"
+import { ACCESS_POINT, heroRack } from "@/lib/dc/devices"
+import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
+import { LAPTOP_SCREEN_CENTER } from "@/lib/dc/laptop"
 import { rackCards } from "@/content/rack-cards"
 import { OpenRack } from "./rack-hardware"
 import { RackCabling } from "./rack-cabling"
 import { Room } from "./room"
 import { InfoCard } from "./info-card"
+import { Laptop } from "./laptop"
+import { AccessPoint } from "./access-point"
+import { TerminalOverlay } from "./terminal-overlay"
 
 const { ACTION } = CameraControlsImpl
-const BG = "#0b0e11"
+const BG = "#2a3036"
 const AZIMUTH_LIMIT = THREE.MathUtils.degToRad(75)
 
 interface Stop {
@@ -26,22 +30,33 @@ interface Stop {
   position: [number, number, number]
   target: [number, number, number]
   cardId?: string
+  /** half-width (m) that must fit on screen when arriving */
+  fit?: number
+  /** allow looking up (the ceiling AP) */
+  lookUp?: boolean
+  terminal?: boolean
 }
 
 function useStops(): Stop[] {
   return useMemo(() => {
-    const stops: Stop[] = [{ id: "overview", label: "Overview", position: [0.72, 1.6, 1.7], target: [0, 1.3, -0.1] }]
-    mountedDevices().forEach((d, i) => {
-      const side = i % 2 === 0 ? 1 : -1
-      const dist = 0.42 + d.cfg.rackUnits * 0.1
-      stops.push({
-        id: d.cfg.id,
-        label: d.cfg.name,
-        position: [side * 0.12, d.centerY + 0.06, dist],
-        target: [0, d.centerY, 0],
-        cardId: d.cfg.cardId,
+    const stops: Stop[] = [{ id: "overview", label: "Overview", position: [0.78, 1.62, 1.85], target: [0, 1.35, -0.1] }]
+    mountedDevices()
+      .filter((d) => d.hotspot)
+      .forEach((d, i) => {
+        const side = i % 2 === 0 ? 1 : -1
+        stops.push({
+          id: d.key,
+          label: d.cfg.short,
+          position: [side * 0.12, d.centerY + 0.06, 0.42 + d.cfg.rackUnits * 0.1],
+          target: [0, d.centerY, 0],
+          cardId: d.cfg.cardId,
+          fit: 0.29,
+        })
       })
-    })
+    const [ax, ay, az] = ACCESS_POINT.position
+    stops.push({ id: "wireless", label: "Wi-Fi", position: [0.2, 2.42, 1.42], target: [ax, ay - 0.05, az], cardId: ACCESS_POINT.cardId, lookUp: true })
+    const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
+    stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.08, ly + 0.1, 0.42], target: [lx, ly - 0.02, lz], fit: 0.21, terminal: true })
     return stops
   }, [])
 }
@@ -55,7 +70,7 @@ function Environment() {
     const pmrem = new THREE.PMREMGenerator(gl)
     const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
     scene.environment = env
-    scene.environmentIntensity = 0.42
+    scene.environmentIntensity = 0.55
     return () => {
       scene.environment = null
       env.dispose()
@@ -73,10 +88,11 @@ function Lights({ quality }: { quality: "high" | "low" }) {
   }
   return (
     <>
-      <hemisphereLight args={["#dfe7ef", "#2c3036", 0.22]} />
+      {/* cool-white data hall: bright overheads, light bounce off the floor */}
+      <hemisphereLight args={["#eef3f8", "#5a6068", 0.4]} />
       <directionalLight
         position={[1.1, 3.0, 2.3]}
-        intensity={1.5}
+        intensity={1.45}
         color="#f4f7ff"
         castShadow
         shadow-mapSize={quality === "high" ? [2048, 2048] : [1024, 1024]}
@@ -90,14 +106,12 @@ function Lights({ quality }: { quality: "high" | "low" }) {
         shadow-camera-far={8}
       />
       {quality === "high" ? (
-        [-1.2, 1.2].map((x) => (
-          <rectAreaLight key={x} args={["#eef3ff", 9, 1.45, 0.09]} position={[x, 3.02, 1.35]} rotation={[-Math.PI / 2, 0, 0]} />
+        [-2.4, 0, 2.4].map((x) => (
+          <rectAreaLight key={x} args={["#eef3ff", 10, 1.45, 0.09]} position={[x, 3.02, 1.35]} rotation={[-Math.PI / 2, 0, 0]} />
         ))
       ) : (
-        <pointLight position={[0, 2.8, 1.4]} intensity={2.2} distance={6} decay={2} color="#eef3ff" />
+        <pointLight position={[0, 2.8, 1.4]} intensity={4} distance={7} decay={2} color="#eef3ff" />
       )}
-      {/* faint cool bounce from the cabinet LEDs */}
-      <pointLight position={[0, 1.2, 2.2]} intensity={0.35} distance={3} decay={2} color="#7fd8ff" />
     </>
   )
 }
@@ -106,12 +120,13 @@ function Lights({ quality }: { quality: "high" | "low" }) {
  * Dev aid (only with ?capture in the URL): lets tooling render frames on demand and grab
  * stills, e.g. to produce the static fallback image. Works even when the tab is hidden.
  */
-function CaptureHook({ setStop }: { setStop: (id: string) => void }) {
+function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; setTraffic: (on: boolean) => void }) {
   const get = useThree((s) => s.get)
   useEffect(() => {
     const w = window as unknown as Record<string, unknown>
     w.__rack = {
       setStop,
+      setTraffic,
       render(frames = 1) {
         for (let i = 0; i < frames; i++) get().advance(performance.now() + i * 16)
       },
@@ -123,7 +138,7 @@ function CaptureHook({ setStop }: { setStop: (id: string) => void }) {
     return () => {
       delete w.__rack
     }
-  }, [get, setStop])
+  }, [get, setStop, setTraffic])
   return null
 }
 
@@ -143,11 +158,13 @@ function CameraRig({
   autoRotate,
   onInteract,
   instant = false,
+  cardOpen,
 }: {
   stop: Stop
   autoRotate: boolean
   onInteract: () => void
   instant?: boolean
+  cardOpen: boolean
 }) {
   const ref = useRef<CameraControlsImpl>(null)
   const size = useThree((s) => s.size)
@@ -156,13 +173,14 @@ function CameraRig({
   // Portrait phones: widen the lens and step back a little to fit the rack width,
   // without backing into the opposite row of cabinets.
   const portrait = aspect < 1
+  const fov = portrait ? 54 : 40
   const pull = portrait ? THREE.MathUtils.clamp(0.85 / Math.sqrt(aspect), 1, 1.3) : 1
   const dir = useRef(1)
 
   useEffect(() => {
-    camera.fov = portrait ? 54 : 40
+    camera.fov = fov
     camera.updateProjectionMatrix()
-  }, [camera, portrait])
+  }, [camera, fov])
 
   useEffect(() => {
     const c = ref.current
@@ -170,25 +188,26 @@ function CameraRig({
     const [tx, ty, tz] = stop.target
     const target = new THREE.Vector3(...stop.target)
     const offset = new THREE.Vector3(...stop.position).sub(target)
-    if (stop.cardId) {
-      // device close-up: back off just enough that a 19" faceplate (plus a little air) fits the width
-      const halfFov = THREE.MathUtils.degToRad(portrait ? 54 : 40) / 2
+    const sideCard = cardOpen && !portrait && aspect > 1.2 && !!stop.cardId
+    if (stop.fit) {
+      // back off just enough that the subject (plus a little air) fits the width;
       // with the desktop card open only ~62% of the width is free
-      const free = !portrait && aspect > 1.2 ? 0.62 : 1
-      const fit = 0.29 / (aspect * free * Math.tan(halfFov))
+      const free = sideCard ? 0.62 : 1
+      const fit = stop.fit / (aspect * free * Math.tan(THREE.MathUtils.degToRad(fov) / 2))
       offset.setLength(Math.max(offset.length(), fit))
     } else {
       offset.multiplyScalar(pull)
     }
     const p = target.clone().add(offset)
     c.setLookAt(p.x, p.y, p.z, tx, ty, tz, !instant)
-    // phones: the info sheet covers the lower half, so lift the device into the upper half
-    const visH = 2 * offset.length() * Math.tan(THREE.MathUtils.degToRad(portrait ? 54 : 40) / 2)
-    // desktop: the card sits on the right, so slide the device left
+    const visH = 2 * offset.length() * Math.tan(THREE.MathUtils.degToRad(fov) / 2)
     const visW = visH * aspect
-    const ox = !portrait && stop.cardId && aspect > 1.2 ? 0.19 * visW : 0
-    c.setFocalOffset(ox, portrait && stop.cardId ? 0.24 * visH : 0, 0, !instant)
-  }, [stop, pull, instant, aspect, portrait])
+    // phones: the info sheet covers the lower half, so lift the subject into the upper half;
+    // desktop: the card sits on the right, so slide the subject left
+    const oy = portrait && cardOpen && stop.cardId ? (stop.lookUp ? -0.22 : 0.24) * visH : 0
+    const ox = sideCard ? 0.19 * visW : 0
+    c.setFocalOffset(ox, oy, 0, !instant)
+  }, [stop, pull, instant, aspect, portrait, fov, cardOpen])
 
   useEffect(() => {
     const c = ref.current
@@ -216,8 +235,8 @@ function CameraRig({
       minAzimuthAngle={-AZIMUTH_LIMIT}
       maxAzimuthAngle={AZIMUTH_LIMIT}
       minPolarAngle={THREE.MathUtils.degToRad(58)}
-      maxPolarAngle={THREE.MathUtils.degToRad(100)}
-      minDistance={0.3}
+      maxPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 150 : 100)}
+      minDistance={0.25}
       maxDistance={2.2}
       dollyToCursor={false}
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.DOLLY }}
@@ -226,35 +245,42 @@ function CameraRig({
   )
 }
 
-function Hotspots({ active, onSelect }: { active: string | null; onSelect: (cardId: string, deviceId: string) => void }) {
+function HotspotButton({ label, active, glyph = "+", onClick }: { label: string; active: boolean; glyph?: string; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} aria-label={label} className="group relative flex h-11 w-11 items-center justify-center">
+      {!active && <span className="absolute h-7 w-7 rounded-full bg-[#00ffe7]/30 motion-safe:animate-ping" />}
+      <span
+        className={`relative flex h-7 w-7 items-center justify-center rounded-full border font-mono text-[12px] font-semibold shadow-lg backdrop-blur transition-colors ${
+          active ? "border-white bg-white text-black" : "border-[#00ffe7]/80 bg-black/60 text-[#00ffe7] group-hover:bg-[#00ffe7] group-hover:text-black"
+        }`}
+      >
+        {active ? "•" : glyph}
+      </span>
+    </button>
+  )
+}
+
+function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: string) => void }) {
+  const [ax, ay, az] = ACCESS_POINT.position
+  const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
   return (
     <>
-      {mountedDevices().map((d) => {
-        if (!d.cfg.cardId || !d.cfg.hotspot) return null
-        const [fw, fh] = faceSize(d.cfg)
-        const x = (d.cfg.hotspot.u - 0.5) * fw
-        const y = d.centerY + (0.5 - d.cfg.hotspot.v) * fh
-        const isActive = active === d.cfg.cardId
-        return (
-          <Html key={d.cfg.id} position={[x, y, FACE_Z + 0.03]} center zIndexRange={[30, 0]}>
-            <button
-              type="button"
-              onClick={() => onSelect(d.cfg.cardId!, d.cfg.id)}
-              aria-label={`About ${d.cfg.name}`}
-              className="group relative flex h-11 w-11 items-center justify-center"
-            >
-              {!isActive && <span className="absolute h-7 w-7 rounded-full bg-[#00ffe7]/30 motion-safe:animate-ping" />}
-              <span
-                className={`relative flex h-7 w-7 items-center justify-center rounded-full border text-sm font-semibold shadow-lg backdrop-blur transition-colors ${
-                  isActive ? "border-white bg-white text-black" : "border-[#00ffe7]/80 bg-black/60 text-[#00ffe7] group-hover:bg-[#00ffe7] group-hover:text-black"
-                }`}
-              >
-                {isActive ? "•" : "+"}
-              </span>
-            </button>
-          </Html>
-        )
-      })}
+      {mountedDevices()
+        .filter((d) => d.hotspot && d.cfg.hotspot)
+        .map((d) => {
+          const [x, y] = facePoint(d.cfg, d.cfg.hotspot!.u, d.cfg.hotspot!.v)
+          return (
+            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03]} center zIndexRange={[30, 0]}>
+              <HotspotButton label={`About ${d.cfg.name}`} active={activeStop === d.key} onClick={() => onStop(d.key)} />
+            </Html>
+          )
+        })}
+      <Html position={[ax, ay - 0.06, az]} center zIndexRange={[30, 0]}>
+        <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
+      </Html>
+      <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={[30, 0]}>
+        <HotspotButton label="Open the console terminal" glyph=">_" active={activeStop === "terminal"} onClick={() => onStop("terminal")} />
+      </Html>
     </>
   )
 }
@@ -265,41 +291,50 @@ function Scene({
   stop,
   autoRotate,
   onInteract,
-  activeCard,
-  onSelect,
+  onStop,
   capture,
   setStop,
+  traffic,
+  setTraffic,
+  cardOpen,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
   stop: Stop
   autoRotate: boolean
   onInteract: () => void
-  activeCard: string | null
-  onSelect: (cardId: string, deviceId: string) => void
+  onStop: (id: string) => void
   capture: boolean
   setStop: (id: string) => void
+  traffic: boolean
+  setTraffic: (on: boolean) => void
+  cardOpen: boolean
 }) {
   return (
     <>
       <color attach="background" args={[BG]} />
-      <fog attach="fog" args={[BG, 4.5, 13]} />
+      <fog attach="fog" args={[BG, 5, 15]} />
       <Environment />
       <Lights quality={quality} />
-      <CameraRig stop={stop} autoRotate={autoRotate && !capture} onInteract={onInteract} instant={capture} />
-      {capture && <CaptureHook setStop={setStop} />}
+      <CameraRig stop={stop} autoRotate={autoRotate && !capture} onInteract={onInteract} instant={capture} cardOpen={cardOpen} />
+      {capture && <CaptureHook setStop={setStop} setTraffic={setTraffic} />}
       <Suspense fallback={null}>
         <Room quality={quality} />
         <OpenRack slots={heroRack} lowRes={quality === "low"}>
-          <RackCabling quality={quality} animate={!reducedMotion} />
+          <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} />
+          <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
         </OpenRack>
-        <Hotspots active={activeCard} onSelect={onSelect} />
+        <AccessPoint lowRes={quality === "low"} />
+        <Hotspots activeStop={stop.id} onStop={onStop} />
       </Suspense>
       {quality === "high" ? (
         <EffectComposer multisampling={4} enableNormalPass={false}>
           <N8AO halfRes aoRadius={0.35} distanceFalloff={0.6} intensity={2.2} color="#000000" />
-          <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={0.55} />
-          <Vignette offset={0.32} darkness={0.55} />
+          {/* camera-like focus: sharp around the subject, soft beyond ~0.5 m */}
+          <DepthOfField target={stop.target} worldFocusRange={stop.id === "overview" ? 2.5 : 0.55} bokehScale={stop.id === "overview" ? 1 : 2.5} height={540} />
+          <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={traffic ? 0.9 : 0.55} />
+          <Noise opacity={0.025} blendFunction={BlendFunction.OVERLAY} />
+          <Vignette offset={0.32} darkness={0.5} />
           <ToneMapping mode={ToneMappingMode.AGX} />
         </EffectComposer>
       ) : null}
@@ -323,28 +358,32 @@ function Loader() {
 export default function RackScene({ quality, reducedMotion }: { quality: "high" | "low"; reducedMotion: boolean }) {
   const stops = useStops()
   const [stopId, setStopId] = useState("overview")
-  const [activeCard, setActiveCard] = useState<string | null>(null)
+  const [cardOpen, setCardOpen] = useState(false)
+  const [terminalOpen, setTerminalOpen] = useState(false)
+  const [traffic, setTraffic] = useState(false)
   const [interacted, setInteracted] = useState(false)
   const [dpr, setDpr] = useState(quality === "high" ? 1.75 : 1.25)
   const capture = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
+  const terminalTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const stop = stops.find((s) => s.id === stopId) ?? stops[0]
   const onInteract = useCallback(() => setInteracted(true), [])
-  const onSelect = useCallback(
-    (cardId: string, deviceId: string) => {
+
+  const goTo = useCallback(
+    (id: string) => {
+      const s = stops.find((x) => x.id === id) ?? stops[0]
       setInteracted(true)
-      setActiveCard(cardId)
-      setStopId(deviceId)
+      setStopId(s.id)
+      setCardOpen(!!s.cardId)
+      clearTimeout(terminalTimer.current)
+      if (s.terminal) terminalTimer.current = setTimeout(() => setTerminalOpen(true), capture ? 0 : 700)
+      else setTerminalOpen(false)
     },
-    []
+    [stops, capture]
   )
-  const goTo = (s: Stop) => {
-    setInteracted(true)
-    setStopId(s.id)
-    setActiveCard(s.cardId ?? null)
-  }
   const close = useCallback(() => {
-    setActiveCard(null)
+    setCardOpen(false)
+    setTerminalOpen(false)
     setStopId("overview")
   }, [])
 
@@ -353,15 +392,16 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
   }, [close])
+  useEffect(() => () => clearTimeout(terminalTimer.current), [])
 
-  const card = activeCard ? rackCards[activeCard] : null
+  const card = cardOpen && stop.cardId ? rackCards[stop.cardId] : null
 
   return (
     <div className="relative h-full w-full overflow-hidden" style={{ background: BG }}>
       <Canvas
         dpr={[1, dpr]}
         shadows="percentage"
-        camera={{ fov: 40, near: 0.02, far: 40, position: [0.95, 1.62, 2.05] }}
+        camera={{ fov: 40, near: 0.02, far: 40, position: [0.78, 1.62, 1.85] }}
         gl={{
           antialias: quality === "low",
           powerPreference: "high-performance",
@@ -380,29 +420,44 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
           quality={quality}
           reducedMotion={reducedMotion}
           stop={stop}
-          autoRotate={!reducedMotion && !interacted && !activeCard}
+          autoRotate={!reducedMotion && !interacted && !card}
           onInteract={onInteract}
-          activeCard={activeCard}
-          onSelect={onSelect}
+          onStop={goTo}
           capture={capture}
-          setStop={setStopId}
+          setStop={goTo}
+          traffic={traffic}
+          setTraffic={setTraffic}
+          cardOpen={!!card}
         />
       </Canvas>
 
       <Loader />
 
+      {/* live traffic toggle */}
+      <button
+        type="button"
+        onClick={() => setTraffic((t) => !t)}
+        aria-pressed={traffic}
+        className={`absolute right-4 top-4 z-20 flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
+          traffic ? "border-[#5ff4ff] bg-[#5ff4ff]/15 text-[#5ff4ff]" : "border-white/15 bg-black/45 text-white/75 hover:border-white/40"
+        }`}
+      >
+        <span className={`h-1.5 w-1.5 rounded-full ${traffic ? "bg-[#5ff4ff] motion-safe:animate-pulse" : "bg-white/40"}`} />
+        Live traffic
+      </button>
+
       {/* camera stops */}
       <nav
         aria-label="Rack views"
-        className={`absolute inset-x-0 bottom-0 z-20 flex justify-center gap-2 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity md:bottom-4 ${
-          card ? "max-md:pointer-events-none max-md:opacity-0" : "opacity-100"
+        className={`absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity md:bottom-4 md:justify-center ${
+          card || terminalOpen ? "max-md:pointer-events-none max-md:opacity-0" : "opacity-100"
         }`}
       >
         {stops.map((s) => (
           <button
             key={s.id}
             type="button"
-            onClick={() => goTo(s)}
+            onClick={() => goTo(s.id)}
             className={`shrink-0 rounded-full border px-4 py-2 font-mono text-[11px] tracking-[0.12em] uppercase backdrop-blur-md transition-colors ${
               stop.id === s.id ? "border-[#00ffe7] bg-[#00ffe7] text-black" : "border-white/15 bg-black/45 text-white/80 hover:border-white/40"
             }`}
@@ -413,12 +468,13 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
       </nav>
 
       {!interacted && (
-        <p className="pointer-events-none absolute inset-x-0 top-4 z-10 text-center font-mono text-[10px] tracking-[0.25em] text-white/50 uppercase">
+        <p className="pointer-events-none absolute inset-x-0 top-5 z-10 px-24 text-center font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase">
           Drag to look around · tap <span className="text-[#00ffe7]">+</span> for details
         </p>
       )}
 
       <InfoCard card={card} onClose={close} />
+      <TerminalOverlay open={terminalOpen} onClose={close} />
     </div>
   )
 }

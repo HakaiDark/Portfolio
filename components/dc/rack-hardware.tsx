@@ -13,6 +13,7 @@ import {
   railTexture,
   rearPanel,
   serverFront,
+  upsFront,
 } from "@/lib/dc/textures"
 
 const RAIL_X = 0.2325 // half of the 465 mm hole-to-hole spacing
@@ -107,11 +108,51 @@ export function TexturedDevice({ cfg, centerY, lowRes }: { cfg: DeviceConfig; ce
   return (
     <group position={[0, centerY, 0]}>
       <Chassis height={fh} depth={cfg.depth} color={cfg.chassisColor} units={cfg.rackUnits} topMap={top} seed={cfg.rackUnits * 13} />
-      <mesh position={[0, 0, FACE_Z + 0.0003]}>
+      <mesh position={[0, 0, FACE_Z + (cfg.faceIncludesEars ? 0.0012 : 0.0003)]}>
         <planeGeometry args={[fw, fh]} />
-        <meshStandardMaterial map={front} metalness={0.3} roughness={0.55} />
+        <meshStandardMaterial map={front} metalness={0.3} roughness={0.5} />
       </mesh>
-      <Ears height={fh} color={cfg.chassisColor} />
+      {!cfg.faceIncludesEars && <Ears height={fh} color={cfg.chassisColor} />}
+    </group>
+  )
+}
+
+export function Shelf({ u }: { u: number }) {
+  const y = unitY(u)
+  const depth = 0.42
+  return (
+    <group>
+      {/* front plate with ears */}
+      <mesh position={[0, y + U / 2, 0.0012]} castShadow>
+        <boxGeometry args={[PANEL_WIDTH, U - 0.0008, 0.0024]} />
+        <meshStandardMaterial {...POWDER} />
+      </mesh>
+      {/* tray */}
+      <mesh position={[0, y + U - 0.0015, -depth / 2 + 0.03]} castShadow receiveShadow>
+        <boxGeometry args={[BODY_WIDTH, 0.003, depth]} />
+        <meshStandardMaterial {...POWDER} roughness={0.6} />
+      </mesh>
+      {/* side lips */}
+      {[-1, 1].map((s) => (
+        <mesh key={s} position={[s * (BODY_WIDTH / 2 - 0.0015), y + U / 2 + 0.004, -depth / 2 + 0.03]} castShadow>
+          <boxGeometry args={[0.003, U * 0.8, depth]} />
+          <meshStandardMaterial {...POWDER} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+export function Ups({ u, units }: { u: number; units: number }) {
+  const { color, emissive } = useMemo(() => upsFront(units), [units])
+  const h = units * U - 0.0008
+  return (
+    <group position={[0, slotCenterY(u, units), 0]}>
+      <Chassis height={h} depth={0.66} color="#1a1b1d" units={units} seed={91} />
+      <mesh position={[0, 0, FACE_Z + 0.006]} castShadow>
+        <boxGeometry args={[PANEL_WIDTH, h, 0.012]} />
+        <meshStandardMaterial map={color} emissiveMap={emissive} emissive="#ffffff" emissiveIntensity={2.4} metalness={0.25} roughness={0.6} />
+      </mesh>
     </group>
   )
 }
@@ -208,7 +249,7 @@ const screwSlot = new THREE.BoxGeometry(0.0055, 0.0009, 0.0006)
 
 function slotUnits(s: RackSlot) {
   if (s.kind === "device") return devices[s.id]?.rackUnits ?? 1
-  if (s.kind === "server" || s.kind === "blank") return s.units
+  if (s.kind === "server" || s.kind === "blank" || s.kind === "ups") return s.units
   return 1
 }
 
@@ -218,10 +259,12 @@ function Screws({ slots }: { slots: RackSlot[] }) {
   const points = useMemo(() => {
     const pts: [number, number, number, number][] = []
     for (const s of slots) {
+      // photos that include the ears already show their own fasteners
+      if (s.kind === "device" && devices[s.id]?.faceIncludesEars) continue
       const n = slotUnits(s)
       for (let k = 0; k < n; k++) {
         const y = unitY(s.u + k) + U * 0.5
-        const z = s.kind === "patch-panel" || s.kind === "cable-manager" || s.kind === "blank" ? 0.0035 : 0.0036
+        const z = s.kind === "ups" ? 0.0135 : s.kind === "device" || s.kind === "server" ? 0.0036 : 0.0035
         for (const side of [-1, 1]) pts.push([side * RAIL_X, y, z, Math.random() * Math.PI])
       }
     }
@@ -373,6 +416,10 @@ export function OpenRack({
             return <GenericServer key={i} u={s.u} units={s.units} variant={s.variant} />
           case "blank":
             return <BlankPanel key={i} u={s.u} units={s.units} />
+          case "shelf":
+            return <Shelf key={i} u={s.u} />
+          case "ups":
+            return <Ups key={i} u={s.u} units={s.units} />
         }
       })}
       <Screws slots={slots} />

@@ -31,6 +31,8 @@ const AZIMUTH_LIMIT = THREE.MathUtils.degToRad(75)
 const SHIFTED_AZIMUTH_LIMIT = THREE.MathUtils.degToRad(48)
 /** how far a visitor can zoom out (unless the stop itself frames from further away) */
 const MAX_DISTANCE = 2.2
+/** closest zoom: keeps the camera in front of the cables and fingers that stick out of the rack */
+const MIN_DISTANCE = 0.32
 
 interface Stop {
   id: string
@@ -45,11 +47,14 @@ interface Stop {
   terminal?: boolean
   /** pull this stop's device out on its rails */
   extend?: boolean
+  /** closest zoom for this stop (default MIN_DISTANCE) */
+  minDistance?: number
 }
 
 function useStops(): Stop[] {
   return useMemo(() => {
-    const stops: Stop[] = [{ id: "overview", label: "Overview", position: [0.78, 1.62, 1.85], target: [0, 1.35, -0.1] }]
+    // the overview orbits a point behind the rack face, so it stops further out
+    const stops: Stop[] = [{ id: "overview", label: "Overview", position: [0.78, 1.62, 1.85], target: [0, 1.35, -0.1], minDistance: 0.55 }]
     mountedDevices()
       .filter((d) => d.hotspot)
       .forEach((d, i) => {
@@ -80,7 +85,7 @@ function useStops(): Stop[] {
     const [ax, ay, az] = ACCESS_POINT.position
     stops.push({ id: "wireless", label: "Wi-Fi", position: [0.2, 2.42, 1.42], target: [ax, ay - 0.05, az], cardId: ACCESS_POINT.cardId, lookUp: true })
     const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
-    stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true })
+    stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true, minDistance: 0.24 })
     return stops
   }, [])
 }
@@ -166,6 +171,13 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
       /** camera-to-target distance (to check zoom gestures) */
       distance() {
         return (get().controls as unknown as CameraControlsImpl | null)?.distance ?? null
+      },
+      /** camera position and orbit target, rounded to mm (to check zoom limits) */
+      pose() {
+        const c = get().controls as unknown as CameraControlsImpl | null
+        if (!c) return null
+        const r = (v: THREE.Vector3) => [v.x, v.y, v.z].map((n) => Math.round(n * 1000) / 1000)
+        return { camera: r(c.getPosition(new THREE.Vector3())), target: r(c.getTarget(new THREE.Vector3())), azimuth: Math.round(THREE.MathUtils.radToDeg(c.azimuthAngle)) }
       },
       render(frames = 1) {
         for (let i = 0; i < frames; i++) get().advance(performance.now() + i * 16)
@@ -319,12 +331,29 @@ function CameraRig({
       const d = c.distance
       if (!pinch && ((dy > 0 && d >= c.maxDistance - 0.01) || (dy < 0 && d <= c.minDistance + 0.01))) return
       e.preventDefault()
-      c.dolly(-THREE.MathUtils.clamp(dy, -120, 120) * (pinch ? 0.01 : 0.0015) * d, true)
+      // zoom toward the point under the cursor (camera-controls' own dolly-to-cursor path;
+      // its public dolly() always aims at the centre). One wheel notch ≈ 18%.
+      const r = el.getBoundingClientRect()
+      const x = ((e.clientX - r.left) / r.width) * 2 - 1
+      const y = -((e.clientY - r.top) / r.height) * 2 + 1
+      const step = THREE.MathUtils.clamp(dy, -120, 120) / (pinch ? 6 : 30)
+      ;(c as unknown as { _dollyInternal: (delta: number, x: number, y: number) => void })._dollyInternal(step, x, y)
       onInteract()
     }
     el.addEventListener("wheel", onWheel, { passive: false })
     return () => el.removeEventListener("wheel", onWheel)
   }, [gl, onInteract])
+
+  // Up close, narrow the arc you can turn through so the camera can't swing into the rack's
+  // side (cable managers stick out) — full arc from ~1.1 m out, about half of it at the closest.
+  useFrame(() => {
+    const c = ref.current
+    if (!c) return
+    const k = THREE.MathUtils.smoothstep(c.distance, 0.4, 1.1)
+    const f = 0.5 + 0.5 * k
+    c.minAzimuthAngle = minAz * f
+    c.maxAzimuthAngle = maxAz * f
+  })
 
   useFrame((_, dt) => {
     const c = ref.current
@@ -346,9 +375,10 @@ function CameraRig({
       maxAzimuthAngle={maxAz}
       minPolarAngle={THREE.MathUtils.degToRad(58)}
       maxPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 150 : 100)}
-      minDistance={0.25}
+      minDistance={stop.minDistance ?? MIN_DISTANCE}
       maxDistance={maxDist}
-      dollyToCursor={false}
+      // wheel and pinch zoom toward the cursor / the point between the fingers
+      dollyToCursor
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.NONE }}
       touches={touchActions}
     />

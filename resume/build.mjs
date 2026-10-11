@@ -1,13 +1,16 @@
-// Prints resume/resume.html to public/Mohammad-Yassin-Resume.pdf with headless Edge or Chrome.
+// Prints resume/resume.html to PDF with headless Edge or Chrome.
+//   public copy  -> public/Mohammad-Yassin-Resume.pdf          (served on the site, no phone number)
+//   private copy -> resume/private/Mohammad-Yassin-Resume.pdf  (for applications; only if resume/private.json exists)
+// resume/private.json (git-ignored): { "phone": "+000 0 000 000" }
 // Usage: node resume/build.mjs
 import { execFileSync } from "node:child_process"
-import { existsSync } from "node:fs"
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
-const src = path.join(root, "resume", "resume.html")
-const out = path.join(root, "public", "Mohammad-Yassin-Resume.pdf")
+const dir = path.dirname(fileURLToPath(import.meta.url))
+const root = path.resolve(dir, "..")
+const template = readFileSync(path.join(dir, "resume.html"), "utf8")
 
 const candidates = [
   process.env.CHROME_PATH,
@@ -22,12 +25,24 @@ const candidates = [
 const browser = candidates.find((p) => existsSync(p))
 if (!browser) throw new Error("No Chrome/Edge found; set CHROME_PATH")
 
-execFileSync(browser, [
-  "--headless=new",
-  "--disable-gpu",
-  "--no-pdf-header-footer",
-  "--generate-pdf-document-outline",
-  `--print-to-pdf=${out}`,
-  pathToFileURL(src).href,
-], { stdio: "inherit" })
-console.log("wrote", out)
+function print(html, out) {
+  const tmp = path.join(dir, `.build-${process.pid}.html`)
+  writeFileSync(tmp, html)
+  try {
+    mkdirSync(path.dirname(out), { recursive: true })
+    execFileSync(browser, ["--headless=new", "--disable-gpu", "--no-pdf-header-footer", `--print-to-pdf=${out}`, pathToFileURL(tmp).href], {
+      stdio: ["ignore", "ignore", "ignore"],
+    })
+  } finally {
+    rmSync(tmp, { force: true })
+  }
+  console.log("wrote", path.relative(root, out))
+}
+
+print(template.replaceAll("{{CONTACT_PHONE}}", ""), path.join(root, "public", "Mohammad-Yassin-Resume.pdf"))
+
+const privateFile = path.join(dir, "private.json")
+if (existsSync(privateFile)) {
+  const { phone } = JSON.parse(readFileSync(privateFile, "utf8"))
+  if (phone) print(template.replaceAll("{{CONTACT_PHONE}}", ` | ${phone}`), path.join(dir, "private", "Mohammad-Yassin-Resume.pdf"))
+}

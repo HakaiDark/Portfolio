@@ -11,3 +11,8 @@ npm-debug.log*
 
 # Private: contains references' contact details. Never commit.
 linkedin-profile.md
+
+# Private resume copy (phone number) and its input
+resume/private.json
+resume/private/
+resume/.build-*.html

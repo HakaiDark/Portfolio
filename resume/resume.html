@@ -6,75 +6,68 @@
 <meta name="author" content="Mohammad Yassin">
 <meta name="description" content="Resume of Mohammad Yassin, Software Developer and Network Engineer">
 <!--
-  ATS-friendly resume. Source of truth: linkedin-profile.md (not committed).
+  ATS-friendly one-page resume. Source of truth: linkedin-profile.md (not committed).
   Single column, standard headings, no tables/columns/icons, contact info in the body.
-  Rebuild the PDF with:  node resume/build.mjs
+  The phone placeholder is filled in only for the private copy (see resume/build.mjs).
+  Rebuild with:  node resume/build.mjs
 -->
 <style>
-  @page { size: A4; margin: 13mm 15mm 13mm 15mm; }
+  @page { size: A4; margin: 11mm 14mm 10mm 14mm; }
   * { box-sizing: border-box; }
-  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  body { margin: 0; font-family: Calibri, Carlito, Arial, Helvetica, sans-serif; font-size: 10.3pt; line-height: 1.32; color: #111; }
-  h1 { font-size: 21pt; margin: 0; letter-spacing: 0.2pt; }
-  .headline { font-size: 11.2pt; font-weight: bold; margin: 2pt 0 3pt; color: #1f3b57; }
-  .contact { margin: 0 0 2pt; }
-  .contact a { color: #111; text-decoration: none; }
-  h2 { font-size: 11.2pt; text-transform: uppercase; letter-spacing: 0.8pt; margin: 9pt 0 3pt; padding-bottom: 1.5pt; border-bottom: 1px solid #555; color: #1f3b57; }
-  h3 { font-size: 10.6pt; margin: 6pt 0 0; }
-  .meta { margin: 0 0 1.5pt; font-style: italic; color: #333; }
-  ul { margin: 1pt 0 0 0; padding-left: 13pt; }
-  li { margin: 0 0 1.2pt; }
-  p { margin: 0 0 2pt; }
-  .skills p { margin: 0 0 1.5pt; }
-  .job, .section { break-inside: avoid; }
-  h2, h3, .meta { break-after: avoid; }
+  body { margin: 0; font-family: Calibri, Carlito, Arial, Helvetica, sans-serif; font-size: 9.9pt; line-height: 1.27; color: #111; }
+  h1 { font-size: 20pt; margin: 0; }
+  .headline { font-size: 11pt; font-weight: bold; margin: 1pt 0 2pt; color: #1f3b57; }
+  .contact { margin: 0; }
+  h2 { font-size: 10.6pt; text-transform: uppercase; letter-spacing: 0.8pt; margin: 7pt 0 2.5pt; padding-bottom: 1pt; border-bottom: 1px solid #555; color: #1f3b57; break-after: avoid; }
+  h3 { font-size: 10.2pt; margin: 4.5pt 0 0; break-after: avoid; }
+  .meta { margin: 0 0 1pt; font-style: italic; color: #333; break-after: avoid; }
+  ul { margin: 0.5pt 0 0 0; padding-left: 12pt; }
+  li { margin: 0 0 0.8pt; }
+  p { margin: 0 0 1.5pt; }
+  .job { break-inside: avoid; }
 </style>
 </head>
 <body>
 
 <h1>Mohammad Yassin</h1>
 <p class="headline">Software Developer &amp; Network Engineer</p>
-<p class="contact">Beirut, Lebanon | Open to relocation: UAE, Saudi Arabia, Qatar | eng.compyassin@gmail.com</p>
+<p class="contact">Beirut, Lebanon | Open to relocation: UAE, Saudi Arabia, Qatar | eng.compyassin@gmail.com{{CONTACT_PHONE}}</p>
 <p class="contact">LinkedIn: linkedin.com/in/compengyassin | GitHub: github.com/Compzool | Portfolio: mohammadyassin.vercel.app</p>
 
 <h2>Summary</h2>
-<p>Software developer and network engineer who writes production code and runs secure enterprise IT infrastructure. Most recently helped run and secure a 100-site enterprise network for Edmonton Catholic Schools (Canada) on Fortinet, Aruba and Cisco. On the development side, builds REST APIs and web apps in Python (Flask, OpenAPI, MongoDB), computer vision and OCR pipelines, mobile apps in Flutter, and automation in Python, PowerShell and Bash. Completing a Diploma in Cybersecurity at the American University of Beirut. Seeking software development or IT/network roles in the UAE, Saudi Arabia and Qatar; ready to relocate.</p>
+<p>Software developer and network engineer who writes production code and runs secure enterprise IT infrastructure. Helped run and secure a 100-site enterprise network for Edmonton Catholic Schools (Canada) on Fortinet, Aruba and Cisco. Builds REST APIs in Python (Flask, OpenAPI, MongoDB), computer vision and OCR pipelines, Flutter mobile apps, and automation in Python, PowerShell and Bash. Completing a Diploma in Cybersecurity at the American University of Beirut.</p>
 
 <h2>Experience</h2>
 
 <div class="job">
 <h3>Network Engineer, Edmonton Catholic Schools</h3>
-<p class="meta">Edmonton, Alberta, Canada (Hybrid) | Permanent full-time | Jan 2025 – Mar 2026</p>
+<p class="meta">Edmonton, Canada (Hybrid) | Full-time | Jan 2025 – Mar 2026</p>
 <ul>
   <li>Administered and secured a 100-school, multi-site enterprise network on FortiGate NGFWs, maintaining high availability across all sites.</li>
-  <li>Designed and tuned firewall policies, site-to-site VPNs, IPS, application control, web filtering, traffic shaping and QoS to protect and prioritize critical services.</li>
+  <li>Designed and tuned firewall policies, site-to-site VPNs, IPS, application control, web filtering, traffic shaping and QoS.</li>
   <li>Ran centralized firewall operations in FortiManager; investigated threats and analyzed logs in FortiAnalyzer.</li>
-  <li>Supported a resilient WAN built on BGP, OSPF and MPLS.</li>
   <li>Helped lead the migration from Cisco switching to FortiSwitch, from planning and configuration through site cutovers.</li>
-  <li>Configured VLANs, trunking, STP, inter-VLAN routing and QoS on Cisco IOS/NX-OS and FortiSwitch.</li>
-  <li>Deployed and managed Aruba wireless through AirWave; implemented 802.1X/RADIUS authentication with Aruba ClearPass NAC.</li>
-  <li>Built PowerShell automation for configuration validation, reporting and routine network operations, cutting repetitive manual work for the team.</li>
+  <li>Supported a resilient BGP, OSPF and MPLS WAN; configured VLANs, trunking, STP, inter-VLAN routing and QoS on Cisco IOS/NX-OS and FortiSwitch.</li>
+  <li>Managed Aruba wireless through AirWave and implemented 802.1X/RADIUS authentication with Aruba ClearPass NAC.</li>
+  <li>Built PowerShell automation for configuration validation, reporting and routine operations, cutting repetitive manual work.</li>
 </ul>
 </div>
 
 <div class="job">
 <h3>Network Technician, Packet Path</h3>
-<p class="meta">Edmonton, Alberta, Canada (On-site) | Part-time | Feb 2024 – Jan 2026</p>
+<p class="meta">Edmonton, Canada (On-site) | Part-time | Feb 2024 – Jan 2026</p>
 <ul>
-  <li>Deployed and configured firewalls, managed switches and access points for enterprise and SMB clients.</li>
-  <li>Installed and terminated copper and fiber structured cabling to industry standards.</li>
-  <li>Managed user accounts, access policies and network permissions across client environments.</li>
-  <li>Troubleshot network hardware and connectivity on site to minimize client downtime; kept configuration records, inventory and documentation for all deployed infrastructure.</li>
+  <li>Deployed and configured firewalls, managed switches and access points for enterprise and SMB clients; managed user accounts, access policies and permissions.</li>
+  <li>Installed and terminated copper and fiber structured cabling; troubleshot hardware and connectivity on site and kept configuration records and documentation.</li>
 </ul>
 </div>
 
 <div class="job">
 <h3>IT Solutions Developer, OESGROUP LLP</h3>
-<p class="meta">Edmonton, Alberta, Canada | Sep 2023 – Jan 2025</p>
+<p class="meta">Edmonton, Canada | Sep 2023 – Jan 2025</p>
 <ul>
   <li>Automated repetitive accounting workflows, cutting processing time and letting the firm take on more clients.</li>
-  <li>Built a Python/OpenCV document-processing pipeline (denoising, thresholding, contour detection, deskewing) for client invoices and statements.</li>
-  <li>Built multi-language OCR with PaddleOCR and Tesseract, plus YOLOv8 for document segmentation, improving extraction accuracy and speed.</li>
+  <li>Built a Python/OpenCV document-processing pipeline (denoising, thresholding, contour detection, deskewing) with multilingual OCR (PaddleOCR, Tesseract) and YOLOv8 document segmentation.</li>
   <li>Maintained office network infrastructure, VoIP and phone systems, and IT security policies.</li>
 </ul>
 </div>
@@ -83,44 +76,26 @@
 <h3>Back End Developer, Cloudgate Consulting DWC-LLC</h3>
 <p class="meta">Beirut, Lebanon | Feb 2022 – Aug 2023</p>
 <ul>
-  <li>Built scalable REST APIs and web apps with Flask, Connexion/OpenAPI and MongoDB.</li>
-  <li>Refactored and optimized existing code, cutting processing time by 20%.</li>
+  <li>Built scalable REST APIs and web apps with Flask, Connexion/OpenAPI and MongoDB; refactored code to cut processing time by 20%.</li>
   <li>Moved heavy processing into asynchronous background task queues, removing load spikes from the main server.</li>
   <li>Built an automated Postman test suite that cut regression testing time by 50%.</li>
 </ul>
 </div>
 
-<div class="section">
 <h2>Skills</h2>
-<div class="skills">
-  <p><strong>Programming and development:</strong> Python, Flask, REST APIs, OpenAPI Specification (OAS), MongoDB, SQL, Firebase, Cloud Firestore, JavaScript, React.js, Next.js, Flutter, Dart, Go, Java, C, C++, x86 Assembly, CSS, OpenCV, Computer Vision, Docker, Git, Bitbucket, Postman</p>
-  <p><strong>Networking and security:</strong> Network Security, Fortinet (FortiGate, FortiManager, FortiAnalyzer, FortiSwitch), Aruba ClearPass, Aruba Wireless, AirWave, 802.1X, RADIUS, VPN, BGP, OSPF, MPLS, VLANs, STP, QoS, Cisco IOS, NX-OS, BlueCat</p>
-  <p><strong>Automation and scripting:</strong> Network Automation, PowerShell, Python, Bash</p>
-  <p><strong>Languages:</strong> Arabic (native), English (fluent), Spanish (basic)</p>
-</div>
-</div>
+<p><strong>Development:</strong> Python, Flask, REST APIs, OpenAPI (OAS), MongoDB, SQL, Firebase, JavaScript, React.js, Next.js, Flutter, Dart, Go, Java, C, C++, OpenCV, Computer Vision, Docker, Git, Bitbucket, Postman</p>
+<p><strong>Networking and security:</strong> Network Security, Fortinet (FortiGate, FortiManager, FortiAnalyzer, FortiSwitch), Aruba ClearPass, Aruba Wireless, AirWave, 802.1X, RADIUS, VPN, BGP, OSPF, MPLS, VLANs, STP, QoS, Cisco IOS, NX-OS, BlueCat</p>
+<p><strong>Automation:</strong> Network Automation, PowerShell, Python, Bash | <strong>Languages:</strong> Arabic (native), English (fluent), Spanish (basic)</p>
 
 <h2>Education</h2>
 <p><strong>Diploma, Cybersecurity</strong>, American University of Beirut | Feb 2026 – Present</p>
 <p><strong>Bachelor of Engineering, Computer Engineering</strong>, Beirut Arab University | Sep 2018 – May 2022</p>
 
-<h2>Projects</h2>
+<h2>Projects and Publications</h2>
 <ul>
-  <li><strong>SmartGasALPR-MLkit</strong> (Flutter, Dart, Google ML Kit): mobile app with automatic license plate recognition.</li>
-  <li><strong>Twitch Clone</strong> (Flutter, Agora, Go): live-streaming app with real-time chat and a Go backend.</li>
-  <li><strong>Lets-Mingle</strong> (Flutter, Bloc, Firebase, Agora): complete mobile app with real-time interaction.</li>
-  <li><strong>Ecommerce</strong> (Next.js, React, Sanity): e-commerce web application.</li>
+  <li><strong>SmartGasALPR-MLkit</strong> (Flutter, Google ML Kit): mobile app with automatic license plate recognition. <strong>Twitch Clone</strong> (Flutter, Agora, Go): live-streaming app with real-time chat and a Go backend.</li>
+  <li>Publications (2022): Cyber Attacks on Connected and Autonomous Vehicles (CAVs); Quality of Experience of CAVEs; FlappyBird Learns How To Beat Itself Using NEAT.</li>
 </ul>
-
-<h2>Publications</h2>
-<ul>
-  <li>Cyber Attacks on Connected and Autonomous Vehicles (CAVs), 2022</li>
-  <li>Quality of Experience of CAVEs, 2022</li>
-  <li>FlappyBird Learns How To Beat Itself Using NEAT, 2022</li>
-</ul>
-
-<h2>References</h2>
-<p>Available on request.</p>
 
 </body>
 </html>

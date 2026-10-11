@@ -26,6 +26,8 @@ const BG = "#2a3036"
 const AZIMUTH_LIMIT = THREE.MathUtils.degToRad(75)
 /** limit on the side a desktop framing offset shifts the camera toward */
 const SHIFTED_AZIMUTH_LIMIT = THREE.MathUtils.degToRad(48)
+/** how far a visitor can zoom out (unless the stop itself frames from further away) */
+const MAX_DISTANCE = 2.2
 
 interface Stop {
   id: string
@@ -142,6 +144,10 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
         c?.setFocalOffset(0, 0, 0, false)
         c?.setLookAt(px, py, pz, tx, ty, tz, false)
       },
+      /** camera-to-target distance (to check zoom gestures) */
+      distance() {
+        return (get().controls as unknown as CameraControlsImpl | null)?.distance ?? null
+      },
       render(frames = 1) {
         for (let i = 0; i < frames; i++) get().advance(performance.now() + i * 16)
       },
@@ -191,6 +197,9 @@ function CameraRig({
   const fov = portrait ? 54 : 40
   const pull = portrait ? THREE.MathUtils.clamp(0.85 / Math.sqrt(aspect), 1, 1.3) : 1
   const dir = useRef(1)
+  const gl = useThree((s) => s.gl)
+  // how far out the visitor can zoom: the overview's own framing, or 2.2 m (more if a stop frames from further)
+  const [maxDist, setMaxDist] = useState(MAX_DISTANCE)
 
   useEffect(() => {
     camera.fov = fov
@@ -214,6 +223,8 @@ function CameraRig({
       offset.multiplyScalar(pull)
     }
     const p = target.clone().add(offset)
+    // the overview is as far out as it goes, so scrolling down there moves the page straight away
+    setMaxDist(stop.id === "overview" ? offset.length() + 0.005 : Math.max(MAX_DISTANCE, offset.length()))
     c.setLookAt(p.x, p.y, p.z, tx, ty, tz, !instant)
     const visH = 2 * offset.length() * Math.tan(THREE.MathUtils.degToRad(fov) / 2)
     const visW = visH * aspect
@@ -254,6 +265,26 @@ function CameraRig({
       : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
   }, [])
 
+  // Mouse wheel / trackpad: zooms the rack only while the page is at the top. Fully zoomed out,
+  // scrolling down hands over to the page, so visitors who just scroll never get stuck here.
+  useEffect(() => {
+    const el = gl.domElement
+    const onWheel = (e: WheelEvent) => {
+      const c = ref.current
+      if (!c) return
+      const pinch = e.ctrlKey // trackpad pinch arrives as ctrl+wheel
+      if (!pinch && window.scrollY > 40) return
+      const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 400 : 1)
+      const d = c.distance
+      if (!pinch && ((dy > 0 && d >= c.maxDistance - 0.01) || (dy < 0 && d <= c.minDistance + 0.01))) return
+      e.preventDefault()
+      c.dolly(-THREE.MathUtils.clamp(dy, -120, 120) * (pinch ? 0.01 : 0.0015) * d, true)
+      onInteract()
+    }
+    el.addEventListener("wheel", onWheel, { passive: false })
+    return () => el.removeEventListener("wheel", onWheel)
+  }, [gl, onInteract])
+
   useFrame((_, dt) => {
     const c = ref.current
     if (!c || !autoRotate) return
@@ -275,7 +306,7 @@ function CameraRig({
       minPolarAngle={THREE.MathUtils.degToRad(58)}
       maxPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 150 : 100)}
       minDistance={0.25}
-      maxDistance={2.2}
+      maxDistance={maxDist}
       dollyToCursor={false}
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.NONE }}
       touches={touchActions}

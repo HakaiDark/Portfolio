@@ -41,7 +41,7 @@ class WebGLBoundary extends Component<{ children: ReactNode; onError: () => void
 }
 
 /** Mounts the 3D rack once it scrolls near the viewport, behind a loading sequence; falls back to a still on weak devices. */
-export function RackSection({ className = "" }: { className?: string }) {
+export function RackSection({ className = "", overlay }: { className?: string; overlay?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
   const [quality, setQuality] = useState<Quality | null>(null)
@@ -98,6 +98,7 @@ export function RackSection({ className = "" }: { className?: string }) {
       ) : (
         <div className="h-full w-full bg-[#0b0e11]" />
       )}
+      {overlay}
       {showBoot && visible && <BootSequence signals={boot} reducedMotion={reducedMotion} onDone={() => setBootDone(true)} />}
     </div>
   )

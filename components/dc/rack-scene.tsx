@@ -211,8 +211,12 @@ function CameraRig({
     const visW = visH * aspect
     // phones: the info sheet covers the lower half, so lift the subject into the upper half;
     // desktop: the card sits on the right, so slide the subject left
-    const oy = portrait && cardOpen && stop.cardId ? (stop.lookUp ? -0.22 : 0.24) * visH : 0
-    const ox = sideCard ? 0.19 * visW : 0
+    // phone overview: the compact hero card covers the top, so frame the rack a little lower
+    const phoneHero = stop.id === "overview" && portrait
+    const oy = portrait && cardOpen && stop.cardId ? (stop.lookUp ? -0.22 : 0.24) * visH : phoneHero ? -0.1 * visH : 0
+    // desktop overview: the hero card sits on the left, so push the rack right
+    const heroCard = stop.id === "overview" && !portrait && aspect > 1.2
+    const ox = sideCard ? 0.19 * visW : heroCard ? -0.14 * visW : 0
     c.setFocalOffset(ox, oy, 0, !instant)
   }, [stop, pull, instant, aspect, portrait, fov, cardOpen])
 
@@ -246,7 +250,7 @@ function CameraRig({
       minDistance={0.25}
       maxDistance={2.2}
       dollyToCursor={false}
-      mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.DOLLY }}
+      mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.NONE }}
       touches={{ one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }}
     />
   )
@@ -471,7 +475,7 @@ export default function RackScene({
         onCreated={({ gl }) => {
           if (quality === "high") gl.toneMapping = THREE.NoToneMapping
         }}
-        style={{ touchAction: "none" }}
+        className="rack-canvas"
         resize={capture ? { polyfill: ImmediateResizeObserver, debounce: 0 } : undefined}
       >
         <PerformanceMonitor onDecline={() => setDpr(1)} />
@@ -495,7 +499,7 @@ export default function RackScene({
       </Canvas>
 
       {/* view toggles */}
-      <div className="absolute right-4 top-4 z-20 flex flex-col items-end gap-2">
+      <div className="absolute right-4 top-4 z-20 flex flex-col items-end gap-2 max-md:top-auto max-md:right-3 max-md:bottom-[4.6rem] max-md:flex-row">
         <button
           type="button"
           onClick={() => setTraffic((t) => !t)}
@@ -525,7 +529,7 @@ export default function RackScene({
 
       {/* photo mode progress */}
       {quality === "high" && photoOn && photo.state !== "idle" && (
-        <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-full border border-white/10 bg-black/45 px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] text-white/70 uppercase backdrop-blur-md">
+        <div className="pointer-events-none absolute right-4 top-[6.5rem] z-20 rounded-full border border-white/10 bg-black/45 px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] text-white/70 uppercase backdrop-blur-md">
           {photo.state === "building" ? "Preparing photo mode…" : `Photo · ${photo.samples} samples`}
         </div>
       )}
@@ -552,8 +556,8 @@ export default function RackScene({
       </nav>
 
       {!interacted && (
-        <p className="pointer-events-none absolute inset-x-0 top-5 z-10 px-24 text-center font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase">
-          Drag to look around · tap <span className="text-[#00ffe7]">+</span> for details
+        <p className="pointer-events-none absolute inset-x-0 bottom-[4.75rem] z-10 px-6 text-center max-md:hidden font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase md:bottom-[5.5rem]">
+          Drag sideways to look around · tap <span className="text-[#00ffe7]">+</span> for details
         </p>
       )}
 

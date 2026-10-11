@@ -123,3 +123,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 3D hero: vertical swipes scroll the page, horizontal swipes orbit the camera.
+   camera-controls writes touch-action:none inline on connect, hence !important. */
+.rack-canvas,
+.rack-canvas canvas {
+  touch-action: pan-y !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

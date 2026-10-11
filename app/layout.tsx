@@ -8,10 +8,21 @@ const inter = Inter({
   variable: "--font-inter"
 });
 
+const description =
+  'Software developer and network engineer. Helped run and secure a 100-site enterprise network on Fortinet, Aruba and Cisco; builds Python APIs, computer vision pipelines and Flutter apps. Open to roles in the UAE, Saudi Arabia and Qatar.'
+
 export const metadata: Metadata = {
-  title: 'Mohammad Yassin | Network Engineer',
-  description: 'Computer Engineering graduate with 5+ years enterprise networking experience. Specializing in Fortinet, BGP/OSPF, and network security.',
-  generator: 'v0.app',
+  metadataBase: new URL('https://mohammadyassin.vercel.app'),
+  title: 'Mohammad Yassin | Software Developer & Network Engineer',
+  description,
+  openGraph: {
+    title: 'Mohammad Yassin | Software Developer & Network Engineer',
+    description,
+    url: '/',
+    type: 'profile',
+    images: [{ url: '/3d/rack-fallback.webp', width: 1280, height: 800, alt: 'A 3D network rack with FortiGate, FortiSwitch, Cisco Catalyst and HPE servers' }],
+  },
+  twitter: { card: 'summary_large_image', images: ['/3d/rack-fallback.webp'] },
   icons: {
     icon: [
       {

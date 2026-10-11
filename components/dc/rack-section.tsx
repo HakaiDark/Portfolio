@@ -98,6 +98,9 @@ export function RackSection({ className = "", overlay }: { className?: string; o
 
   const forceBoot = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("boot")
   const showBoot = quality !== null && quality !== "static" && (!capture || forceBoot) && !bootDone
+  // The loading screen only mounts after hydration; keep the name card hidden until then (and
+  // until the scene is ready) so it doesn't flash for a frame before the loading screen covers it.
+  const overlayPending = quality === null || (showBoot && !boot.ready)
 
   return (
     <div ref={ref} className={`relative ${className}`}>
@@ -113,11 +116,17 @@ export function RackSection({ className = "", overlay }: { className?: string; o
       {overlay && (
         <div
           // positioned so the slide doesn't re-anchor the absolutely positioned card
-          className={`pointer-events-none absolute inset-x-0 top-0 z-[35] transition-[opacity,transform] duration-300 ease-out ${
+          className={`hero-overlay pointer-events-none absolute inset-x-0 top-0 z-[35] transition-[opacity,transform] duration-300 ease-out ${
+            overlayPending ? "invisible opacity-0" : ""
+          } ${
             exploring ? "max-md:-translate-y-6 max-md:opacity-0 max-md:[&_*]:pointer-events-none" : ""
           }`}
         >
           {overlay}
+          {/* without JavaScript there is no loading screen: show the card */}
+          <noscript>
+            <style>{".hero-overlay{visibility:visible!important;opacity:1!important}"}</style>
+          </noscript>
         </div>
       )}
       {overlay && exploring && (

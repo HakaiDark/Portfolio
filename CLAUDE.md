@@ -1,8 +1,8 @@
 # Mohammad Yassin — portfolio (3D data-centre rack)
 
 Live: https://mohammadyassin.vercel.app — Vercel project `portfolio` (team `engcompyassin-7906s-projects`), deploys from GitHub **HakaiDark/Portfolio** `main` (PUBLIC repo).
-Work: local branch `feature/redesign-rack` → pushed to remote branch **`redesign`**. Preview (behind Vercel login): https://portfolio-git-redesign-engcompyassin-7906s-projects.vercel.app
-Status (2026-10-11): redesign complete on `redesign`, **not yet live**. Going live = make `redesign` the new `main` (its history is unrelated to old `main`) — only with the user's explicit OK.
+Status (2026-10-11): **LIVE.** The redesign is on `main` (merged with `-s ours` over the old site, old history kept as a parent).
+Work: local branch `feature/redesign-rack` tracks the remote. `git push origin feature/redesign-rack:main` = **production deploy**; push to `:redesign` first for a private preview (behind Vercel login): https://portfolio-git-redesign-engcompyassin-7906s-projects.vercel.app
 
 ## Stack & commands
 Next 16 (Turbopack, App Router), React 19, @react-three/fiber 9, drei 10, three 0.186, @react-three/postprocessing, Tailwind 4. **npm only** (no pnpm lockfile — Vercel picks the package manager from the lockfile).
@@ -38,7 +38,7 @@ DOM overlays (cards, terminal, hero) do show in normal screenshots. Perf: `perfo
 Stop IDs: `overview`, `<deviceId>@<u>` (e.g. `fortigate-601f@34`), `wireless`, `terminal`.
 
 ## Deploy flow
-- `git push origin feature/redesign-rack:redesign` (GitHub creds cached in Windows Credential Manager; if a sign-in is needed the user must run the push in their own terminal — this shell can't show the prompt).
+- Preview: `git push origin feature/redesign-rack:redesign`; production: `...:main` (GitHub creds cached in Windows Credential Manager; if a sign-in is needed the user must run the push in their own terminal — this shell can't show the prompt).
 - Vercel status: `GET https://api.github.com/repos/HakaiDark/Portfolio/commits/redesign/status` (context `Vercel`).
 - Before pushing dependency changes, do a clean-room check: `git archive` the staged tree into a scratch dir → `npm ci` → `npx next build`.
 
@@ -49,5 +49,5 @@ Stop IDs: `overview`, `<deviceId>@<u>` (e.g. `fortigate-601f@34`), `wireless`, `
 - Photo mode (three-gpu-pathtracer) was built and then removed (grainy/dark, GPU busy while scrolling) — in git history (`ec5325b`) if ever needed.
 
 ## Possible next steps
-- User tests the preview on a real phone/laptop → go live.
+- User is testing the live site on his phone; act on his feedback (preview on `redesign` first, then `main`).
 - Optional: make `terminal.ts` and `rack-cards.ts` read from `content/profile.ts` (single source).

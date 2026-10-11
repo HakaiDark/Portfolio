@@ -1,0 +1,1783 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red113\green113\blue119;\red229\green248\blue242;\red25\green193\blue161;
+\red8\green8\blue8;\red183\green0\blue221;\red255\green255\blue255;\red102\green31\blue246;\red102\green101\blue108;
+\red200\green97\blue31;\red202\green154\blue16;\red25\green178\blue235;\red29\green144\blue187;\red248\green1\blue96;
+\red201\green22\blue41;\red27\green155\blue130;\red28\green145\blue52;}
+{\*\expandedcolortbl;;\cssrgb\c51765\c51765\c54118;\cssrgb\c91765\c97647\c96078;\cssrgb\c0\c79216\c69412\c14902;
+\cssrgb\c2745\c2745\c2745;\cssrgb\c77647\c20784\c89412;\cssrgb\c100000\c100000\c100000;\cssrgb\c48235\c26275\c97255;\cssrgb\c47451\c47451\c49804;
+\cssrgb\c83137\c46275\c15686;\cssrgb\c83529\c66275\c6275;\cssrgb\c3137\c75294\c93725;\cssrgb\c10980\c63137\c78039;\cssrgb\c98824\c16863\c45098;
+\cssrgb\c83529\c17255\c21176;\cssrgb\c8627\c66275\c58039;\cssrgb\c9804\c62353\c26275;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww20820\viewh15320\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+// \cb4 Realistic cable \cb3 tray with \cb4 organized\cb3  fiber bundles\cb4  and cable ties\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7 function\cf8  CableTray\cf9 (\{ z \}: \{\cf10  z\cf9 :\cf6  number\cf9  \}) \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3   const\cf11  \cb4 singleModeFibers\cf12 \cb3  =\cf9  [\cf13 0xffcc00\cf9 ,\cf13  \cb4 0xffcc00\cf9 \cb3 ,\cf13  \cb4 0xffcc00\cf9 \cb3 ,\cf13  \cb4 0xffcc00\cf9 ]\cf12  //\cf10  Yellow\cf11  SM\cf5 \cb3 \
+\cf6   const\cf11  multiModeFibers\cf12  =\cf9  [\cf13 0x00cccc\cf9 ,\cf13  0x00cccc\cf9 ,\cf13  0x00cccc\cf9 ,\cf13  0x00cccc\cf9 ]\cf12  //\cf10  Aqua\cf11  OM4\cf5 \
+\cf6   const\cf11  copperBundles\cf12  =\cf9  [\cf13 0x0066cc\cf9 ,\cf13  0x0066cc\cf9 ,\cf13  0x0066cc\cf9 ]\cf12  //\cf10  Blue Cat6A\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb7   \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Galvanized steel \cb3 cable tray \cb4 - ladder style \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 3\cf9 , \cf13 8.\cb4 88\cf9 \cb3 , \cf10 z\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 32\cf9 \cb3 , \cf13 0.\cb4 04\cf9 \cb3 , \cf13 0.\cb4 7\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x808488\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 25\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* Tray \cb4 side rails \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 3\cf9 , \cf13 8.\cb4 92\cf9 \cb3 , \cf10 z\cf12  -\cf13  0.\cb4 33\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 32\cf9 \cb3 , \cf13 0.\cb4 12\cf9 \cb3 , \cf13 0.\cb4 03\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x707478\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 25\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 3\cf9 , \cf13 8.\cb4 92\cf9 \cb3 , \cf10 z\cf12  +\cf13  0.\cb4 33\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 32\cf9 \cb3 , \cf13 0.\cb4 12\cf9 \cb3 , \cf13 0.\cb4 03\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x707478\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 25\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Cross rungs \cb3 */\cf14 \}\cf5 \
+\cf14       \{\cf10 \cb4 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 22\cf9  \}).\cf8 \cb3 map\cf9 ((\cb4 _\cb3 , \cb4 r\cb3 ) \cf6 =>\cf9  \cb4 (\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9         \cb4 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 r\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 17\cf12  +\cf10  r\cf12  *\cf13  1.5\cf9 \cb3 , \cf13 \cb4 8.88\cf9 , \cf10 z\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9           \cb4 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.025\cf9 , \cf13 0.03\cf9 , \cf13 0.64\cf9 ]\cf14 \}\cf9  />\cf5 \cb3 \
+\cf9           \cb4 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.8\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 \cb3 0.\cb4 3\cf14 \}\cf9  />\cf5 \cb3 \
+\cf9         </\cf15 mesh\cf9 >\cf5 \
+\cf9       ))\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Single-mode fiber bundle (yellow) - for 40G/100G */\cf14 \}\cf5 \
+\cf14       \{\cf10 singleModeFibers\cf9 .\cf8 map\cf9 ((col, fb) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  pts\cf12  =\cf10  Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 30\cf9  \}).\cf8 map\cf9 ((_, fs) \cf6 =>\cf9  \{\cf5 \
+\cf6           const\cf11  t\cf12  =\cf10  fs\cf12  /\cf13  29\cf5 \
+\cf6           const\cf11  sag\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 t\cf12  *\cf10  Math\cf9 .\cf11 PI\cf9 ) \cf12 *\cf13  0.015\cf5 \
+\cf6           const\cf11  wobble\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 t\cf12  *\cf10  Math\cf9 .\cf11 PI\cf12  *\cf13  3\cf12  +\cf10  fb\cf9 ) \cf12 *\cf13  0.008\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7           return new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf12 \cb3             -\cf13 \cb4 17\cf12 \cb3  +\cf10  t\cf12  *\cf13  \cb4 34\cf9 \cb3 , \cf5 \
+\cf13             8.\cb4 92\cf12 \cb3  +\cf10  sag\cf12 \cb4  +\cf10  wobble\cf9 \cb3 , \cf5 \
+\cf10             z\cf12  -\cf13  0.\cb4 22\cf12 \cb3  +\cf10  fb\cf12  *\cf13  0.\cb4 035\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           )\cf5 \
+\cf9         \})\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  \cb4 <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 sm\cf14 $\{\cf10 fb\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 col\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 5\cf14 \}\cf9  />\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb4       \})\cf14 \}\cf5 \cb3 \
+\cf9 \cb4       \cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Multi-mode fiber bundle (aqua OM4) - for 10G */\cf14 \}\cf5 \
+\cf14       \{\cf10 multiModeFibers\cf9 .\cf8 map\cf9 ((col, fb) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  pts\cf12  =\cf10  Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 30\cf9  \}).\cf8 map\cf9 ((_, fs) \cf6 =>\cf9  \{\cf5 \
+\cf6           const\cf11  t\cf12  =\cf10  fs\cf12  /\cf13  29\cf5 \
+\cf6           const\cf11  sag\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 t\cf12  *\cf10  Math\cf9 .\cf11 PI\cf9 ) \cf12 *\cf13  0.018\cf5 \
+\cf6           const\cf11  wobble\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 t\cf12  *\cf10  Math\cf9 .\cf11 PI\cf12  *\cf13  2.5\cf12  +\cf10  fb\cf12  *\cf13  1.2\cf9 ) \cf12 *\cf13  0.006\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           return new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf12             -\cf13 17\cf12  +\cf10  t\cf12  *\cf13  34\cf9 , \cf5 \
+\cf13             8.93\cf12  +\cf10  sag\cf12  +\cf10  wobble\cf9 , \cf5 \
+\cf10             z\cf12  +\cf10  fb\cf12  *\cf13  0.035\cf5 \
+\cf9           )\cf5 \
+\cf9         \})\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14         return\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 mm\cf14 $\{\cf10 fb\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 col\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 4\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Copper Cat6A bundle - for management/1G */\cf14 \}\cf5 \
+\cf14       \{\cf10 copperBundles\cf9 .\cf8 map\cf9 ((col, cb) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  pts\cf12  =\cf10  Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 30\cf9  \}).\cf8 map\cf9 ((_, fs) \cf6 =>\cf9  \{\cf5 \
+\cf6           const\cf11  t\cf12  =\cf10  fs\cf12  /\cf13  29\cf5 \
+\cf6           const\cf11  sag\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 t\cf12  *\cf10  Math\cf9 .\cf11 PI\cf9 ) \cf12 *\cf13  0.02\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           return new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf12             -\cf13 17\cf12  +\cf10  t\cf12  *\cf13  34\cf9 , \cf5 \
+\cf13             8.91\cf12  +\cf10  sag\cf9 , \cf5 \
+\cf10             z\cf12  +\cf13  0.18\cf12  +\cf10  cb\cf12  *\cf13  0.04\cf5 \
+\cf9           )\cf5 \
+\cf9         \})\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14         return\cf9  <\cf6 CopperCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 cu\cf14 $\{\cf10 cb\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 col\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 2\cf14 \}\cf16  thickness\cf12 =\cf14 \{\cf13 0.015\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Velcro cable ties at intervals */\cf14 \}\cf5 \
+\cf14       \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 12\cf9  \}).\cf8 map\cf9 ((_, t) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         <\cf6 CableTie\cf16  key\cf12 =\cf14 \{\cf10 t\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 15\cf12  +\cf10  t\cf12  *\cf13  2.5\cf9 , \cf13 8.95\cf9 , \cf10 z\cf9 ]\cf14 \}\cf16  width\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf9  />\cf5 \
+\cf9       ))\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7     </\cf15 group\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 // \cb4 Realistic copper Cat6A \cb3 cable with \cb4 proper jacket and connectors\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  CopperCable\cf9 (\{ points, color, pulseCount\cf12  =\cf13  2\cf9 \cb4 , thickness\cf12  =\cf13  0.012\cf9  \cb3 \}: \{\cf10  points\cf9 :\cf11  THREE\cf9 .\cf6 Vector3\cf9 [];\cf10  color\cf9 :\cf6  number\cf9 ;\cf10  pulseCount\cf14 ?\cf9 :\cf6  number\cf9 \cb4 ;\cf10  thickness\cf14 ?\cf9 :\cf6  number\cf9  \cb3 \}) \{\cf5 \
+\cf6   const\cf11  curve\cf12  =\cf8  useMemo\cf9 (()\cf6  =>\cf14  new\cf11  THREE\cf9 .\cf8 CatmullRomCurve3\cf9 (\cf10 points\cf9 \cb4 ,\cf13  false\cf9 ,\cf17  "catmullrom"\cf9 ,\cf13  0.5\cf9 \cb3 ), [\cf10 points\cf9 ])\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Cable \cb3 jacket \cb4 with realistic PVC look \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       <\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf6 tubeGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf10 curve\cf9 , \cf13 \cb4 48\cf9 \cb3 , \cf10 \cb4 thickness\cf9 \cb3 , \cf13 8\cf9 , \cf13 false\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf10 color\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 7\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.\cb4 05\cf14 \cb3 \}\cf16  \cb4 clearcoat\cf12 =\cf14 \{\cf13 0.15\cf14 \}\cf9  \cb3 />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Data pulses \cb3 - \cb4 subtle and fast \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7       \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf10 pulseCount\cf9  \}).\cf8 map\cf9 ((_, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf6 DataPulse\cf16  key\cf12 =\cf14 \{\cf10 i\cf14 \}\cf16  curve\cf12 =\cf14 \{\cf10 curve\cf14 \}\cf16  color\cf12 =\cf14 \{\cf13 0x00ff88\cf14 \}\cf16  speed\cf12 =\cf14 \{\cf13 0.\cb4 6\cf12  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  0.3\cf14 \cb3 \}\cf16  offset\cf12 =\cf14 \{\cf10 i\cf12  /\cf10  pulseCount\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       ))\cf14 \}\cf5 \
+\cf9     </\cf15 group\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 // \cb4 Heavy power \cb3 cable \cb4 with proper sheathing\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  PowerCable\cf9 (\{ points\cb4 , thickness\cf12  =\cf13  0.02\cf9  \cb3 \}: \{\cf10  points\cf9 :\cf11  THREE\cf9 .\cf6 Vector3\cf9 []\cb4 ;\cf10  thickness\cf14 ?\cf9 :\cf6  number\cf9  \cb3 \}) \{\cf5 \
+\cf6   const\cf11  curve\cf12  =\cf8  useMemo\cf9 (()\cf6  =>\cf14  new\cf11  THREE\cf9 .\cf8 CatmullRomCurve3\cf9 (\cf10 points\cf9 \cb4 ,\cf13  false\cf9 ,\cf17  "catmullrom"\cf9 ,\cf13  0.5\cf9 \cb3 ), [\cf10 points\cf9 ])\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf6 tubeGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf10 curve\cf9 , \cf13 \cb4 32\cf9 \cb3 , \cf10 \cb4 thickness\cf9 \cb3 , \cf13 8\cf9 , \cf13 false\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9       <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x0a0a0a\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf16  \cb4 metalness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  \cb3 />\cf5 \
+\cf9     </\cf15 mesh\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 // Velcro cable tie/wrap\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  CableTie\cf9 (\{ position, rotation\cf12  =\cf9  [\cf13 0\cf9 ,\cf13  0\cf9 ,\cf13  0\cf9 ], width\cf12  =\cf13  0.15\cf9  \}: \{\cf10  position\cf9 : [\cf6 number\cf9 ,\cf6  number\cf9 ,\cf6  number\cf9 ];\cf10  rotation\cf14 ?\cf9 : [\cf6 number\cf9 ,\cf6  number\cf9 ,\cf6  number\cf9 ];\cf10  width\cf14 ?\cf9 :\cf6  number\cf9  \}) \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf10 position\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf10 rotation\cf14 \}\cf9 >\cf5 \
+\cf9       <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf10 width\cf9 , \cf13 0.02\cf9 , \cf13 0.04\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9       <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7     </\cf15 mesh\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 // \cb4 Bundled cable run\cb3  (\cb4 multiple cables bound together)\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  \cb4 CableBundle\cf9 \cb3 (\{\cf5  \
+\cf9   \cb4 startPos\cb3 ,\cf5  \
+\cf9   \cb4 endPos\cb3 ,\cf5  \
+\cf9   cableCount\cf12  =\cf13  6\cf9 ,\cf5  \
+\cf9   colors,\cf5  \
+\cf9   isFiber\cf12  =\cf13  false\cf9 ,\cf5 \
+\cf9   bundleRadius\cf12  =\cf13  0.08\cf5 \
+\cf9 \}: \{\cf5  \
+\cf10   startPos\cf9 : [\cf6 number\cf9 ,\cf6  number\cf9 ,\cf6  number\cf9 ]\cf5 \
+\cf10   endPos\cf9 : [\cf6 number\cf9 ,\cf6  number\cf9 ,\cf6  number\cf9 ]\cf5 \
+\cf10   cableCount\cf14 ?\cf9 :\cf6  number\cf5 \
+\cf10   colors\cf9 :\cf6  number\cf9 []\cf5 \
+\cf10   isFiber\cf14 ?\cf9 :\cf6  boolean\cf5 \
+\cf10   bundleRadius\cf14 ?\cf9 :\cf6  number\cf5 \
+\cf9 \}) \{\cf5 \
+\cf6   const\cf11  cables\cf12  =\cf8  useMemo\cf9 (()\cf6  =>\cf9  \{\cf5 \
+\cf6     const\cf11  result\cf12  =\cf9  []\cf5 \
+\cf6     const\cf11  midY\cf12  =\cf9  (\cf10 startPos\cf9 [\cf13 1\cf9 ]\cf12  +\cf10  endPos\cf9 [\cf13 1\cf9 ])\cf12  /\cf13  2\cf5 \
+\cf6     const\cf11  midX\cf12  =\cf9  (\cf10 startPos\cf9 [\cf13 0\cf9 ]\cf12  +\cf10  endPos\cf9 [\cf13 0\cf9 ])\cf12  /\cf13  2\cf5 \
+\cf6     const\cf11  sagAmount\cf12  =\cf10  Math\cf9 .\cf8 abs\cf9 (\cf10 endPos\cf9 [\cf13 0\cf9 ]\cf12  -\cf10  startPos\cf9 [\cf13 0\cf9 ])\cf12  *\cf13  0.08\cf5 \
+    \
+\pard\pardeftab720\partightenfactor0
+\cf14     for\cf9  (\cf6 let\cf10  i\cf12  =\cf13  0\cf9 ;\cf10  i\cf12  <\cf10  cableCount\cf9 ;\cf10  i\cf12 ++\cf9 ) \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6       const\cf11  angle\cf12  =\cf9  (\cf10 i\cf12  /\cf10  cableCount\cf9 )\cf12  *\cf10  Math\cf9 .\cf11 PI\cf12  *\cf13  2\cf5 \
+\cf6       const\cf11  offsetX\cf12  =\cf10  Math\cf9 .\cf8 cos\cf9 (\cf10 angle\cf9 )\cf12  *\cf10  bundleRadius\cf12  *\cf13  0.3\cf5 \
+\cf6       const\cf11  offsetZ\cf12  =\cf10  Math\cf9 .\cf8 sin\cf9 (\cf10 angle\cf9 )\cf12  *\cf10  bundleRadius\cf12  *\cf13  0.3\cf5 \
+      \
+\cf6       const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14         new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 startPos\cf9 [\cf13 0\cf9 ]\cf12  +\cf10  offsetX\cf12  *\cf13  0.5\cf9 ,\cf10  startPos\cf9 [\cf13 1\cf9 ],\cf10  startPos\cf9 [\cf13 2\cf9 ]\cf12  +\cf10  offsetZ\cf12  *\cf13  0.5\cf9 ),\cf5 \
+\cf14         new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 startPos\cf9 [\cf13 0\cf9 ]\cf12  +\cf10  offsetX\cf9 ,\cf10  startPos\cf9 [\cf13 1\cf9 ]\cf12  -\cf13  0.1\cf9 ,\cf10  startPos\cf9 [\cf13 2\cf9 ]\cf12  +\cf10  offsetZ\cf12  +\cf13  0.05\cf9 ),\cf5 \
+\cf14         new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 midX\cf12  +\cf10  offsetX\cf12  *\cf13  0.8\cf9 ,\cf10  midY\cf12  -\cf10  sagAmount\cf9 ,\cf10  startPos\cf9 [\cf13 2\cf9 ]\cf12  +\cf10  offsetZ\cf12  +\cf13  0.08\cf9 ),\cf5 \
+\cf14         new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 endPos\cf9 [\cf13 0\cf9 ]\cf12  +\cf10  offsetX\cf9 ,\cf10  endPos\cf9 [\cf13 1\cf9 ]\cf12  +\cf13  0.1\cf9 ,\cf10  endPos\cf9 [\cf13 2\cf9 ]\cf12  +\cf10  offsetZ\cf12  +\cf13  0.05\cf9 ),\cf5 \
+\cf14         new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 endPos\cf9 [\cf13 0\cf9 ]\cf12  +\cf10  offsetX\cf12  *\cf13  0.5\cf9 ,\cf10  endPos\cf9 [\cf13 1\cf9 ],\cf10  endPos\cf9 [\cf13 2\cf9 ]\cf12  +\cf10  offsetZ\cf12  *\cf13  0.5\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       ]\cf5 \
+\cf10       result\cf9 .\cf8 push\cf9 (\{\cf10  points\cf9 :\cf10  pts\cf9 ,\cf10  color\cf9 :\cf10  colors\cf9 [\cf10 i\cf12  %\cf10  colors\cf9 .\cf10 length\cf9 ] \})\cf5 \
+\cf9     \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14     return\cf10  result\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9   \}, [\cf10 startPos\cf9 ,\cf10  endPos\cf9 ,\cf10  cableCount\cf9 ,\cf10  colors\cf9 ,\cf10  bundleRadius\cf9 ])\cf5 \
+  \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf10 cables\cf9 .\cf8 map\cf9 ((cable, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         isFiber \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           ?\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf10 i\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 cable\cf9 .\cf10 points\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 cable\cf9 .\cf10 color\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 3\cf14 \}\cf9  />\cf5 \
+\cf14           :\cf9  <\cf6 CopperCable\cf16  key\cf12 =\cf14 \{\cf10 i\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 cable\cf9 .\cf10 points\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 cable\cf9 .\cf10 color\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 2\cf14 \}\cf16  thickness\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       ))\cf14 \}\cf5 \
+\cf9     </\cf15 group\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 // Comprehensive rack cabling system\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  RackCableSystem\cf9 (\{ rackX \}: \{\cf10  rackX\cf9 :\cf6  number\cf9  \}) \{\cf5 \
+\cf6   const\cf11  fiberColors\cf12  =\cf9  [\cf13 0xffcc00\cf9 ,\cf13  0x00aaff\cf9 ,\cf13  0x00ff88\cf9 ,\cf13  0xff6600\cf9 ,\cf13  0x00ffcc\cf9 ,\cf13  0xaa66ff\cf9 ,\cf13  0xff00aa\cf9 ,\cf13  0x88ff00\cf9 ]\cf5 \
+\cf6   const\cf11  copperBlue\cf12  =\cf9  [\cf13 0x0044aa\cf9 ,\cf13  0x0055bb\cf9 ,\cf13  0x0066cc\cf9 ,\cf13  0x0077dd\cf9 ,\cf13  0x0088ee\cf9 ,\cf13  0x0099ff\cf9 ]\cf5 \
+\cf6   const\cf11  copperGray\cf12  =\cf9  [\cf13 0x606060\cf9 ,\cf13  0x707070\cf9 ,\cf13  0x808080\cf9 ,\cf13  0x909090\cf9 ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb7   \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 rackX\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 === VERTICAL CABLE MANAGEMENT CHANNEL === \cb3 */\cf14 \}\cf5 \
+\cf14       \{\cf2 \cb4 /* D-rings / cable guides along rack side */\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb4       \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 8\cf9  \}).\cf8 map\cf9 ((_, i) \cf6 =>\cf9  (\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9         <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 dring\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 1.15\cf9 , \cf13 2\cf12  +\cf10  i\cf12  *\cf13  0.9\cf9 , \cf13 0.3\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9           <\cf6 torusGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.04\cf9 , \cf13 0.008\cf9 , \cf13 8\cf9 , \cf13 12\cf9 , \cf10 Math\cf9 .\cf11 PI\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9           <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404040\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.8\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9         </\cf15 mesh\cf9 >\cf5 \
+\cf9       ))\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* === FIBER UPLINKS: Switch to Cable Tray === */\cf14 \}\cf5 \
+\cf14       \{\cf2 /* 40G QSFP+ fiber trunks - yellow single-mode */\cf14 \}\cf5 \
+\cf14       \{\cf9 [\cf13 0\cf9 , \cf13 1\cf9 , \cf13 2\cf9 , \cf13 3\cf9 ].\cf8 map\cf9 ((i) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  offsetX\cf12  = -\cf13 0.25\cf12  +\cf10  i\cf12  *\cf13  0.12\cf5 \
+\cf6         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf9 , \cf13 8.35\cf9 , \cf13 0.58\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12  +\cf13  0.03\cf9 , \cf13 8.45\cf9 , \cf13 0.62\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12  +\cf13  0.02\cf9 , \cf13 8.6\cf9 , \cf13 0.55\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf9 , \cf13 8.75\cf9 , \cf13 0.35\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12  -\cf13  0.02\cf9 , \cf13 8.85\cf9 , \cf13 0.1\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf9 , \cf13 8.9\cf9 , \cf12 -\cf13 0.1\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14         return\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 qsfp\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf13 0xffcc00\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 4\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* 10G SFP+ fiber - aqua multi-mode OM4 */\cf14 \}\cf5 \
+\cf14       \{\cf9 [\cf13 0\cf9 , \cf13 1\cf9 ].\cf8 map\cf9 ((i) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  offsetX\cf12  =\cf13  0.3\cf12  +\cf10  i\cf12  *\cf13  0.1\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf9 , \cf13 8.35\cf9 , \cf13 0.58\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf9 , \cf13 8.5\cf9 , \cf13 0.6\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12  +\cf13  0.\cb4 05\cf9 \cb3 , \cf13 8.\cb4 7\cf9 \cb3 , \cf13 0.\cb4 4\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12 \cb4  +\cf13  0.03\cf9 \cb3 , \cf13 8.\cb4 85\cf9 \cb3 , \cf13 0.\cb4 05\cf9 \cb3 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 \cb4 sfp\cf14 \cb3 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x00cccc\cf14 \cb3 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 3\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 === PATCH CABLES: Patch Panel \cb3 to \cb4 Switch === \cb3 */\cf14 \}\cf5 \
+\cf14       \{\cf2 \cb4 /* Organized cable waterfall with service loops */\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb4       \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 24\cf9  \}).\cf8 map\cf9 ((_, i) \cf6 =>\cf9  \{\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  \cb4 col\cf12 \cb3  =\cf10  \cb4 copperBlue\cf9 [\cf10 \cb3 i\cf12  %\cf10  \cb4 copperBlue\cf9 .\cf10 length\cf9 ]\cf5 \cb3 \
+\cf6         const\cf11  \cb4 portOffset\cf12 \cb3  = -\cf13 0.\cb4 65\cf12 \cb3  +\cf9  (\cf10 i\cf12  %\cf13  \cb4 24\cf9 \cb3 ) \cf12 *\cf13  0.\cb4 054\cf5 \cb3 \
+\cf6         const\cf11  \cb4 switchPort\cf12 \cb3  = \cb4 -\cf13 \cb3 0.\cb4 65\cf12 \cb3  +\cf9  (\cf10 \cb4 i\cf12  %\cf13  24\cf9 \cb3 ) \cf12 *\cf13  0.\cb4 054\cf5 \cb3 \
+\cf6         const\cf11  sagVariation\cf12  =\cf13  0.12\cf12  +\cf9  (\cf10 i\cf12  %\cf13  4\cf9 ) \cf12 *\cf13  0.025\cf5 \
+\cf6         const\cf11  zVariation\cf12  =\cf13  0.58\cf12  +\cf9  (\cf10 i\cf12  %\cf13  3\cf9 ) \cf12 *\cf13  0.02\cf5 \
+\cf9         \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 portOffset\cf9 \cb3 , \cf13 9.\cb4 52\cf9 \cb3 , \cf10 \cb4 zVariation\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 portOffset\cf9 \cb3 , \cf13 9.\cb4 45\cf9 \cb3 , \cf10 \cb4 zVariation\cf12  +\cf13  \cb3 0.\cb4 06\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 portOffset\cf12  *\cf13  0.95\cf9 \cb3 , \cf13 9.\cb4 3\cf9 , \cf10 zVariation\cf12  +\cf13 \cb3  0.\cb4 1\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cb4 (\cf10 portOffset\cf12  +\cf10  switchPort\cf9 ) \cf12 /\cf13  2\cf9 \cb3 , \cf13 \cb4 9.0\cf12  -\cf10  sagVariation\cf9 \cb3 , \cf10 \cb4 zVariation\cf12  +\cf13  \cb3 0.\cb4 12\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 switchPort\cf12  *\cf13  0.95\cf9 \cb3 , \cf13 8.\cb4 6\cf9 \cb3 , \cf10 \cb4 zVariation\cf12  +\cf13  \cb3 0.\cb4 08\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 switchPort\cf9 , \cf13 8.42\cf9 , \cf10 zVariation\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  <\cf6 CopperCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 \cb4 patch\cf14 \cb3 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 col\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 \cb4 1\cf14 \cb3 \}\cf16  \cb4 thickness\cf12 =\cf14 \{\cf13 0.006\cf14 \}\cf9  \cb3 />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 === POWER CABLES: UPS to PDU\cb3  to \cb4 Devices ===\cb3  */\cf14 \}\cf5 \
+\cf14       \{\cf2 \cb4 /* Main power feeds - thick black */\cf14 \}\cf5 \cb3 \
+\cf14       \{\cf9 [\cf12 -\cf13 0.5\cf9 , \cf13 0.5\cf9 ].\cf8 map\cf9 ((offsetX, i) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 offsetX\cf9 \cb3 , \cf13 \cb4 1.8\cf9 \cb3 , \cf13 0.\cb4 52\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 offsetX\cf12  *\cf13  0.9\cf9 \cb3 , \cf13 \cb4 2.2\cf9 \cb3 , \cf13 0.\cb4 58\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 offsetX\cf12  *\cf13  0.85\cf9 \cb3 , \cf13 \cb4 3.0\cf9 \cb3 , \cf13 \cb4 0.55\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 offsetX\cf12  *\cf13  0.8\cf9 , \cf13 4.5\cf9 , \cf13 0.52\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  <\cf6 \cb4 PowerCable\cf16 \cb3  key\cf12 =\cf14 \{\cf9 `\cf17 \cb4 pwr\cf14 \cb3 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  \cb4 thickness\cf12 \cb3 =\cf14 \{\cf13 0\cb4 .025\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 C13 power cords to devices \cb3 - \cb4 red \cb3 */\cf14 \}\cf5 \
+\cf14       \{\cf9 [\cf13 \cb4 3.5\cf9 \cb3 , \cf13 \cb4 5.2\cf9 , \cf13 6.8\cf9 , \cf13 8.3\cf9 \cb3 ].\cf8 map\cf9 ((\cb4 y\cb3 , i) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 \cb4 -\cf13 0.35\cf12  +\cf10  i\cf12  *\cf13  0.05\cf9 \cb3 , \cf10 \cb4 y\cf9 , \cf13 \cb3 0.\cb4 52\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 \cb4 -\cf13 0.55\cf9 \cb3 , \cf10 \cb4 y\cf12  -\cf13  0.1\cf9 \cb3 , \cf13 0.\cb4 58\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 \cb4 -\cf13 \cb3 0.\cb4 7\cf9 \cb3 , \cf10 \cb4 y\cf12  -\cf13  0.15\cf9 \cb3 , \cf13 0.\cb4 55\cf9 \cb3 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  \cb4 (\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 c13-\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 tubeGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf14 new\cf11  THREE\cf9 .\cf8 CatmullRomCurve3\cf9 (\cf10 pts\cf9 .\cf8 map\cf9 (p\cf6  =>\cf14  new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (...\cf10 Object\cf9 .\cf8 values\cf9 (\cf10 p\cf9 )))), \cf13 16\cf9 , \cf13 0.01\cf9 , \cf13 6\cf9 , \cf13 false\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x880000\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.75\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9         )\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* === MANAGEMENT CABLES === */\cf14 \}\cf5 \
+\cf14       \{\cf2 /* Console cables - light blue RJ45 to serial */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       <\cf6 CopperCable\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16         points\cf12 =\cf14 \{\cf9 [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 -\cf13 0.88\cf9 , \cf13 8.38\cf9 , \cf13 0.56\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 -\cf13 0.92\cf9 , \cf13 8.3\cf9 , \cf13 0.62\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 -\cf13 0.95\cf9 , \cf13 8.0\cf9 , \cf13 0.58\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf12 -\cf13 0.9\cf9 , \cf13 7.5\cf9 , \cf13 0.55\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16         color\cf12 =\cf14 \{\cf13 0x66aacc\cf14 \}\cf5 \
+\cf16         pulseCount\cf12 =\cf14 \{\cf13 1\cf14 \}\cf5 \
+\cf16         thickness\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       />\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* === CABLE TIES AT INTERVALS === */\cf14 \}\cf5 \
+\cf14       \{\cf9 [\cf13 8.8\cf9 , \cf13 9.0\cf9 , \cf13 9.2\cf9 , \cf13 9.4\cf9 ].\cf8 map\cf9 ((y, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         <\cf6 CableTie\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 tie\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 y\cf9 , \cf13 0.62\cf9 ]\cf14 \}\cf16  width\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9       ))\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7     </\cf15 group\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 // Cross-rack fiber \cb4 backbone with proper routing\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 function\cf8  \cb4 CrossRackFiberBackbone\cf9 \cb3 (\{ rack1X, rack2X \}: \{\cf10  rack1X\cf9 :\cf6  number\cf9 ;\cf10  rack2X\cf9 :\cf6  number\cf9  \}) \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7   const\cf11  midX\cf12  =\cf9  (\cf10 rack1X\cf12  +\cf10  rack2X\cf9 )\cf12  /\cf13  2\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3   const\cf11  trunkColors\cf12  =\cf9  [\cf13 0xffcc00\cf9 ,\cf13  0xffcc00\cf9 ,\cf13  0x00cccc\cf9 ,\cf13  0x00cccc\cf9 ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb7   \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 100G QSFP28 \cb3 inter-switch \cb4 links via overhead tray\cb3  */\cf14 \}\cf5 \
+\cf14       \{\cf10 \cb4 trunkColors\cf9 \cb3 .\cf8 map\cf9 ((\cb4 col, \cb3 idx) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6         const\cf11  \cb4 yBase\cf12 \cb3  =\cf13  8.\cb4 85\cf5 \cb3 \
+\cf6         const\cf11  zOffset\cf12  = -\cf13 0.15\cf12  +\cf9  (\cf10 idx\cf12  %\cf13  2\cf9 ) \cf12 *\cf13  0.08\cf5 \
+\cf6         const\cf11  xSpread\cf12  =\cf10  idx\cf12  <\cf13  2\cf14  ?\cf13  0\cf14  :\cf13  0.08\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7         const\cf11  pts\cf12  =\cf9  [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack1X\cf12  +\cf13  0.\cb4 35\cf12  +\cf10  xSpread\cf9 \cb3 , \cf13 \cb4 8.38\cf9 \cb3 , \cf13 0.\cb4 58\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack1X\cf12  +\cf13  0.\cb4 4\cf12  \cb3 +\cf10  \cb4 xSpread\cf9 , \cf13 8.5\cf9 \cb3 , \cf13 0.\cb4 62\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 rack1X\cf12  \cb3 +\cf13  0.\cb4 5\cf9 \cb3 , \cf13 \cb4 8.7\cf9 , \cf13 \cb3 0.\cb4 5\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 rack1X\cf12  +\cf13 \cb3  0.\cb4 6\cf9 \cb3 , \cf10 \cb4 yBase\cf9 \cb3 , \cf10 \cb4 zOffset\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 \cb4 midX\cf9 , \cf10 yBase\cf12  +\cf13  \cb3 0.\cb4 02\cf9 \cb3 , \cf10 \cb4 zOffset\cf12  -\cf13  \cb3 0.\cb4 05\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.6\cf9 , \cf10 yBase\cf9 , \cf10 zOffset\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.5\cf9 , \cf13 8.7\cf9 , \cf13 0.5\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.4\cf12  -\cf10  xSpread\cf9 , \cf13 8.5\cf9 , \cf13 0.62\cf9 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.35\cf12  -\cf10  xSpread\cf9 , \cf13 8.38\cf9 , \cf13 0.58\cf9 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3         return\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 \cb4 trunk\cf14 \cb3 $\{\cf10 idx\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  color\cf12 =\cf14 \{\cf10 \cb4 col\cf14 \cb3 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 \cb4 6\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \})\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Redundant path\cb3  - \cb4 different color\cb3  */\cf14 \}\cf5 \
+\cf14       \cb4 \{\cf9 [\cf13 0\cf9 , \cf13 1\cf9 ].\cf8 map\cf9 ((idx) \cf6 =>\cf9  \{\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6         \cb4 const\cf11  pts\cf12  =\cf9  \cb3 [\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack1X\cf12  +\cf13  0.\cb4 5\cf9 \cb3 , \cf13 6.\cb4 78\cf9 \cb3 , \cf13 0.\cb4 56\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack1X\cf12  +\cf13  0.\cb4 7\cf9 \cb3 , \cf13 6.\cb4 85\cf9 \cb3 , \cf13 0.\cb4 62\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 midX\cf9 , \cf13 \cb4 6.95\cf9 \cb3 , \cf13 0.\cb4 65\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.\cb4 7\cf9 \cb3 , \cf13 6.\cb4 85\cf9 \cb3 , \cf13 0.\cb4 62\cf9 \cb3 ),\cf5 \
+\cf14           new\cf11  THREE\cf9 .\cf8 Vector3\cf9 (\cf10 rack2X\cf12  -\cf13  0.\cb4 5\cf9 \cb3 , \cf13 6.\cb4 78\cf9 \cb3 , \cf13 0.\cb4 56\cf9 \cb3 ),\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         ]\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14         \cb4 return\cf9  <\cf6 FiberCable\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 redun\cf14 $\{\cf10 idx\cf14 \}\cf9 `\cf14 \}\cf16  points\cf12 =\cf14 \{\cf10 pts\cf14 \}\cf16  \cb3 color\cf12 =\cf14 \{\cf13 \cb4 0xff6600\cf14 \}\cf16  pulseCount\cf12 =\cf14 \{\cf13 4\cf14 \}\cf9  />\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb4       \})\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7     </\cf15 group\cf9 >\cf5 \
+\cf9   )\cf5 \
+\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf5   )\
+\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 // \cb4 Realistic rack \cb3 device component - \cb4 highly \cb3 detailed \cb4 appliances\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb7 function\cf8  RackDevice\cf9 (\{\cf5 \
+\cf9   y,\cf5 \
+\cf9   h,\cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf10   onHover\cf14 ?:\cf9  (l:\cf6  string\cf9  |\cf6  null\cf9 )\cf6  =>\cf14  void\cf5 \
+\cf10   onClick\cf14 ?:\cf9  (s:\cf6  string\cf9 )\cf6  =>\cf14  void\cf5 \
+\}) \cf9 \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16       position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 y\cf9 , \cf13 0\cf9 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf10       onPointerOut\cf12 =\cf9 \{\cf5 () => onHover?.(null)\cf9 \}\cf5 \
+\cf10       onClick\cf12 =\cf9 \{\cf5 () => section && onClick?.(section)\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf12     >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* \cb4 ===== CISCO CATALYST 9300 SWITCH ===== \cb3 */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "switch"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - dark gunmetal with subtle texture \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  castShadow\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.12\cf9 , \cf10 h\cf9 , \cf13 1.08\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1c2024\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.35\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.7\cf14 \}\cf16  clearcoat\cf12 =\cf14 \{\cf13 0.1\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front bezel - recessed panel look */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.02\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x181c20\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears - brushed aluminum */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14               \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 3\cf9  \}).\cf8 map\cf9 ((_, j) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 j\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , (\cf10 j\cf12  -\cf13  1\cf9 ) \cf12 *\cf10  h\cf12  *\cf13  0.3\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               ))\cf14 \}\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* CISCO logo with proper styling */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 09\cf14 \cb3 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#049fd9"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 98\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 045\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/\cb4 KFOlCnqEu92Fr1MmWUlfBBc4\cb3 .ttf"\cf5 \
+\cf16             letterSpacing\cf12 =\cf14 \{\cf13 0.08\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           >\cf5 \
+\cf9             CISCO\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           \cb4 <\cf6 Text\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb4             fontSize\cf12 \cb3 =\cf14 \{\cf13 0.\cb4 04\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf16             color\cf12 =\cf17 "#888888"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.98\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.1\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             Catalyst 9300-48P\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Blue accent strip\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 \cb4 h\cf12  /\cf13  2\cf12  -\cf13  0.015\cf9 \cb3 , \cf13 0.\cb4 545\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 2.06\cf9 \cb3 , \cf13 0.\cb4 018\cf9 \cb3 , \cf13 0.\cb4 003\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 \cb4 meshBasicMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x049fd9\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Recessed port bay */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.05\cf9 , \cf12 -\cf13 0.02\cf9 , \cf13 0.535\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 1.65\cf9 , \cf10 h\cf12  *\cf13  0.68\cf9 , \cf13 0.03\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0c0e10\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 48x \cb3 RJ45 \cb4 PoE+ ports in realistic grid\cb3  */\cf14 \}\cf5 \
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 48\cf9  \}).\cf8 map\cf9 ((_, \cb4 p\cb3 ) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6             const\cf11  row\cf12  =\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 \cb4 p\cf12 \cb3  /\cf13  24\cf9 )\cf5 \
+\cf6             const\cf11  col\cf12  =\cf10  \cb4 p\cf12 \cb3  %\cf13  24\cf5 \
+\cf6             const\cf11  px\cf12  = -\cf13 0.\cb4 68\cf12 \cb3  +\cf10  col\cf12  *\cf13  0.\cb4 058\cf5 \cb3 \
+\cf6             const\cf11  py\cf12  =\cf13  0.\cb4 06\cf12 \cb3  -\cf10  row\cf12  *\cf13  0.\cb4 13\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7             return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3               <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 \cb4 p\cf14 \cb3 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Port \cb4 bezel\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf10 py\cf9 , \cf13 0.\cb4 548\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 052\cf9 \cb3 , \cf13 0.\cb4 058\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x08090a\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Gold pin contacts visible inside */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf10 py\cf9 , \cf13 0.554\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.04\cf9 , \cf13 0.035\cf9 , \cf13 0.002\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 /* \cb4 Dual LEDs per port \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf12 \cb4  -\cf13  0.015\cf9 \cb3 , \cf10 py\cf12  \cb4 +\cf13 \cb3  0.035\cf9 , \cf13 0.\cb4 558\cf9 \cb3 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x00ff44\cf14 \cb3 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x0a120a\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 2\cf12 \cb3  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  \cb4 5\cf14 \cb3 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  \cb4 8\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 005\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf12  +\cf13  0.015\cf9 , \cf10 py\cf12  +\cf13  0.035\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0xffaa00\cf14 \}\cf16  altColor\cf12 =\cf14 \{\cf13 0x120a00\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 12\cf12  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  20\cf14 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  8\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.005\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7               </\cf15 group\cf9 >\cf5 \
+\cf9             )\cf5 \
+\cf9           \})\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 4x \cb3 SFP+ uplink \cb4 module bay \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf13 0\cf9 \cb3 , \cf13 \cb4 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9             <\cf6 \cb4 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 [\cf13 0.\cb4 22\cf9 \cb3 , \cf10 \cb4 h\cf12  \cb3 *\cf13  0.\cb4 5\cf9 \cb3 , \cf13 0.\cb4 025\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0c0e\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 4\cf9  \}).\cf8 map\cf9 ((_, s) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf6 SFPModule\cf16  key\cf12 =\cf14 \{\cf10 s\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf12  +\cf9  (\cf10 s\cf12  %\cf13  2\cf9 ) \cf12 *\cf13  0.065\cf12  -\cf13  0.032\cf9 , \cf13 0.05\cf12  -\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 s\cf12  /\cf13  2\cf9 ) \cf12 *\cf13  0.1\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Management section\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 \cb4 -\cf13 \cb3 0.\cb4 88\cf9 \cb3 , \cf12 -\cf13 0.\cb4 04\cf9 \cb3 , \cf13 0.\cb4 548\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 2\cf9 \cb3 , \cf13 0.\cb4 18\cf9 \cb3 , \cf13 0.\cb4 02\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 \cb4 meshStandardMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x0a0c0e\cf14 \cb3 \}\cf16  \cb4 roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  \cb3 />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 \cb4 /* Console port (light blue) */\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb4           <\cf15 mesh\cf16  position\cf12 \cb3 =\cf14 \{\cf9 [\cf12 \cb4 -\cf13 \cb3 0.\cb4 9\cf9 \cb3 , \cf13 0\cf9 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 \cb4 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 \cb4 [\cf13 0.05\cf9 , \cf13 0.038\cf9 , \cf13 \cb3 0.\cb4 012\cf9 ]\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a6090\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \cb4 \{\cf2 /* USB port */\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9           \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.86\cf9 , \cf12 -\cf13 0.06\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9 \cb4             <\cf6 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 [\cf13 0.\cb4 032\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 , \cf13 0.\cb4 008\cf9 \cb3 ]\cf14 \}\cf9 \cb4  /\cb3 >\cf5 \
+\cf9             <\cf6 \cb4 meshStandardMaterial\cf16  color\cf12 \cb3 =\cf14 \{\cf13 \cb4 0x202020\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb4           \cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Status LED cluster */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.06\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff44\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.012\cf14 \}\cf9  />\cf5 \
+\cf9           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.1\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x049fd9\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Ventilation holes pattern */\cf14 \}\cf5 \
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 6\cf9  \}).\cf8 map\cf9 ((_, v) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 v\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.75\cf12  +\cf9  (\cf10 v\cf12  %\cf13  3\cf9 ) \cf12 *\cf13  0.06\cf9 , \cf12 -\cf13 0.12\cf12  +\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 v\cf12  /\cf13  3\cf9 ) \cf12 *\cf13  0.04\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf6 circleGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.008\cf9 , \cf13 6\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9               <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x080808\cf14 \}\cf9  />\cf5 \
+\cf9             </\cf15 mesh\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9         </\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       )\}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* ===== FORTIGATE \cb4 600E \cb3 FIREWALL ===== */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "fw"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - \cb3 Fortinet \cb4 signature beige/cream\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  castShadow\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.12\cf9 , \cf10 h\cf9 , \cf13 1.08\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xe8e4dc\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.1\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front bezel */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.02\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xe0dcd4\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.55\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14               \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 3\cf9  \}).\cf8 map\cf9 ((_, j) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 j\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , (\cf10 j\cf12  -\cf13  1\cf9 ) \cf12 *\cf10  h\cf12  *\cf13  0.3\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               ))\cf14 \}\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Fortinet signature red stripe at top */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.02\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.06\cf9 , \cf13 0.03\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xcc0000\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Fortinet signature red stripe at bottom */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf10 h\cf12  /\cf13  2\cf12  +\cf13  0.02\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.06\cf9 , \cf13 0.025\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xcc0000\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* FORTINET logo */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 085\cf14 \cb3 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#cc0000"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 07\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/\cb4 KFOlCnqEu92Fr1MmWUlfBBc4\cb3 .ttf"\cf5 \
+\cf16             letterSpacing\cf12 =\cf14 \{\cf13 0.06\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           >\cf5 \
+\cf9             FORTINET\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 055\cf14 \cb3 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#\cb4 666666\cb3 "\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 14\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             FortiGate 600E\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Dark port \cb3 panel \cb4 area\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 3\cf9 \cb3 , \cf12 \cb4 -\cf13 0.02\cf9 \cb3 , \cf13 0.\cb4 54\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 1.\cb4 25\cf9 \cb3 , \cf10 h\cf12  *\cf13  0.\cb4 6\cf9 \cb3 , \cf13 0.\cb4 025\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x1a1c1e\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 16x \cb3 GbE \cb4 RJ45 \cb3 ports */\cf14 \}\cf5 \
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 16\cf9  \}).\cf8 map\cf9 ((_, \cb4 p\cb3 ) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6             const\cf11  row\cf12  =\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 \cb4 p\cf12 \cb3  /\cf13  8\cf9 )\cf5 \
+\cf6             const\cf11  col\cf12  =\cf10  \cb4 p\cf12 \cb3  %\cf13  8\cf5 \
+\cf6             const\cf11  px\cf12  = -\cf13 0.\cb4 78\cf12 \cb3  +\cf10  col\cf12  *\cf13  0.\cb4 12\cf5 \cb3 \
+\cf6             const\cf11  py\cf12  =\cf13  0.\cb4 08\cf12 \cb3  -\cf10  row\cf12  *\cf13  0.\cb4 16\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7             return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3               <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 \cb4 p\cf14 \cb3 \}\cf9 >\cf5 \
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf10 py\cf9 , \cf13 0.\cb4 552\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 072\cf9 \cb3 , \cf13 0.\cb4 058\cf9 \cb3 , \cf13 0.\cb4 018\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x0c0e10\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 8\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Port number label area */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf10 py\cf12  +\cf13  0.045\cf9 , \cf13 0.553\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.06\cf9 , \cf13 0.015\cf9 , \cf13 0.001\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x2a2c2e\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 /* Link LED \cb4 (green) \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf12  -\cf13  0.\cb4 022\cf9 \cb3 , \cf10 py\cf12  +\cf13  0.\cb4 038\cf9 \cb3 , \cf13 0.\cb4 562\cf9 \cb3 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff00\cf14 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x001800\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 1.5\cf12 \cb3  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  3\cf14 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  6\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.006\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Activity LED \cb4 (amber) \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf12  +\cf13  0.\cb4 022\cf9 \cb3 , \cf10 py\cf12  +\cf13  0.\cb4 038\cf9 \cb3 , \cf13 0.\cb4 562\cf9 \cb3 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0xff8800\cf14 \cb3 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x180800\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 10\cf12 \cb3  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  \cb4 15\cf14 \cb3 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  6\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.006\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7               </\cf15 group\cf9 >\cf5 \
+\cf9             )\cf5 \
+\cf9           \})\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 4x \cb3 SFP\cb4 +\cb3  slots */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.22\cf9 , \cf13 0\cf9 \cb3 , \cf13 \cb4 0.548\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9             <\cf6 \cb4 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 [\cf13 0.2\cf9 , \cf10 \cb4 h\cf12  \cb3 *\cf13  0.\cb4 45\cf9 \cb3 , \cf13 0.\cb4 02\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1c1e\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 4\cf9  \}).\cf8 map\cf9 ((_, s) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf6 SFPModule\cf16  key\cf12 =\cf14 \{\cf10 s\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.22\cf12  +\cf9  (\cf10 s\cf12  %\cf13  2\cf9 ) \cf12 *\cf13  0.06\cf12  -\cf13  0.03\cf9 , \cf13 0.06\cf12  -\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 s\cf12  /\cf13  2\cf9 ) \cf12 *\cf13  0.12\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* LCD \cb4 Status Display with bezel \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 68\cf9 \cb3 , \cf13 0.\cb4 04\cf9 \cb3 , \cf13 0.\cb4 548\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 38\cf9 \cb3 , \cf13 0.22\cf9 , \cf13 0.\cb4 025\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x1a1a1a\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 5\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 68\cf9 \cb3 , \cf13 0.\cb4 04\cf9 \cb3 , \cf13 0.\cb4 562\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 34\cf9 \cb3 , \cf13 0.18\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x003311\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.68\cf9 , \cf13 0.04\cf9 , \cf13 0.566\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.32\cf9 , \cf13 0.16\cf9 , \cf13 0.002\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00cc44\cf14 \}\cf16  transparent opacity\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Control buttons\cb3  */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf13 0.\cb4 52\cf9 \cb3 , \cf13 0.\cb4 58\cf9 \cb3 , \cf13 0.\cb4 64\cf9 ].\cf8 map\cf9 ((bx, i) \cf6 =>\cf9  (\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 \cb4 mesh\cf16  key\cf12 \cb3 =\cf14 \{\cf10 \cb4 i\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 bx\cf9 \cb3 , \cf12 \cb4 -\cf13 \cb3 0.\cb4 1\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9 \cb4               <\cf6 cylinderGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 \cb4 [\cf13 0.012\cf9 , \cf13 0.012\cf9 , \cf13 0.008\cf9 , \cf13 8\cf9 ]\cf14 \cb3 \}\cf16  \cb4 rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  /\cb3 >\cf5 \
+\cf9               <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404040\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.7\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9             </\cf15 mesh\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* USB 3.0 port */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.78\cf9 , \cf12 -\cf13 0.1\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.035\cf9 , \cf13 0.018\cf9 , \cf13 0.012\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0044cc\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* Power button \cb4 with LED ring \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 92\cf9 \cb3 , \cf13 0\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 025\cf9 \cb3 , \cf13 0.\cb4 025\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 , \cf13 \cb4 16\cf9 \cb3 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x505050\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.8\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf15 \cb4 mesh\cf16 \cb3  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 92\cf9 \cb3 , \cf13 0\cf9 , \cf13 0.\cb4 564\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9 \cb4             <\cf6 torusGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.018\cf9 , \cf13 0.003\cf9 , \cf13 8\cf9 , \cf13 16\cf9 ]\cf14 \}\cf9  \cb3 />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00ff00\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* System status LEDs */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 group\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.92\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.08\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff44\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 0.035\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0xff8800\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 15\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 0.07\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x0088ff\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 group\cf9 >\cf5 \
+\cf9         </\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       )\}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* ===== DELL \cb4 POWEREDGE R750 \cb3 SERVER ===== */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "srv"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - matte black \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  castShadow\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.12\cf9 , \cf10 h\cf9 , \cf13 1.08\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0c0e\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front bezel with perforations */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.02\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x101214\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.45\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14               \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 3\cf9  \}).\cf8 map\cf9 ((_, j) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 j\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , (\cf10 j\cf12  -\cf13  1\cf9 ) \cf12 *\cf10  h\cf12  *\cf13  0.3\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               ))\cf14 \}\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Dell EMC logo */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 075\cf14 \cb3 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#007db8"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 055\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/\cb4 KFOlCnqEu92Fr1MmWUlfBBc4\cb3 .ttf"\cf5 \
+\cf16             letterSpacing\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3             DELL\cb4  EMC\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 04\cf14 \cb3 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#\cb4 666666\cb3 "\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 11\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             PowerEdge R750\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Blue accent line \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.015\cf9 \cb3 , \cf13 \cb4 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9             \cb4 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.06\cf9 , \cf13 0.015\cf9 , \cf13 0.003\cf9 ]\cf14 \}\cf9  />\cf5 \cb3 \
+\cf9             \cb4 <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x007db8\cf14 \}\cf9  />\cf5 \cb3 \
+\cf9 \cb4           </\cf15 mesh\cf9 >\cf5 \cb3 \
+\cf9 \cb4           \cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* 12x 3.5" Hot-swap drive bays */\cf14 \}\cf5 \
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 12\cf9  \}).\cf8 map\cf9 ((_, d) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6             const\cf11  row\cf12  =\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 d\cf12  /\cf13  6\cf9 )\cf5 \
+\cf6             const\cf11  col\cf12  =\cf10  d\cf12  %\cf13  6\cf5 \
+\cf6             const\cf11  dx\cf12  = -\cf13 0.7\cf12  +\cf10  col\cf12  *\cf13  0.235\cf5 \
+\cf6             const\cf11  dy\cf12  =\cf13  0.12\cf12  -\cf10  row\cf12  *\cf13  0.32\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7             return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3               <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 \cb4 d\cf14 \cb3 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Drive \cb4 carrier/\cb3 caddy \cb4 - brushed aluminum \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 \cb4 dx\cf9 \cb3 , \cf10 \cb4 dy\cf9 \cb3 , \cf13 0.\cb4 552\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 21\cf9 \cb3 , \cf13 0.28\cf9 , \cf13 0.\cb4 035\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x585c60\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 25\cf14 \cb3 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf16  \cb4 clearcoat\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf9  \cb3 />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Handle recessed area */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 dx\cf9 , \cf10 dy\cf12  +\cf13  0.11\cf9 , \cf13 0.568\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.17\cf9 , \cf13 0.04\cf9 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.15\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Orange release button */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 dx\cf12  +\cf13  0.06\cf9 , \cf10 dy\cf12  +\cf13  0.11\cf9 , \cf13 0.575\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.025\cf9 , \cf13 0.025\cf9 , \cf13 0.008\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xff6600\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 /* Drive \cb4 bay number \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 \cb4 dx\cf12  -\cf13  0.075\cf9 \cb3 , \cf10 \cb4 dy\cf12 \cb3  +\cf13  0.\cb4 11\cf9 \cb3 , \cf13 0.\cb4 575\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 03\cf9 \cb3 , \cf13 0.\cb4 02\cf9 \cb3 , \cf13 0.\cb4 002\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x222222\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 /* \cb4 Status\cb3  LED \cb4 (blue = healthy) \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 \cb4 dx\cf12 \cb3  +\cf13  0.\cb4 085\cf9 \cb3 , \cf10 \cb4 dy\cf12 \cb3  +\cf13  0.12\cf9 , \cf13 0.575\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x0088ff\cf14 \cb3 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x001830\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 0.1\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Activity LED \cb4 (green blink) \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 \cb4 dx\cf12 \cb3  +\cf13  0.\cb4 085\cf9 \cb3 , \cf10 \cb4 dy\cf12 \cb3  +\cf13  0.1\cf9 , \cf13 0.575\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x00ff44\cf14 \cb3 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x001808\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 18\cf12 \cb3  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  \cb4 25\cf14 \cb3 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  \cb4 8\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.006\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7               </\cf15 group\cf9 >\cf5 \
+\cf9             )\cf5 \
+\cf9           \})\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Info panel area \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 8\cf9 \cb3 , \cf13 0\cf9 , \cf13 0.\cb4 548\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 3\cf9 \cb3 , \cf10 \cb4 h\cf12  *\cf13  \cb3 0.\cb4 65\cf9 \cb3 , \cf13 0.\cb4 02\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0c0e10\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* iDRAC Quick Sync 2 module */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.72\cf9 , \cf13 0.15\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.08\cf9 , \cf13 0.06\cf9 , \cf13 0.015\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.72\cf9 , \cf13 0.15\cf9 , \cf13 0.567\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 circleGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.02\cf9 , \cf13 16\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x003355\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Dedicated iDRAC port */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf13 0.15\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.058\cf9 , \cf13 0.045\cf9 , \cf13 0.015\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0a0a\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16             fontSize\cf12 =\cf14 \{\cf13 0.018\cf14 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#007db8"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "center"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf13 0.19\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             iDRAC\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* VGA port */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 88\cf9 \cb3 , \cf13 0.\cb4 05\cf9 \cb3 , \cf13 0.\cb4 558\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 048\cf9 \cb3 , \cf13 0.\cb4 032\cf9 \cb3 , \cf13 0.\cb4 012\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x0055aa\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Dual \cb3 USB \cb4 3.0\cb3  */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf13 0\cf9 , \cf13 0.\cb4 05\cf9 \cb3 ].\cf8 map\cf9 ((offset, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 i\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 75\cf12 \cb3  +\cf10  offset\cf9 , \cf12 \cb4 -\cf13 0.05\cf9 \cb3 , \cf13 0.\cb4 558\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 035\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9               <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x0044cc\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7             </\cf15 mesh\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 System ID \cb3 button */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 88\cf9 \cb3 , \cf12 -\cf13 0.\cb4 1\cf9 \cb3 , \cf13 0.\cb4 558\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 015\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 , \cf13 0.01\cf9 , \cf13 12\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0066cc\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Power button with ring */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf12 -\cf13 0.18\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.022\cf9 , \cf13 0.022\cf9 , \cf13 0.012\cf9 , \cf13 16\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404040\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.8\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 88\cf9 \cb3 , \cf12 -\cf13 0.\cb4 18\cf9 \cb3 , \cf13 0.\cb4 566\cf9 \cb3 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x00ff44\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 012\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9 \cb4           \cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* System health LEDs */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.06\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff44\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.09\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x007db8\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  />\cf5 \
+\cf9         </\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       )\}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* ===== ARUBA CLEARPASS \cb4 C3010 \cb3 ===== */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "aruba"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - silver/white \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  castShadow\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.12\cf9 , \cf10 h\cf9 , \cf13 1.08\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xf0f0f0\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.15\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front bezel */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.02\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xe8e8e8\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.45\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.1\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14               \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 3\cf9  \}).\cf8 map\cf9 ((_, j) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 j\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , (\cf10 j\cf12  -\cf13  1\cf9 ) \cf12 *\cf10  h\cf12  *\cf13  0.3\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               ))\cf14 \}\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Aruba orange stripe */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.018\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.06\cf9 , \cf13 0.025\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xff6600\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* HPE Aruba logo */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 065\cf14 \cb3 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#ff6600"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 065\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc4.ttf"\cf5 \
+\cf16             letterSpacing\cf12 =\cf14 \{\cf13 0.04\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             aruba\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16             fontSize\cf12 =\cf14 \{\cf13 0.035\cf14 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#666666"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.96\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.11\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3             \cb4 ClearPass C3010\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 025\cf14 \cb3 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#\cb4 888888\cb3 "\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 14\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3             \cb4 a Hewlett Packard Enterprise company\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf6 Text\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Port section */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf12             </\cf10 group\cf12 >\cf5 \
+          ))\}\
+          \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           \{\cf2 /* Dark port panel area */\cf9 \}\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 0.02\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 1.55\cf9 , \cf10 h\cf12  *\cf13  0.55\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+          \
+\cf9           \{\cf2 /* 4x GbE Management ports */\cf9 \}\cf5 \
+\cf9           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{\cf10  length\cf9 :\cf13  4\cf9  \}).\cf8 map\cf9 ((_, p)\cf6  =>\cf9  (\cf5 \
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 p\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.5\cf12  +\cf10  p\cf12  *\cf13  0.2\cf9 , \cf13 0\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.075\cf9 , \cf13 0.055\cf9 , \cf13 0.018\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0c0e10\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.75\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\cf9               <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.5\cf12  +\cf10  p\cf12  *\cf13  0.2\cf9 , \cf12 -\cf13 0.038\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff88\cf14 \}\cf16  altColor\cf12 =\cf14 \{\cf13 0x081808\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 2\cf12  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  4\cf14 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  6\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.006\cf14 \}\cf9  />\cf5 \
+\cf9               <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.5\cf12  +\cf10  p\cf12  *\cf13  0.2\cf9 , \cf12 -\cf13 0.048\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0xffaa00\cf14 \}\cf16  altColor\cf12 =\cf14 \{\cf13 0x180800\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 12\cf12  +\cf10  Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  18\cf14 \}\cf16  offset\cf12 =\cf14 \{\cf10 Math\cf9 .\cf8 random\cf9 () \cf12 *\cf13  6\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.005\cf14 \}\cf9  />\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\}\cf5 \
+          \
+\cf9           \{\cf2 /* SFP+ ports */\cf9 \}\cf5 \
+\cf9           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{\cf10  length\cf9 :\cf13  2\cf9  \}).\cf8 map\cf9 ((_, s)\cf6  =>\cf9  (\cf5 \
+\cf9             <\cf6 SFPModule\cf16  key\cf12 =\cf14 \{\cf10 s\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.35\cf12  +\cf10  s\cf12  *\cf13  0.08\cf9 , \cf13 0\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9           ))\}\cf5 \
+          \
+\cf9           \{\cf2 /* LCD info panel */\cf9 \}\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.72\cf9 , \cf13 0.02\cf9 , \cf13 0.548\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.28\cf9 , \cf13 0.18\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.72\cf9 , \cf13 0.02\cf9 , \cf13 0.56\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.24\cf9 , \cf13 0.14\cf9 , \cf13 0.003\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x001a08\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.72\cf9 , \cf13 0.02\cf9 , \cf13 0.563\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.22\cf9 , \cf13 0.12\cf9 , \cf13 0.001\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00cc44\cf14 \}\cf16  transparent opacity\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+          \
+\cf9           \{\cf2 /* Power/Reset buttons */\cf9 \}\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf13 0.04\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.01\cf9 , \cf13 12\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404040\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.7\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.88\cf9 , \cf12 -\cf13 0.02\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.012\cf9 , \cf13 0.012\cf9 , \cf13 0.008\cf9 , \cf13 12\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606060\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+          \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           \{\cf2 /* Status LEDs */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 95\cf9 \cb3 , \cf10 \cb4 h\cf12  /\cf13  2\cf12  -\cf13  \cb3 0.\cb4 05\cf9 \cb3 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x00ff44\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 95\cf9 \cb3 , \cf10 \cb4 h\cf12  /\cf13  2\cf12  -\cf13  \cb3 0.\cb4 08\cf9 \cb3 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0xff6600\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 \cb4 0.3\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 008\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9 \cb4           <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.11\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x0088ff\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 1.5\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.008\cf14 \}\cf9  /\cb3 >\cf5 \
+\cf12         </\cf10 group\cf12 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf5 \cb7       )\}\
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* ===== \cb4 24-PORT \cb3 PATCH PANEL ===== */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "patch"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - black metal \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  \cb4 castShadow\cf9 \cb3 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.\cb4 12\cf9 \cb3 , \cf10 h\cf9 , \cf13 \cb4 1.08\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 \cb4 meshPhysicalMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x1a1c1e\cf14 \cb3 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.\cb4 5\cf14 \cb3 \}\cf16  \cb4 metalness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf9  \cb3 />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front plate */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x101214\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Label area */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.88\cf9 , \cf13 0\cf9 , \cf13 0.548\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.2\cf9 , \cf10 h\cf12  *\cf13  0.6\cf9 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xf0f0f0\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16             fontSize\cf12 =\cf14 \{\cf13 0.035\cf14 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#333333"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "center"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.88\cf9 , \cf13 0.02\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             CAT6A\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16             fontSize\cf12 =\cf14 \{\cf13 0.025\cf14 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#666666"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "center"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.88\cf9 , \cf12 -\cf13 0.02\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             PATCH\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* 24 \cb4 keystone\cb3  ports */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 24\cf9  \}).\cf8 map\cf9 ((_, pp) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \cb3             const\cf11  px\cf12  = -\cf13 0.\cb4 68\cf12 \cb3  +\cf10  pp\cf12  *\cf13  0.\cb4 062\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7             return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9               <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 pp\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 \cb4 /* Port housing */\cf14 \}\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb4                 <\cf15 mesh\cf16  position\cf12 \cb3 =\cf14 \{\cf9 [\cf10 \cb4 px\cf9 \cb3 , \cf13 0\cf9 , \cf13 0.\cb4 552\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 \cb4 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 \cb4 [\cf13 0.054\cf9 , \cf10 h\cf12  *\cf13  \cb3 0.\cb4 65\cf9 , \cf13 0.018\cf9 ]\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0c0e\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3                 \{\cf2 /* \cb4 Keystone jack - white\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf13 0\cf9 , \cf13 0.\cb4 562\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 044\cf9 \cb3 , \cf10 \cb4 h\cf12  *\cf13  \cb3 0.\cb4 5\cf9 \cb3 , \cf13 0.\cb4 008\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0xf0f0f0\cf14 \}\cf16  \cb4 roughness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf9  \cb3 />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Port opening */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf13 0.015\cf9 , \cf13 0.567\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.032\cf9 , \cf13 0.022\cf9 , \cf13 0.002\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* Port number */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 px\cf9 , \cf12 -\cf13 0.035\cf9 , \cf13 0.567\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.028\cf9 , \cf13 0.015\cf9 , \cf13 0.001\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x2a2a2a\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               </\cf15 group\cf9 >\cf5 \
+\cf9             )\cf5 \
+\cf9           \})\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         </\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       )\}\cf5 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \{\cf2 /* ===== \cb4 APC SMART-\cb3 UPS \cb4 SRT 3000VA \cb3 ===== */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       \{\cf10 type\cf12  ===\cf17  "ups"\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf15 \cb4 group\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* \cb4 Main chassis - matte black \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  castShadow\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.12\cf9 , \cf10 h\cf9 , \cf13 1.08\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Front bezel */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.54\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 2.08\cf9 , \cf10 h\cf12  -\cf13  0.02\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x141414\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.55\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.25\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Rack ears */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 1.08\cf9 , \cf13 1.08\cf9 ].\cf8 map\cf9 ((ex, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 group\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 ear\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , \cf13 0\cf9 , \cf13 0.53\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.1\cf9 , \cf10 h\cf12  -\cf13  0.01\cf9 , \cf13 0.06\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                 <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x404448\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.9\cf14 \}\cf9  />\cf5 \
+\cf9               </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14               \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 3\cf9  \}).\cf8 map\cf9 ((_, j) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 j\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ex\cf9 , (\cf10 j\cf12  -\cf13  1\cf9 ) \cf12 *\cf10  h\cf12  *\cf13  0.3\cf9 , \cf13 0.565\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 cylinderGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.015\cf9 , \cf13 0.015\cf9 , \cf13 0.012\cf9 , \cf13 6\cf9 ]\cf14 \}\cf16  rotation\cf12 =\cf14 \{\cf9 [\cf10 Math\cf9 .\cf11 PI\cf12  /\cf13  2\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshPhysicalMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x606468\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.95\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.05\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               ))\cf14 \}\cf5 \
+\cf9             </\cf15 group\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* APC by Schneider Electric logo */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 09\cf14 \cb3 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#00aa44"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 08\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/\cb4 KFOlCnqEu92Fr1MmWUlfBBc4\cb3 .ttf"\cf5 \
+\cf16             letterSpacing\cf12 =\cf14 \{\cf13 0.08\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           >\cf5 \
+\cf9             APC\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             fontSize\cf12 =\cf14 \{\cf13 0.\cb4 032\cf14 \cb3 \}\cf5 \
+\cf16             color\cf12 =\cf17 "#666666"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\cf16             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.96\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.13\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf5 \
+\cf16             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\cf9             by Schneider Electric\cf5 \
+\cf9           </\cf6 Text\cf9 >\cf5 \
+\cf9           <\cf6 Text\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16             fontSize\cf12 =\cf14 \{\cf13 0.038\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             color\cf12 =\cf17 "#888888"\cf5 \
+\cf16             anchorX\cf12 =\cf17 "left"\cf5 \
+\cf16             anchorY\cf12 =\cf17 "middle"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3             position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 96\cf9 \cb3 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.\cb4 175\cf9 \cb3 , \cf13 0.\cb4 555\cf9 \cb3 ]\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7             font\cf12 =\cf17 "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5Q.ttf"\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3             Smart-UPS \cb4 SRT \cb3 3000VA\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf6 Text\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Green accent line \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf10 \cb4 h\cf12  /\cf13  2\cf12  -\cf13  \cb3 0.\cb4 018\cf9 \cb3 , \cf13 0.\cb4 545\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 2.06\cf9 \cb3 , \cf13 0.\cb4 022\cf9 \cb3 , \cf13 0.\cb4 004\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 \cb4 meshBasicMaterial\cf16 \cb3  color\cf12 =\cf14 \{\cf13 \cb4 0x00aa44\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Main LCD display with bezel */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.45\cf9 , \cf13 0.08\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.55\cf9 , \cf13 0.32\cf9 , \cf13 0.025\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0a0a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.45\cf9 , \cf13 0.08\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.48\cf9 , \cf13 0.26\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x001a08\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 45\cf9 \cb3 , \cf13 0.\cb4 08\cf9 \cb3 , \cf13 0.\cb4 562\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 45\cf9 \cb3 , \cf13 0.\cb4 23\cf9 \cb3 , \cf13 0.\cb4 002\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00ff88\cf14 \}\cf16  transparent opacity\cf12 =\cf14 \{\cf13 0.\cb4 85\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           </\cf15 mesh\cf9 >\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Control buttons under display \cb3 */\cf14 \}\cf5 \
+\cf14           \{\cf9 [\cf12 -\cf13 0.58\cf9 , \cf12 -\cf13 0.48\cf9 , \cf12 -\cf13 0.38\cf9 , \cf12 -\cf13 0.28\cf9 ].\cf8 map\cf9 ((bx, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf15 mesh\cf16  key\cf12 =\cf14 \{\cf10 i\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 bx\cf9 , \cf12 -\cf13 0.12\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9               <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.06\cf9 , \cf13 0.04\cf9 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9               <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x303030\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.4\cf14 \}\cf9  />\cf5 \
+\cf9             </\cf15 mesh\cf9 >\cf5 \
+\cf9           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Battery level LED bar */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.15\cf9 , \cf13 0.18\cf9 , \cf13 0.548\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.5\cf9 , \cf13 0.06\cf9 , \cf13 0.015\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.6\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 5\cf9  \}).\cf8 map\cf9 ((_, i) \cf6 =>\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3             <\cf6 LED\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 bat\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.\cb4 05\cf12 \cb3  +\cf10  i\cf12  *\cf13  0.\cb4 09\cf9 \cb3 , \cf13 0.\cb4 18\cf9 \cb3 , \cf13 0.\cb4 558\cf9 \cb3 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 \cb4 0x00ff44\cf14 \cb3 \}\cf16  altColor\cf12 =\cf14 \{\cf13 \cb4 0x001a08\cf14 \cb3 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.\cb4 15\cf14 \cb3 \}\cf16  offset\cf12 =\cf14 \{\cf10 i\cf12  *\cf13  0.\cb4 5\cf14 \cb3 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 015\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* \cb4 Load level LED bar \cb3 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.15\cf9 , \cf13 0.08\cf9 \cb3 , \cf13 \cb4 0.548\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9             <\cf6 \cb4 boxGeometry\cf16  args\cf12 \cb3 =\cf14 \{\cf9 [\cf13 0.\cb4 5\cf9 \cb3 , \cf13 0.\cb4 06\cf9 \cb3 , \cf13 0.\cb4 015\cf9 \cb3 ]\cf14 \}\cf9 \cb4  /\cb3 >\cf5 \
+\cf9 \cb4             <\cf6 meshStandardMaterial\cf16  color\cf12 \cb3 =\cf14 \{\cf13 \cb4 0x1a1a1a\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 \cb3 0.\cb4 6\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9 \cb4           </\cf15 mesh\cf9 \cb3 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb4           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 5\cf9  \}).\cf8 map\cf9 ((_, i) \cf6 =>\cf9  (\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9             <\cf6 LED\cf16  key\cf12 =\cf14 \{\cf9 `\cf17 load\cf14 $\{\cf10 i\cf14 \}\cf9 `\cf14 \}\cf16  position\cf12 =\cf14 \{\cf9 [\cf12 -\cf13 0.05\cf12  +\cf10  i\cf12  *\cf13  0.09\cf9 , \cf13 0.08\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf10 i\cf12  <\cf13  3\cf14  ?\cf13  0x00ff44\cf14  :\cf13  0xffaa00\cf14 \}\cf16  altColor\cf12 =\cf14 \{\cf13 0x0a0a08\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.08\cf14 \}\cf16  offset\cf12 =\cf14 \{\cf10 i\cf12  *\cf13  0.3\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.015\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           ))\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3           \{\cf2 /* Outlet banks - IEC C13 */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.55\cf9 , \cf12 -\cf13 0.02\cf9 , \cf13 0.545\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.6\cf9 , \cf10 h\cf12  *\cf13  0.5\cf9 , \cf13 0.02\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0c0c0c\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.85\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf10 Array\cf9 .\cf8 from\cf9 (\{ \cf10 length\cf9 : \cf13 8\cf9  \}).\cf8 map\cf9 ((_, o) \cf6 =>\cf9  \{\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf6             const\cf11  ox\cf12  =\cf13  0.35\cf12  +\cf9  (\cf10 o\cf12  %\cf13  4\cf9 ) \cf12 *\cf13  0.13\cf5 \
+\cf6             const\cf11  oy\cf12  =\cf13  0.06\cf12  -\cf10  Math\cf9 .\cf8 floor\cf9 (\cf10 o\cf12  /\cf13  4\cf9 ) \cf12 *\cf13  0.14\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14             return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9               <\cf15 group\cf16  key\cf12 =\cf14 \{\cf10 o\cf14 \}\cf9 >\cf5 \
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ox\cf9 , \cf10 oy\cf9 , \cf13 0.558\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.08\cf9 , \cf13 0.055\cf9 , \cf13 0.015\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x1a1a1a\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14                 \{\cf2 /* IEC pins */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ox\cf12  -\cf13  0.015\cf9 , \cf10 oy\cf9 , \cf13 0.568\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.008\cf9 , \cf13 0.035\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0a0a\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ox\cf12  +\cf13  0.015\cf9 , \cf10 oy\cf9 , \cf13 0.568\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.008\cf9 , \cf13 0.035\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0a0a\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9                 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf10 ox\cf9 , \cf10 oy\cf12  +\cf13  0.015\cf9 , \cf13 0.568\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9                   <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.012\cf9 , \cf13 0.006\cf9 , \cf13 0.005\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9                   <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0a0a0a\cf14 \}\cf9  />\cf5 \
+\cf9                 </\cf15 mesh\cf9 >\cf5 \
+\cf9               </\cf15 group\cf9 >\cf5 \
+\cf9             )\cf5 \
+\cf9           \})\cf14 \}\cf5 \
+\cf9           \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb7           \{\cf2 /* Cooling fans */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 SpinningFan\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 9\cf9 \cb3 , \cf13 0.\cb4 12\cf9 \cb3 , \cf13 0.555\cf9 ]\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 09\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9           <\cf6 SpinningFan\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.\cb4 9\cf9 \cb3 , \cf12 -\cf13 0.\cb4 12\cf9 \cb3 , \cf13 0.555\cf9 ]\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.\cb4 09\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9 \cb4           \cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf14           \{\cf2 /* Status LEDs cluster */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9           <\cf15 group\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0.95\cf9 , \cf10 h\cf12  /\cf13  2\cf12  -\cf13  0.1\cf9 , \cf13 0.555\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00ff44\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.012\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 0.04\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0x00aa44\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9             <\cf6 LED\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 0.08\cf9 , \cf13 0\cf9 ]\cf14 \}\cf16  baseColor\cf12 =\cf14 \{\cf13 0xff8800\cf14 \}\cf16  rate\cf12 =\cf14 \{\cf13 0.2\cf14 \}\cf16  size\cf12 =\cf14 \{\cf13 0.01\cf14 \}\cf9  />\cf5 \
+\cf9           </\cf15 group\cf9 >\cf5 \
+\cf9         </\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       )\}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf12     </\cf10 group\cf12 >\cf5 \
+  )\
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf5   \
+\pard\pardeftab720\partightenfactor0
+\cf14   return\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     <\cf15 group\cf9  \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb3       position\cf12 =\cf14 \{\cf9 [\cf13 \cb4 17\cf9 \cb3 , \cf13 5.5\cf9 , \cf12 -\cf13 12.7\cf9 ]\cf14 \}\cf9  \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf16 \cb7       onPointerOver\cf12 =\cf14 \{\cf9 () \cf6 =>\cf8  onHover\cf9 ?.(\cf17 "Lebanon Internet Traffic"\cf9 )\cf14 \}\cf9  \cf5 \
+\cf16       onPointerOut\cf12 =\cf14 \{\cf9 () \cf6 =>\cf8  onHover\cf9 ?.(\cf13 null\cf9 )\cf14 \}\cf9  \cf5 \
+\cf16       onClick\cf12 =\cf14 \{\cf9 () \cf6 =>\cf8  onClick\cf9 ?.(\cf17 "contact"\cf9 )\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9     >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* Monitor frame */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf12 -\cf13 0.1\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 6\cb4 .5\cf9 \cb3 , \cf13 \cb4 4.8\cf9 \cb3 , \cf13 0.18\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x181c20\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.7\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Monitor bezel with LED strip */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 6.3\cf9 \cb3 , \cf13 4\cb4 .6\cf9 \cb3 , \cf13 0.1\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x101418\cf14 \}\cf16  roughnes\cf12 =\cf14 \{\cf13 0.5\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* LED accent strip around bezel */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 2.\cb4 25\cf9 \cb3 , \cf13 0.06\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 6.1\cf9 \cb3 , \cf13 0.02\cf9 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00ffe7\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf12 -\cf13 2.\cb4 25\cf9 \cb3 , \cf13 0.06\cf9 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 6.1\cf9 \cb3 , \cf13 0.02\cf9 , \cf13 0.01\cf9 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00ffe7\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* Screen with canvas texture */\cf14 \}\cf5 \
+\cf14       \{\cf10 tex\cf12  &&\cf9  (\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9         <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf13 0.055\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3           <\cf6 planeGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 6\cb3 .0\cf9 , \cf13 \cb4 4.4\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7           <\cf6 meshStandardMaterial\cf16  map\cf12 =\cf14 \{\cf10 tex\cf14 \}\cf16  emissiveMap\cf12 =\cf14 \{\cf10 tex\cf14 \}\cf16  emissive\cf12 =\cf14 \{\cf13 0xffffff\cf14 \}\cf16  emissiveIntensity\cf12 =\cf14 \{\cf13 1.3\cf14 \}\cf9  />\cf5 \
+\cf9         </\cf15 mesh\cf9 >\cf5 \
+\cf9       )\cf14 \}\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14       \{\cf2 /* LED indicator lights */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 \cb4 2.9\cf9 \cb3 , \cf12 -\cf13 2.\cb4 35\cf9 \cb3 , \cf13 0.06\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 sphereGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.04\cf9 , \cf13 8\cf9 , \cf13 8\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x00ff88\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 \cb4 2.7\cf9 \cb3 , \cf12 -\cf13 2.\cb4 35\cf9 \cb3 , \cf13 0.06\cf9 ]\cf14 \}\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 sphereGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.04\cf9 , \cf13 8\cf9 , \cf13 8\cf9 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 meshBasicMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x0088ff\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\cf9       \cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf14 \cb3       \{\cf2 /* \cb4 Wall mount arm\cb3  */\cf14 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9       <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 \cb4 0\cf9 \cb3 , \cf12 \cb4 -\cf13 \cb3 0.\cb4 25\cf9 \cb3 ]\cf14 \}\cf9 >\cf5 \
+\cf9         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 \cb4 0.8\cf9 \cb3 , \cf13 0.15\cf9 , \cf13 0.\cb4 3\cf9 \cb3 ]\cf14 \}\cf9  />\cf5 \
+\cf9         <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 \cb4 0x202428\cf14 \cb3 \}\cf16  \cb4 metalness\cf12 \cb3 =\cf14 \{\cf13 0.\cb4 7\cf14 \cb3 \}\cf16  \cb4 roughness\cf12 \cb3 =\cf14 \{\cf13 0.\cb4 3\cf14 \cb3 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       </\cf15 mesh\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3       \cb4 <\cf15 mesh\cf16  position\cf12 =\cf14 \{\cf9 [\cf13 0\cf9 , \cf13 0\cf9 , \cf12 -\cf13 0.45\cf9 ]\cf14 \}\cf9 >\cf5 \cb3 \
+\cf9 \cb4         <\cf6 boxGeometry\cf16  args\cf12 =\cf14 \{\cf9 [\cf13 0.15\cf9 , \cf13 0.8\cf9 , \cf13 0.15\cf9 ]\cf14 \}\cf9  />\cf5 \cb3 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7         <\cf6 meshStandardMaterial\cf16  color\cf12 =\cf14 \{\cf13 0x202428\cf14 \}\cf16  metalness\cf12 =\cf14 \{\cf13 0.7\cf14 \}\cf16  roughness\cf12 =\cf14 \{\cf13 0.3\cf14 \}\cf9  />\cf5 \
+\cf9       </\cf15 mesh\cf9 >\cf5 \
+\cf9     </\cf15 group\cf9 >\cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f1 \cf5 \
+\pard\pardeftab720\partightenfactor0
+
+\f0 \cf9   <\cf6 ServerRack\cf16  x\cf12 =\cf14 \{\cf12 -\cf13 8\cf14 \}\cf16  onHover\cf12 =\cf14 \{\cf10 onHover\cf14 \}\cf16  onClick\cf12 =\cf14 \{\cf10 onSectionClick\cf14 \}\cf9  />\cf5 \
+\cf9   <\cf6 ServerRack\cf16  x\cf12 =\cf14 \{\cf12 -\cf13 5\cf14 \}\cf16  onHover\cf12 =\cf14 \{\cf10 onHover\cf14 \}\cf16  onClick\cf12 =\cf14 \{\cf10 onSectionClick\cf14 \}\cf9  />\cf5 \
+\cf9   \{\cf2 /* Inter-rack fiber cables with data flow */\cf9 \}\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb3   \{\cf2 \cb4 /* Comprehensive rack cabling with realistic cable management */\cf9 \}\cf5 \cb3 \
+\cf9   <\cf6 \cb4 RackCableSystem\cf16 \cb3  rackX\cf12 =\cf14 \{\cf12 -\cf13 \cb4 11\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9   <\cf6 \cb4 RackCableSystem\cf16 \cb3  rackX\cf12 =\cf14 \{\cf12 -\cf13 \cb4 8\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9   \cb4 <\cf6 RackCableSystem\cf16  rackX\cf12 =\cf14 \{\cf12 -\cf13 5\cf14 \}\cf9  />\cf5 \cb3 \
+\cf9   \{\cf2 \cb4 /* Cross-rack fiber backbone interconnects */\cf9 \}\cf5 \cb3 \
+\cf9   <\cf6 \cb4 CrossRackFiberBackbone\cf16 \cb3  rack1X\cf12 =\cf14 \{\cf12 -\cf13 \cb4 11\cf14 \cb3 \}\cf16  rack2X\cf12 =\cf14 \{\cf12 -\cf13 \cb4 8\cf14 \cb3 \}\cf9  />\cf5 \
+\cf9   <\cf6 CrossRackFiberBackbone\cf16  rack1X\cf12 =\cf14 \{\cf12 -\cf13 8\cf14 \}\cf16  rack2X\cf12 =\cf14 \{\cf12 -\cf13 5\cf14 \}\cf9  />\cf5 \
+\pard\pardeftab720\partightenfactor0
+\cf9 \cb7       <\cf6 WallMonitors\cf16  onHover\cf12 =\cf14 \{\cf10 onHover\cf14 \}\cf16  onClick\cf12 =\cf14 \{\cf10 onSectionClick\cf14 \}\cf9  />\cf5 \
+\cf9       <\cf6 Workstation\cf16  onHover\cf12 =\cf14 \{\cf10 onHover\cf14 \}\cf16  onClick\cf12 =\cf14 \{\cf10 onSectionClick\cf14 \}\cf9  />\cf5 \
+\cf9       <\cf6 Chair\cf9  />}

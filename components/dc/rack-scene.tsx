@@ -4,11 +4,11 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { CameraControls, CameraControlsImpl, Html, PerformanceMonitor, useProgress } from "@react-three/drei"
 import { Bloom, DepthOfField, EffectComposer, N8AO, Noise, ToneMapping, Vignette } from "@react-three/postprocessing"
-import { BlendFunction, ToneMappingMode } from "postprocessing"
+import { BlendFunction, ToneMappingMode, type DepthOfFieldEffect } from "postprocessing"
 import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js"
-import { ACCESS_POINT, heroRack } from "@/lib/dc/devices"
+import { ACCESS_POINT, U, heroRack } from "@/lib/dc/devices"
 import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
 import { LAPTOP_SCREEN_CENTER } from "@/lib/dc/laptop"
 import { rackCards } from "@/content/rack-cards"
@@ -20,6 +20,9 @@ import { Laptop } from "./laptop"
 import { Mug } from "./mug"
 import { AccessPoint } from "./access-point"
 import { TerminalOverlay } from "./terminal-overlay"
+import { Ambience } from "@/lib/dc/ambience"
+import { HA_PRIMARY, HA_TIMELINE, haBadges, haView, type BadgeTone, type HaPhase, type HaStep, type HaView } from "@/lib/dc/ha"
+import { FailoverPanel } from "./failover-panel"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -40,6 +43,8 @@ interface Stop {
   /** allow looking up (the ceiling AP) */
   lookUp?: boolean
   terminal?: boolean
+  /** pull this stop's device out on its rails */
+  extend?: boolean
 }
 
 function useStops(): Stop[] {
@@ -49,6 +54,20 @@ function useStops(): Stop[] {
       .filter((d) => d.hotspot)
       .forEach((d, i) => {
         const side = i % 2 === 0 ? 1 : -1
+        const slide = d.cfg.slide
+        if (slide) {
+          // pulled out on its rails: look down into the open tray
+          stops.push({
+            id: d.key,
+            label: d.cfg.short,
+            position: [0.2, d.centerY + 0.4, 0.6 + slide],
+            target: [0, d.centerY - 0.01, slide * 0.5],
+            cardId: d.cfg.cardId,
+            fit: 0.27,
+            extend: true,
+          })
+          return
+        }
         stops.push({
           id: d.key,
           label: d.cfg.short,
@@ -404,6 +423,80 @@ function SceneReady({ onAssets, onReady }: { onAssets: () => void; onReady: () =
   return null
 }
 
+/** Feeds the camera distance to the ambience so the fans get louder up close. */
+function AmbienceDriver({ ambience, on }: { ambience: Ambience; on: boolean }) {
+  const get = useThree((s) => s.get)
+  const n = useRef(0)
+  useFrame(() => {
+    if (!on || n.current++ % 6) return
+    const d = (get().controls as unknown as CameraControlsImpl | null)?.distance
+    if (d != null) ambience.setProximity(THREE.MathUtils.clamp((2.4 - d) / 1.9, 0, 1))
+  })
+  return null
+}
+
+// constant so React re-renders never re-apply it over the animated focus
+const DOF_TARGET: [number, number, number] = [0, 1.35, -0.1]
+
+/**
+ * Camera-like focus: sharp around the subject, soft beyond it. On a new stop the focus trails
+ * the camera move with a little extra blur, so the subject "racks" into focus like a film shot.
+ * The effect is created once and animated (changing its props would rebuild it and hitch).
+ */
+function FocusPull({ stop }: { stop: Stop }) {
+  const ref = useRef<DepthOfFieldEffect>(null)
+  const focus = useMemo(() => new THREE.Vector3(...stop.target), []) // eslint-disable-line react-hooks/exhaustive-deps
+  const goal = useMemo(() => new THREE.Vector3(), [])
+  const s = useRef({ range: 2.5, pull: 0 })
+  useEffect(() => {
+    s.current.pull = 1
+  }, [stop.id])
+  useFrame((_, delta) => {
+    const e = ref.current
+    if (!e?.target) return
+    const dt = Math.min(delta, 0.05)
+    const overview = stop.id === "overview"
+    goal.set(...stop.target)
+    focus.lerp(goal, 1 - Math.exp(-dt * 2.4))
+    e.target.copy(focus)
+    s.current.range += ((overview ? 2.5 : 0.55) - s.current.range) * (1 - Math.exp(-dt * 3))
+    e.cocMaterial.focusRange = s.current.range
+    s.current.pull = Math.max(0, s.current.pull - dt / 1.3)
+    const pull = s.current.pull * s.current.pull * (3 - 2 * s.current.pull) // smoothstep
+    e.bokehScale = (overview ? 1 : 2.5) + pull * 3
+  })
+  return <DepthOfField ref={ref} target={DOF_TARGET} worldFocusRange={2.5} bokehScale={1} height={540} />
+}
+
+const BADGE_TONE: Record<BadgeTone, string> = {
+  good: "border-[#3ee07a]/60 text-[#3ee07a]",
+  bad: "border-[#ff6b5b]/70 text-[#ff7a6b]",
+  warn: "border-[#ffb020]/70 text-[#ffb020] motion-safe:animate-pulse",
+  idle: "border-white/20 text-white/60",
+}
+
+/** HA role badges on the blank panels just above FGT-01 and below FGT-02 while their stop is open. */
+function HaBadges({ phase }: { phase: HaPhase }) {
+  const badges = haBadges(phase)
+  return (
+    <>
+      {mountedDevices()
+        .filter((d) => badges[d.key])
+        .map((d) => {
+          const b = badges[d.key]
+          const y = d.key === HA_PRIMARY ? d.centerY + U : d.centerY - U
+          return (
+            <Html key={d.key} position={[0.1, y, FACE_Z + 0.01]} center zIndexRange={[29, 0]} style={{ pointerEvents: "none" }}>
+              <div className={`whitespace-nowrap rounded-full border bg-black/70 px-2 py-0.5 font-mono text-[9px] tracking-[0.12em] uppercase backdrop-blur ${BADGE_TONE[b.tone]}`}>
+                {b.name} · {b.role}
+              </div>
+            </Html>
+          )
+        })}
+    </>
+  )
+}
+
 function HotspotButton({ label, active, glyph = "+", onClick }: { label: string; active: boolean; glyph?: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-label={label} className="group relative flex h-11 w-11 items-center justify-center">
@@ -429,7 +522,8 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
         .map((d) => {
           const [x, y] = facePoint(d.cfg, d.cfg.hotspot!.u, d.cfg.hotspot!.v)
           return (
-            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03]} center zIndexRange={[30, 0]}>
+            // a server pulled out on its rails takes its button with it
+            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03 + (activeStop === d.key ? (d.cfg.slide ?? 0) : 0)]} center zIndexRange={[30, 0]}>
               <HotspotButton label={`About ${d.cfg.name}`} active={activeStop === d.key} onClick={() => onStop(d.key)} />
             </Html>
           )
@@ -458,6 +552,8 @@ function Scene({
   cardOpen,
   onAssets,
   onReady,
+  ha,
+  haPhase,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -472,6 +568,8 @@ function Scene({
   cardOpen: boolean
   onAssets: () => void
   onReady: () => void
+  ha: HaView
+  haPhase: HaPhase
 }) {
   return (
     <>
@@ -483,20 +581,20 @@ function Scene({
       {capture && <CaptureHook setStop={setStop} setTraffic={setTraffic} />}
       <Suspense fallback={null}>
         <Room quality={quality} />
-        <OpenRack slots={heroRack} lowRes={quality === "low"}>
-          <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} />
+        <OpenRack slots={heroRack} lowRes={quality === "low"} extendedKey={stop.extend ? stop.id : undefined}>
+          <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} ledStates={ha.leds} paused={ha.paused} />
           <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
           <Mug />
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
         <Hotspots activeStop={stop.id} onStop={onStop} />
+        {stop.id === HA_PRIMARY && <HaBadges phase={haPhase} />}
         <SceneReady onAssets={onAssets} onReady={onReady} />
       </Suspense>
       {quality === "high" ? (
         <EffectComposer multisampling={4} enableNormalPass={false}>
           <N8AO halfRes aoRadius={0.35} distanceFalloff={0.6} intensity={2.2} color="#000000" />
-          {/* camera-like focus: sharp around the subject, soft beyond ~0.5 m */}
-          <DepthOfField target={stop.target} worldFocusRange={stop.id === "overview" ? 2.5 : 0.55} bokehScale={stop.id === "overview" ? 1 : 2.5} height={540} />
+          <FocusPull stop={stop} />
           <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={traffic ? 0.9 : 0.55} />
           <Noise opacity={0.025} blendFunction={BlendFunction.OVERLAY} />
           <Vignette offset={0.32} darkness={0.5} />
@@ -550,6 +648,21 @@ export default function RackScene({
   const [cardOpen, setCardOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)
   const [traffic, setTraffic] = useState(false)
+  const [sound, setSound] = useState(false)
+  const ambience = useMemo(() => new Ambience(), [])
+  useEffect(() => () => ambience.dispose(), [ambience])
+  // silence while the hero is off screen or the tab is in the background
+  useEffect(() => {
+    const sync = () => ambience.setPaused(!active || document.hidden)
+    sync()
+    document.addEventListener("visibilitychange", sync)
+    return () => document.removeEventListener("visibilitychange", sync)
+  }, [ambience, active])
+  const toggleSound = () => {
+    if (sound) ambience.stop()
+    else ambience.start() // inside the click: iOS only unlocks audio in a user gesture
+    setSound(!sound)
+  }
   const [interacted, setInteracted] = useState(false)
   const [dpr, setDpr] = useState(quality === "high" ? 1.75 : 1.25)
   const capture = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
@@ -589,6 +702,43 @@ export default function RackScene({
 
   const card = cardOpen && stop.cardId ? rackCards[stop.cardId] : null
 
+  // HA failover demo: scripted timeline, traffic view on while it runs
+  const [haPhase, setHaPhase] = useState<HaPhase>("idle")
+  const [haLog, setHaLog] = useState<NonNullable<HaStep["log"]>[]>([])
+  const [haRunning, setHaRunning] = useState(false)
+  const haTimers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const haViewNow = useMemo(() => haView(haPhase), [haPhase])
+  const trafficRef = useRef(traffic)
+  trafficRef.current = traffic
+  const trafficBefore = useRef(false)
+  const haRunningRef = useRef(false)
+  useEffect(() => () => haTimers.current.forEach(clearTimeout), [])
+  const runFailover = useCallback(() => {
+    haTimers.current.forEach(clearTimeout)
+    goTo(HA_PRIMARY)
+    setTerminalOpen(false)
+    setHaLog([])
+    setHaRunning(true)
+    // remember the visitor's own traffic setting (not one this demo switched on)
+    if (!haRunningRef.current) trafficBefore.current = trafficRef.current
+    haRunningRef.current = true
+    setTraffic(true)
+    const last = HA_TIMELINE[HA_TIMELINE.length - 1].at
+    haTimers.current = HA_TIMELINE.map((step) =>
+      setTimeout(() => {
+        if (step.phase) setHaPhase(step.phase)
+        if (step.log) setHaLog((l) => [...l, step.log!])
+      }, step.at * 1000 + 700)
+    )
+    haTimers.current.push(
+      setTimeout(() => {
+        setHaRunning(false)
+        haRunningRef.current = false
+        setTraffic(trafficBefore.current)
+      }, (last + 2.5) * 1000 + 700)
+    )
+  }, [goTo])
+
   return (
     <div className="relative h-full w-full overflow-hidden" style={{ background: BG }}>
       <Canvas
@@ -610,6 +760,7 @@ export default function RackScene({
         resize={capture ? { polyfill: ImmediateResizeObserver, debounce: 0 } : undefined}
       >
         <PerformanceMonitor onDecline={() => setDpr(1)} />
+        <AmbienceDriver ambience={ambience} on={sound} />
         <Scene
           quality={quality}
           reducedMotion={reducedMotion}
@@ -624,6 +775,8 @@ export default function RackScene({
           cardOpen={!!card}
           onAssets={onAssets}
           onReady={onReady}
+          ha={haViewNow}
+          haPhase={haPhase}
         />
       </Canvas>
 
@@ -639,6 +792,21 @@ export default function RackScene({
         >
           <span className={`h-1.5 w-1.5 rounded-full ${traffic ? "bg-[#5ff4ff] motion-safe:animate-pulse" : "bg-white/40"}`} />
           Live traffic
+        </button>
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-pressed={sound}
+          aria-label={sound ? "Mute data-centre sound" : "Play data-centre sound"}
+          className={`flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] tracking-[0.15em] uppercase backdrop-blur-md transition-colors ${
+            sound ? "border-[#5ff4ff] bg-[#5ff4ff]/15 text-[#5ff4ff]" : "border-white/15 bg-black/45 text-white/75 hover:border-white/40"
+          }`}
+        >
+          <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 6v4h3l4 3V3L5 6H2z" fill="currentColor" stroke="none" />
+            {sound ? <path d="M11.5 5.5a3.5 3.5 0 010 5M13.5 3.5a6.5 6.5 0 010 9" /> : <path d="M11.5 6l3.5 4M15 6l-3.5 4" />}
+          </svg>
+          Sound
         </button>
       </div>
 
@@ -667,16 +835,18 @@ export default function RackScene({
       {!interacted && (
         <>
           <p className="pointer-events-none absolute inset-x-0 bottom-[5.5rem] z-10 px-6 text-center font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase max-md:hidden">
-            Drag to look around · tap <span className="text-[#00ffe7]">+</span> for details
+            Drag to look around · scroll to zoom · tap <span className="text-[#00ffe7]">+</span> for details
           </p>
           <p className="pointer-events-none absolute bottom-[5.1rem] left-4 z-10 max-w-[55%] font-mono text-[9px] leading-relaxed tracking-[0.18em] text-white/65 uppercase md:hidden">
-            Two fingers to turn · tap <span className="text-[#00ffe7]">+</span> for details
+            Pinch to zoom · tap <span className="text-[#00ffe7]">+</span> for details
           </p>
         </>
       )}
 
-      <InfoCard card={card} onClose={close} />
-      <TerminalOverlay open={terminalOpen} onClose={close} />
+      <InfoCard card={card} onClose={close}>
+        {stop.id === HA_PRIMARY && <FailoverPanel running={haRunning} log={haLog} onRun={runFailover} />}
+      </InfoCard>
+      <TerminalOverlay open={terminalOpen} onClose={close} onAction={runFailover} />
     </div>
   )
 }

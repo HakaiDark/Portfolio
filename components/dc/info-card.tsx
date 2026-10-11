@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, type ReactNode } from "react"
 import type { RackCard } from "@/content/rack-cards"
 
 /** Side card on desktop, bottom sheet on phones. */
-export function InfoCard({ card: current, onClose }: { card: RackCard | null; onClose: () => void }) {
+export function InfoCard({ card: current, onClose, children }: { card: RackCard | null; onClose: () => void; children?: ReactNode }) {
   const closeRef = useRef<HTMLButtonElement>(null)
   // keep showing the last card while it animates out
   const last = useRef<RackCard | null>(null)
@@ -47,6 +47,8 @@ export function InfoCard({ card: current, onClose }: { card: RackCard | null; on
             </button>
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-white/85">{shown.summary}</p>
+          {/* interactive extras sit high up, so the phone sheet shows them without scrolling */}
+          {current && children}
           {shown.points && (
             <ul className="mt-4 space-y-2 text-sm leading-relaxed text-white/70">
               {shown.points.map((p) => (

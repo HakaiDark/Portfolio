@@ -1,6 +1,7 @@
 "use client"
 
-import { useLayoutEffect, useMemo, useRef } from "react"
+import { useLayoutEffect, useMemo, useRef, useState } from "react"
+import { useFrame } from "@react-three/fiber"
 import { RoundedBox, useTexture } from "@react-three/drei"
 import * as THREE from "three"
 import { BODY_WIDTH, PANEL_WIDTH, RACK_UNITS, U, devices, unitY, type DeviceConfig, type RackSlot } from "@/lib/dc/devices"
@@ -9,10 +10,13 @@ import {
   brushedRoughness,
   cableManagerFront,
   chassisSide,
+  fanTop,
+  heatsinkFins,
   patchPanelFront,
   railTexture,
   rearPanel,
   serverFront,
+  serverInternals,
   upsFront,
 } from "@/lib/dc/textures"
 
@@ -92,7 +96,122 @@ function Chassis({
 // ---------------------------------------------------------------------------
 // devices
 
-export function TexturedDevice({ cfg, centerY, lowRes }: { cfg: DeviceConfig; centerY: number; lowRes: boolean }) {
+const dimmGeo = new THREE.BoxGeometry(0.0014, 0.031, 0.133)
+const SHEET = 0.0012
+
+/**
+ * What a 1U server looks like pulled out on its rails with the lid off: open tray, drive cage,
+ * fan wall, two CPU heatsinks with their DIMM banks, PSUs and riser cards at the back.
+ * Only mounted while the server is out, so the closed rack costs nothing extra.
+ */
+function ServerInternals({ height, depth, color }: { height: number; depth: number; color: string }) {
+  const board = useMemo(() => serverInternals(), [])
+  const fan = useMemo(() => fanTop(), [])
+  const fins = useMemo(() => heatsinkFins(), [])
+  const floor = -height / 2 + SHEET
+  // texture fractions -> tray coordinates (u across, f from the back (0) to the front (1))
+  const x = (u: number) => (u - 0.5) * BODY_WIDTH
+  const z = (f: number) => FACE_Z - depth * (1 - f)
+  const dimmRef = useRef<THREE.InstancedMesh>(null)
+  const dimms = useMemo(() => {
+    const pts: [number, number][] = []
+    for (const cx of [0.31, 0.69]) for (const side of [-1, 1]) for (let i = 0; i < 6; i++) pts.push([x(cx + side * (0.105 + i * 0.022)), z(0.465)])
+    return pts
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    const m = new THREE.Matrix4()
+    dimms.forEach(([dx, dz], i) => dimmRef.current?.setMatrixAt(i, m.makeTranslation(dx, floor + 0.004 + 0.0155, dz)))
+    if (dimmRef.current) dimmRef.current.instanceMatrix.needsUpdate = true
+  }, [dimms, floor])
+  const wallH = height - 0.002
+  return (
+    <group>
+      {/* open tray: floor, side walls, rear wall */}
+      <mesh position={[0, floor - SHEET / 2, FACE_Z - depth / 2]} receiveShadow>
+        <boxGeometry args={[BODY_WIDTH, SHEET, depth]} />
+        <meshStandardMaterial color={color} metalness={0.55} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, floor + 0.0002, FACE_Z - depth / 2]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[BODY_WIDTH - 0.004, depth - 0.004]} />
+        <meshStandardMaterial map={board} roughness={0.7} metalness={0.15} />
+      </mesh>
+      {[-1, 1].map((s) => (
+        <mesh key={s} position={[s * (BODY_WIDTH / 2 - SHEET / 2), 0, FACE_Z - depth / 2]} castShadow receiveShadow>
+          <boxGeometry args={[SHEET, wallH, depth]} />
+          <meshStandardMaterial color={color} metalness={0.55} roughness={0.5} />
+        </mesh>
+      ))}
+      <mesh position={[0, 0, FACE_Z - depth + SHEET / 2]}>
+        <boxGeometry args={[BODY_WIDTH, wallH, SHEET]} />
+        <meshStandardMaterial color={color} metalness={0.55} roughness={0.5} />
+      </mesh>
+      {/* drive cage behind the bezel */}
+      <mesh position={[0, 0, z(0.93)]} castShadow>
+        <boxGeometry args={[BODY_WIDTH - 0.004, wallH, depth * 0.13]} />
+        <meshStandardMaterial color="#2c2f34" metalness={0.5} roughness={0.55} />
+      </mesh>
+      {/* fan wall: 7 hot-plug modules */}
+      {Array.from({ length: 7 }, (_, i) => (
+        <mesh key={i} position={[x(0.08 + i * 0.14), floor + 0.019, z(0.8)]} castShadow>
+          <boxGeometry args={[0.056, 0.038, 0.04]} />
+          <meshStandardMaterial attach="material-0" color="#141518" roughness={0.7} />
+          <meshStandardMaterial attach="material-1" color="#141518" roughness={0.7} />
+          <meshStandardMaterial attach="material-2" map={fan} roughness={0.6} />
+          <meshStandardMaterial attach="material-3" color="#141518" roughness={0.7} />
+          <meshStandardMaterial attach="material-4" color="#141518" roughness={0.7} />
+          <meshStandardMaterial attach="material-5" color="#141518" roughness={0.7} />
+        </mesh>
+      ))}
+      {/* CPU heatsinks */}
+      {[0.31, 0.69].map((cx) => (
+        <group key={cx} position={[x(cx), floor, z(0.465)]}>
+          <mesh position={[0, 0.003, 0]}>
+            <boxGeometry args={[0.07, 0.006, 0.066]} />
+            <meshStandardMaterial color="#b8bcc1" metalness={0.85} roughness={0.35} />
+          </mesh>
+          <mesh position={[0, 0.006 + 0.012, 0]} castShadow>
+            <boxGeometry args={[0.078, 0.024, 0.1]} />
+            <meshStandardMaterial attach="material-0" color="#9ea2a7" metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial attach="material-1" color="#9ea2a7" metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial attach="material-2" map={fins} metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial attach="material-3" color="#9ea2a7" metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial attach="material-4" color="#c4c8cc" metalness={0.8} roughness={0.35} />
+            <meshStandardMaterial attach="material-5" color="#c4c8cc" metalness={0.8} roughness={0.35} />
+          </mesh>
+        </group>
+      ))}
+      <instancedMesh ref={dimmRef} args={[dimmGeo, undefined, dimms.length]} castShadow>
+        <meshStandardMaterial color="#17391f" roughness={0.55} metalness={0.2} />
+      </instancedMesh>
+      {/* two hot-plug PSUs at the back right, riser cards at the back left */}
+      {[0.79, 0.915].map((u) => (
+        <mesh key={u} position={[x(u), floor + 0.0185, z(0.13)]} castShadow>
+          <boxGeometry args={[0.052, 0.037, depth * 0.26]} />
+          <meshStandardMaterial color="#3a3d42" metalness={0.6} roughness={0.45} />
+        </mesh>
+      ))}
+      {[0.1, 0.2].map((u) => (
+        <mesh key={u} position={[x(u), floor + 0.019, z(0.2)]} castShadow>
+          <boxGeometry args={[0.002, 0.03, depth * 0.24]} />
+          <meshStandardMaterial color="#1f4d33" roughness={0.6} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+export function TexturedDevice({
+  cfg,
+  centerY,
+  lowRes,
+  extended = false,
+}: {
+  cfg: DeviceConfig
+  centerY: number
+  lowRes: boolean
+  /** pulled out on its rails (devices with `slide`) */
+  extended?: boolean
+}) {
   const urls = [lowRes && cfg.textures.frontLow ? cfg.textures.frontLow : cfg.textures.front]
   if (cfg.textures.top) urls.push(cfg.textures.top)
   const [front, top] = useTexture(urls)
@@ -105,14 +224,52 @@ export function TexturedDevice({ cfg, centerY, lowRes }: { cfg: DeviceConfig; ce
     }
   }, [front, top])
   const [fw, fh] = faceSize(cfg)
+
+  // rails: ease out/in; the lid fades as the server clears the rack, revealing the internals
+  const slider = useRef<THREE.Group>(null)
+  const lid = useRef<THREE.MeshStandardMaterial>(null)
+  const progress = useRef(0)
+  const [open, setOpen] = useState(false)
+  useFrame((_, delta) => {
+    if (!cfg.slide) return
+    const goal = extended ? 1 : 0
+    const p = progress.current
+    if (Math.abs(goal - p) < 0.0005) return
+    const next = goal > p ? Math.min(1, p + Math.min(delta, 0.05) / 0.9) : Math.max(0, p - Math.min(delta, 0.05) / 0.7)
+    progress.current = next
+    const eased = next * next * (3 - 2 * next)
+    if (slider.current) slider.current.position.z = eased * cfg.slide
+    if (lid.current) lid.current.opacity = THREE.MathUtils.clamp(1 - (next - 0.35) / 0.4, 0, 1)
+    if ((next > 0) !== open) setOpen(next > 0)
+  })
+
   return (
     <group position={[0, centerY, 0]}>
-      <Chassis height={fh} depth={cfg.depth} color={cfg.chassisColor} units={cfg.rackUnits} topMap={top} seed={cfg.rackUnits * 13} />
-      <mesh position={[0, 0, FACE_Z + (cfg.faceIncludesEars ? 0.0012 : 0.0003)]}>
-        <planeGeometry args={[fw, fh]} />
-        <meshStandardMaterial map={front} metalness={0.3} roughness={0.5} />
-      </mesh>
-      {!cfg.faceIncludesEars && <Ears height={fh} color={cfg.chassisColor} />}
+      <group ref={slider}>
+        {open ? (
+          <>
+            <ServerInternals height={fh} depth={cfg.depth} color={cfg.chassisColor} />
+            <mesh position={[0, fh / 2 - SHEET / 2, FACE_Z - cfg.depth / 2]}>
+              <boxGeometry args={[BODY_WIDTH, SHEET, cfg.depth]} />
+              <meshStandardMaterial ref={lid} color={cfg.chassisColor} metalness={0.55} roughness={0.5} transparent depthWrite={false} />
+            </mesh>
+            {/* inner rail members travel with the chassis */}
+            {[-1, 1].map((s) => (
+              <mesh key={s} position={[s * (BODY_WIDTH / 2 + 0.005), 0, FACE_Z - cfg.depth / 2 - 0.02]}>
+                <boxGeometry args={[0.005, 0.018, cfg.depth]} />
+                <meshStandardMaterial color="#b4b8bd" metalness={0.85} roughness={0.32} />
+              </mesh>
+            ))}
+          </>
+        ) : (
+          <Chassis height={fh} depth={cfg.depth} color={cfg.chassisColor} units={cfg.rackUnits} topMap={top} seed={cfg.rackUnits * 13} />
+        )}
+        <mesh position={[0, 0, FACE_Z + (cfg.faceIncludesEars ? 0.0012 : 0.0003)]}>
+          <planeGeometry args={[fw, fh]} />
+          <meshStandardMaterial map={front} metalness={0.3} roughness={0.5} />
+        </mesh>
+        {!cfg.faceIncludesEars && <Ears height={fh} color={cfg.chassisColor} />}
+      </group>
     </group>
   )
 }
@@ -361,11 +518,14 @@ export function OpenRack({
   slots,
   managers = true,
   lowRes = false,
+  extendedKey,
   children,
 }: {
   slots: RackSlot[]
   managers?: boolean
   lowRes?: boolean
+  /** mounted-device key (e.g. "proliant-dl360@20") currently pulled out on its rails */
+  extendedKey?: string
   children?: React.ReactNode
 }) {
   const topY = RAIL_TOP + 0.02
@@ -406,7 +566,9 @@ export function OpenRack({
         switch (s.kind) {
           case "device": {
             const cfg = devices[s.id]
-            return cfg ? <TexturedDevice key={i} cfg={cfg} centerY={slotCenterY(s.u, cfg.rackUnits)} lowRes={lowRes} /> : null
+            return cfg ? (
+              <TexturedDevice key={i} cfg={cfg} centerY={slotCenterY(s.u, cfg.rackUnits)} lowRes={lowRes} extended={extendedKey === `${s.id}@${s.u}`} />
+            ) : null
           }
           case "patch-panel":
             return <PatchPanel key={i} u={s.u} ports={s.ports} />

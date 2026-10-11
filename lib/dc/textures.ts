@@ -453,3 +453,124 @@ export function assetLabel(text: string) {
     ctx.fillText(text, 14, 42)
   })
 }
+
+/**
+ * 1U server seen from above with the lid off (front at the bottom of the canvas).
+ * The 3D parts (DIMMs, heatsinks, fans, PSUs) sit on top of this; it supplies the board,
+ * sockets, traces and the small print between them.
+ */
+export function serverInternals() {
+  const w = 512
+  const h = 820
+  return canvasTex("srv-int", w, h, (ctx) => {
+    // galvanised tray
+    ctx.fillStyle = "#9da1a6"
+    ctx.fillRect(0, 0, w, h)
+    noise(ctx, w, h, 14, 61)
+    // motherboard
+    const bx = w * 0.04
+    const by = h * 0.11
+    const bw = w * 0.92
+    const bh = h * 0.6
+    ctx.fillStyle = "#1c3a2c"
+    ctx.fillRect(bx, by, bw, bh)
+    noise(ctx, w, h * 0.7, 10, 62)
+    // copper traces
+    const r = rng(63)
+    ctx.strokeStyle = "rgba(160,140,70,0.25)"
+    ctx.lineWidth = 1
+    for (let i = 0; i < 140; i++) {
+      const x = bx + r() * bw
+      const y = by + r() * bh
+      ctx.beginPath()
+      ctx.moveTo(x, y)
+      ctx.lineTo(x + (r() - 0.5) * 60, y)
+      ctx.lineTo(x + (r() - 0.5) * 60, y + (r() - 0.5) * 60)
+      ctx.stroke()
+    }
+    // DIMM slots either side of each CPU (12 per CPU)
+    for (const cx of [0.31, 0.69]) {
+      for (const side of [-1, 1])
+        for (let i = 0; i < 6; i++) {
+          const x = w * (cx + side * (0.105 + i * 0.022))
+          ctx.fillStyle = "#121315"
+          ctx.fillRect(x - 3, h * 0.44, 6, h * 0.19)
+          ctx.fillStyle = "#e9e6dc"
+          ctx.fillRect(x - 3, h * 0.44, 6, 4)
+          ctx.fillRect(x - 3, h * 0.63 - 4, 6, 4)
+        }
+      // socket frame
+      ctx.strokeStyle = "#c8ccd0"
+      ctx.lineWidth = 3
+      ctx.strokeRect(w * (cx - 0.09), h * 0.455, w * 0.18, h * 0.16)
+    }
+    // chipset + BMC with small heatsinks
+    ctx.fillStyle = "#2b2e33"
+    ctx.fillRect(w * 0.45, h * 0.3, w * 0.1, w * 0.1)
+    ctx.fillRect(w * 0.12, h * 0.2, w * 0.06, w * 0.06)
+    // PCIe riser slots at the back left
+    ctx.fillStyle = "#0e0f11"
+    for (let i = 0; i < 3; i++) ctx.fillRect(w * (0.08 + i * 0.1), h * 0.13, w * 0.025, h * 0.14)
+    // battery (CR2032)
+    ctx.fillStyle = "#c9ccd0"
+    ctx.beginPath()
+    ctx.arc(w * 0.82, h * 0.34, 13, 0, Math.PI * 2)
+    ctx.fill()
+    // SATA / power headers
+    ctx.fillStyle = "#e9e6dc"
+    for (let i = 0; i < 4; i++) ctx.fillRect(w * (0.2 + i * 0.05), h * 0.69, 14, 8)
+    // service label printed on the airflow baffle area
+    ctx.fillStyle = "#e8e6df"
+    ctx.fillRect(w * 0.08, h * 0.03, w * 0.32, h * 0.06)
+    ctx.fillStyle = "#333"
+    ctx.font = "bold 13px sans-serif"
+    ctx.fillText("SYSTEM BOARD · DIMM / CPU MAP", w * 0.095, h * 0.06)
+    ctx.font = "11px sans-serif"
+    ctx.fillText("Populate DIMMs from the slot nearest the CPU", w * 0.095, h * 0.08)
+    // front drive cage floor and backplane
+    ctx.fillStyle = "#2c2f34"
+    ctx.fillRect(0, h * 0.86, w, h * 0.14)
+    ctx.fillStyle = "#23412f"
+    ctx.fillRect(w * 0.03, h * 0.845, w * 0.94, h * 0.018)
+  })
+}
+
+/** Fan module seen from above: black frame with the blades showing. */
+export function fanTop() {
+  return canvasTex("fan-top", 128, 128, (ctx, w, h) => {
+    ctx.fillStyle = "#141518"
+    ctx.fillRect(0, 0, w, h)
+    ctx.fillStyle = "#050506"
+    ctx.beginPath()
+    ctx.arc(w / 2, h / 2, w * 0.44, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = "#2a2c30"
+    ctx.lineWidth = 9
+    for (let i = 0; i < 7; i++) {
+      const a = (i / 7) * Math.PI * 2
+      ctx.beginPath()
+      ctx.moveTo(w / 2, h / 2)
+      ctx.quadraticCurveTo(w / 2 + Math.cos(a + 0.5) * 34, h / 2 + Math.sin(a + 0.5) * 34, w / 2 + Math.cos(a) * 54, h / 2 + Math.sin(a) * 54)
+      ctx.stroke()
+    }
+    ctx.fillStyle = "#1d1f23"
+    ctx.beginPath()
+    ctx.arc(w / 2, h / 2, 14, 0, Math.PI * 2)
+    ctx.fill()
+    // HPE-style hot-plug touch point
+    ctx.fillStyle = "#d4782f"
+    ctx.fillRect(w * 0.06, h * 0.06, 14, 14)
+  })
+}
+
+/** CPU heatsink fins from above (linear-ish grey stripes). */
+export function heatsinkFins() {
+  return canvasTex("hs-fins", 128, 128, (ctx, w, h) => {
+    ctx.fillStyle = "#6f7378"
+    ctx.fillRect(0, 0, w, h)
+    for (let x = 2; x < w; x += 6) {
+      ctx.fillStyle = "#d4d8dc"
+      ctx.fillRect(x, 0, 3, h)
+    }
+  })
+}

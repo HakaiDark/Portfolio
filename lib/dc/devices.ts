@@ -70,6 +70,8 @@ export interface DeviceConfig {
   cardId?: string
   /** hotspot position on the faceplate (texture fractions); down the rack they alternate left/right, on plain panel rather than logos */
   hotspot?: { u: number; v: number }
+  /** slides out on its rails (metres) with the lid off when its stop is open */
+  slide?: number
 }
 
 const grid = (
@@ -243,6 +245,7 @@ export const devices: Record<string, DeviceConfig> = {
     ],
     cardId: "servers",
     hotspot: { u: 0.06, v: 0.5 },
+    slide: 0.45,
   },
 
   // Kept for reference; swapped out for the FortiGate in the hero rack.

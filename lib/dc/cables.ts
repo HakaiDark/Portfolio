@@ -39,8 +39,8 @@ export interface CableSet {
   plugs: Plug[]
   ties: [number, number, number][]
   sleeves: Sleeve[]
-  /** cable paths, used by the packet-flow view */
-  paths: { curve: THREE.CatmullRomCurve3; kind: "copper" | "fiber" | "console" }[]
+  /** cable paths, used by the packet-flow view; `owner` is the device key, "ha" or "console" */
+  paths: { curve: THREE.CatmullRomCurve3; kind: "copper" | "fiber" | "console"; owner: string }[]
 }
 
 const v = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z)
@@ -90,13 +90,14 @@ function createHeroCables(quality: "high" | "low"): CableSet {
   const sleeves: Sleeve[] = []
   const paths: CableSet["paths"] = []
 
+  let owner = ""
   const addCable = (color: CableColor, pts: THREE.Vector3[], radius: number, kind: "copper" | "fiber" | "console", sleeveEnds: boolean) => {
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", 0.5)
     const len = curve.getLength()
     const geo = new THREE.TubeGeometry(curve, Math.max(24, Math.round(len * 150)), radius, 6, false)
     if (!byColor.has(color)) byColor.set(color, [])
     byColor.get(color)!.push(geo)
-    paths.push({ curve, kind })
+    paths.push({ curve, kind, owner })
     if (sleeveEnds && quality === "high") {
       for (const d of [0.045, len - 0.045]) {
         if (d <= 0 || d >= len) continue
@@ -121,6 +122,7 @@ function createHeroCables(quality: "high" | "low"): CableSet {
   const plugZ = FACE_Z + 0.024
 
   for (const dev of mounted) {
+    owner = dev.key
     const below = slotCenterY(dev.u, 0) - 0.03 // just under the device
     for (const p of dev.ports) {
       if (!p.patched) continue
@@ -219,6 +221,7 @@ function createHeroCables(quality: "high" | "low"): CableSet {
   }
 
   // HA heartbeat between stacked units of the same model (e.g. the FortiGate pair)
+  owner = "ha"
   for (let i = 0; i + 1 < mounted.length; i++) {
     const a = mounted[i]
     const b = mounted[i + 1]
@@ -239,6 +242,7 @@ function createHeroCables(quality: "high" | "low"): CableSet {
 
   // console cable: primary FortiGate console port -> USB-serial adapter on the laptop
   const consoleDev = mounted.find((m) => m.cfg.console)
+  owner = "console"
   if (consoleDev && consoleDev.cfg.console) {
     const [cx, cy] = facePoint(consoleDev.cfg, consoleDev.cfg.console.u, consoleDev.cfg.console.v)
     const y = consoleDev.centerY + cy

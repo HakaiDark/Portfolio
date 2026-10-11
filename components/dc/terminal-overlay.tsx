@@ -13,7 +13,7 @@ const KIND_CLASS: Record<NonNullable<TermLine["kind"]>, string> = {
 }
 
 /** The laptop's console, as a real terminal visitors can type into. */
-export function TerminalOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function TerminalOverlay({ open, onClose, onAction }: { open: boolean; onClose: () => void; onAction?: (action: "failover") => void }) {
   const [lines, setLines] = useState<(TermLine & { prompt?: boolean })[]>(WELCOME)
   const [input, setInput] = useState("")
   const [history, setHistory] = useState<string[]>([])
@@ -38,8 +38,9 @@ export function TerminalOverlay({ open, onClose }: { open: boolean; onClose: () 
     setInput("")
     if (res.clear) return setLines([])
     if (res.exit) {
-      setLines((l) => [...l, { text: raw, kind: "cmd", prompt: true }, { text: "Connection closed.", kind: "dim" }])
-      setTimeout(onClose, 350)
+      setLines((l) => [...l, { text: raw, kind: "cmd", prompt: true }, ...res.lines, { text: "Connection closed.", kind: "dim" }])
+      const action = res.action
+      setTimeout(() => (action && onAction ? onAction(action) : onClose()), res.action ? 900 : 350)
       return
     }
     setLines((l) => [...l, { text: raw, kind: "cmd", prompt: true }, ...res.lines])

@@ -57,13 +57,14 @@ const HELP: TermLine[] = [
   { text: "ssh github          open my GitHub" },
   { text: "ping linkedin       open my LinkedIn" },
   { text: "get system status   the box you're consoled into" },
+  { text: "execute ha failover set 1   pull the plug on this firewall (HA demo)" },
   { text: "clear / exit" },
 ]
 
 /** Commands shown as tap-to-run chips on phones. */
 export const QUICK_COMMANDS = ["whoami", "show experience", "get skills", "show projects", "contact"]
 
-export type CommandResult = { lines: TermLine[]; open?: string; clear?: boolean; exit?: boolean }
+export type CommandResult = { lines: TermLine[]; open?: string; clear?: boolean; exit?: boolean; action?: "failover" }
 
 export function runCommand(raw: string): CommandResult {
   const cmd = raw.trim().replace(/\s+/g, " ").toLowerCase()
@@ -160,6 +161,16 @@ export function runCommand(raw: string): CommandResult {
           { text: "Hostname: FGT-01 · HA mode: active-passive · Configuration: in-sync" },
           { text: "Operator: Mohammad Yassin", kind: "accent" },
         ],
+      }
+    case "execute ha failover set 1":
+    case "failover":
+      return {
+        lines: [
+          { text: "Warning: this unit will stop passing traffic. Do you want to continue? (y/n) y", kind: "dim" },
+          { text: "Forcing failover · watch the rack", kind: "accent" },
+        ],
+        action: "failover",
+        exit: true,
       }
     case "sudo hire-me":
     case "hire me":

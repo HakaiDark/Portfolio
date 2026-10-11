@@ -18,7 +18,8 @@ Next 16 (Turbopack, App Router), React 19, @react-three/fiber 9, drei 10, three 
   - `rack-scene.tsx` — camera stops, `CameraRig` (azimuth ±75°, 48° on the side a desktop framing offset shifts toward, so it never clips into racks), `SceneReady` (chunked GPU warm-up while `frameloop="never"`), `CaptureHook`.
   - `rack-section.tsx` — lazy mount on scroll, boot/loading sequence (`boot-sequence.tsx`), pauses rendering when off screen, static fallback `public/3d/rack-fallback.webp`.
   - `lib/dc/quality.ts` tiers: high / low (phones, weak GPUs: no AO, no rain) / static (no WebGL).
-  - `lib/dc/cables.ts` (cached; routing, sag, HA + console cables), `textures.ts` (procedural canvas textures, tiled grain), `laptop.ts`, `contact.ts`.
+  - `lib/dc/cables.ts` (cached; routing, sag, HA + console cables; each path has an `owner` = device key / "ha" / "console"), `textures.ts` (procedural canvas textures, tiled grain), `laptop.ts`, `contact.ts`.
+  - Wow features (no perf cost): **HA failover demo** (`lib/dc/ha.ts` timeline + per-phase LED states / paused cable owners / role badges; button in the FortiGate card via `failover-panel.tsx`; terminal `execute ha failover set 1`; the passive FGT-02 never shows traffic in normal operation). **Server slide-out** (`slide` in `devices.ts`: the ProLiant pulls out on rails with the lid off, internals only mounted while out). **Ambient sound** (`lib/dc/ambience.ts`, Web Audio, no files, off by default, fans louder up close). **Focus pull** (`FocusPull` in `rack-scene.tsx`: one DoF effect animated, never rebuilt).
 - `tools/capture-receiver.mjs`, `tools/crop-faceplates.mjs` — see below.
 
 ## Content rules (non-negotiable)

@@ -7,6 +7,7 @@ import { buildHeroCables, CABLE_COLORS, type CableColor, type CableSet, type Plu
 import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
 import { Leds, type LedPoint } from "./leds"
 import { timed } from "@/lib/dc/perf"
+import type { LedState } from "@/lib/dc/ha"
 
 const PLUG_GEO: Record<Plug["kind"], THREE.BufferGeometry> = {
   rj45: new THREE.BoxGeometry(0.0118, 0.0088, 0.022),
@@ -82,8 +83,10 @@ function Sleeves({ sleeves }: { sleeves: CableSet["sleeves"] }) {
 const pulseGeo = new THREE.SphereGeometry(0.0055, 10, 8)
 const PULSE_COLOR = { fiber: new THREE.Color("#5ff4ff").multiplyScalar(6), copper: new THREE.Color("#ff9a3c").multiplyScalar(5), console: new THREE.Color("#7fb8ff").multiplyScalar(5) }
 
-/** "Live traffic" view: light pulses travelling along every cable. */
-function PacketFlow({ paths }: { paths: CableSet["paths"] }) {
+const HIDDEN = new THREE.Matrix4().makeScale(0, 0, 0)
+
+/** "Live traffic" view: light pulses travelling along every cable (except paused owners). */
+function PacketFlow({ paths, paused }: { paths: CableSet["paths"]; paused: string[] }) {
   const ref = useRef<THREE.InstancedMesh>(null)
   const pulses = useMemo(() => {
     const list: { path: number; t: number; speed: number; dir: 1 | -1 }[] = []
@@ -109,6 +112,10 @@ function PacketFlow({ paths }: { paths: CableSet["paths"] }) {
     const mesh = ref.current
     if (!mesh) return
     pulses.forEach((p, i) => {
+      if (paused.includes(paths[p.path].owner)) {
+        mesh.setMatrixAt(i, HIDDEN)
+        return
+      }
       p.t = (p.t + p.dir * p.speed * Math.min(dt, 0.05) + 1) % 1
       paths[p.path].curve.getPointAt(p.t, pos)
       m.makeTranslation(pos.x, pos.y, pos.z)
@@ -125,7 +132,21 @@ function PacketFlow({ paths }: { paths: CableSet["paths"] }) {
 
 const LED_COLORS = { green: "#3dff6e", amber: "#ffb020", blue: "#4aa3ff" } as const
 
-export function RackCabling({ quality, animate, traffic }: { quality: "high" | "low"; animate: boolean; traffic: boolean }) {
+export function RackCabling({
+  quality,
+  animate,
+  traffic,
+  ledStates,
+  paused = [],
+}: {
+  quality: "high" | "low"
+  animate: boolean
+  traffic: boolean
+  /** per-unit LED overrides (HA demo, passive secondary) */
+  ledStates?: Record<string, LedState>
+  /** cable owners whose traffic pulses are stopped */
+  paused?: string[]
+}) {
   const cables = useMemo(() => timed("cables", () => buildHeroCables(quality)), [quality])
   // geometry is cached for the page's lifetime (see buildHeroCables), so it isn't disposed on unmount
 
@@ -146,11 +167,11 @@ export function RackCabling({ quality, animate, traffic }: { quality: "high" | "
         if (!p.led || !p.patched) continue
         // some 1G copper ports show amber link like real gear
         const color = p.kind === "rj45" && p.col % 5 === 3 ? "amber" : "green"
-        out[color].push({ position: [p.led[0], dev.centerY + p.led[1], FACE_Z + 0.0009], mode: "link" })
+        out[color].push({ position: [p.led[0], dev.centerY + p.led[1], FACE_Z + 0.0009], mode: "link", owner: dev.key })
       }
       for (const l of dev.cfg.leds ?? []) {
         const [x, y] = facePoint(dev.cfg, l.u, l.v)
-        out[l.color].push({ position: [x, dev.centerY + y, FACE_Z + (dev.cfg.faceIncludesEars ? 0.0018 : 0.0009)], mode: l.mode })
+        out[l.color].push({ position: [x, dev.centerY + y, FACE_Z + (dev.cfg.faceIncludesEars ? 0.0018 : 0.0009)], mode: l.mode, owner: dev.key })
       }
     }
     return out
@@ -175,9 +196,9 @@ export function RackCabling({ quality, animate, traffic }: { quality: "high" | "
       <Ties ties={cables.ties} />
       <Sleeves sleeves={cables.sleeves} />
       {(Object.keys(LED_COLORS) as (keyof typeof LED_COLORS)[]).map((c) => (
-        <Leds key={c} points={leds[c]} color={LED_COLORS[c]} animate={animate} />
+        <Leds key={c} points={leds[c]} color={LED_COLORS[c]} animate={animate} states={ledStates} />
       ))}
-      {traffic && <PacketFlow paths={cables.paths} />}
+      {traffic && <PacketFlow paths={cables.paths} paused={paused} />}
     </group>
   )
 }

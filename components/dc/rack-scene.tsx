@@ -25,6 +25,8 @@ import { PhotoMode, type PhotoStatus } from "./photo-mode"
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
 const AZIMUTH_LIMIT = THREE.MathUtils.degToRad(75)
+/** limit on the side a desktop framing offset shifts the camera toward */
+const SHIFTED_AZIMUTH_LIMIT = THREE.MathUtils.degToRad(48)
 
 interface Stop {
   id: string
@@ -129,6 +131,13 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
     w.__rack = {
       setStop,
       setTraffic,
+      /** orbit like a user drag (degrees); the controls clamp to their limits */
+      orbit(deg: number) {
+        const c = get().controls as unknown as CameraControlsImpl | null
+        c?.rotate(THREE.MathUtils.degToRad(deg), 0, false)
+        c?.update(0)
+        return c ? THREE.MathUtils.radToDeg(c.azimuthAngle) : null
+      },
       lookAt(px: number, py: number, pz: number, tx: number, ty: number, tz: number) {
         const c = get().controls as unknown as CameraControlsImpl | null
         c?.setFocalOffset(0, 0, 0, false)
@@ -228,13 +237,22 @@ function CameraRig({
     return () => c.removeEventListener("controlstart", start)
   }, [onInteract])
 
+  // The desktop framing offsets shift the camera sideways. Orbiting toward the side the shift
+  // points at would bring the camera ~30 cm closer to the rack row and clip into it, so that
+  // side stops earlier (the overview shifts toward the left; an open side card toward the right).
+  const wide = !portrait && aspect > 1.2
+  const shiftedLeft = wide && stop.id === "overview"
+  const shiftedRight = wide && cardOpen && !!stop.cardId
+  const minAz = shiftedLeft ? -SHIFTED_AZIMUTH_LIMIT : -AZIMUTH_LIMIT
+  const maxAz = shiftedRight ? SHIFTED_AZIMUTH_LIMIT : AZIMUTH_LIMIT
+
   useFrame((_, dt) => {
     const c = ref.current
     if (!c || !autoRotate) return
     // slow ping-pong sweep inside the allowed arc
     const az = c.azimuthAngle
-    if (az > AZIMUTH_LIMIT * 0.55) dir.current = -1
-    if (az < -AZIMUTH_LIMIT * 0.55) dir.current = 1
+    if (az > maxAz * 0.55) dir.current = -1
+    if (az < minAz * 0.55) dir.current = 1
     c.rotate(dir.current * dt * 0.06, 0, false)
   })
 
@@ -243,8 +261,8 @@ function CameraRig({
       ref={ref}
       makeDefault
       smoothTime={0.55}
-      minAzimuthAngle={-AZIMUTH_LIMIT}
-      maxAzimuthAngle={AZIMUTH_LIMIT}
+      minAzimuthAngle={minAz}
+      maxAzimuthAngle={maxAz}
       minPolarAngle={THREE.MathUtils.degToRad(58)}
       maxPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 150 : 100)}
       minDistance={0.25}

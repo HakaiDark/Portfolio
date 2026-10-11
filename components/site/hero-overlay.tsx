@@ -1,5 +1,6 @@
 import { ArrowDown, Download, Mail } from "lucide-react"
 import { profile } from "@/content/profile"
+import { PhoneActions } from "./phone-actions"
 
 const outline =
   "inline-flex items-center gap-1.5 rounded-full border border-white/20 px-3 py-1.5 text-xs text-white/90 transition-colors hover:border-white/60 md:gap-2 md:px-4 md:py-2 md:text-sm"
@@ -25,10 +26,11 @@ export function HeroOverlay() {
             <Download className="h-3.5 w-3.5 md:h-4 md:w-4" aria-hidden />
             Download CV
           </a>
+          <PhoneActions size="sm" />
           <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" className={outline}>
             LinkedIn
           </a>
-          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className={outline}>
+          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className={`${outline} max-sm:hidden`}>
             GitHub
           </a>
           <a href={`mailto:${profile.email}`} className={outline} aria-label={`Email ${profile.email}`}>

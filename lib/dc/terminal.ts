@@ -1,5 +1,6 @@
 // Terminal content: the looping session shown on the laptop screen, and the
 // interactive portfolio CLI visitors can type into. Edit freely.
+import { phonePretty, phoneTel, whatsappUrl } from "../contact"
 
 export const PROMPT = "FGT-01 #"
 
@@ -136,6 +137,8 @@ export function runCommand(raw: string): CommandResult {
       return {
         lines: [
           { text: "email     eng.compyassin@gmail.com", href: LINKS.email, kind: "link" },
+          { text: `phone     ${phonePretty()}`, href: phoneTel(), kind: "link" },
+          { text: "whatsapp  chat now", href: whatsappUrl(), kind: "link" },
           { text: "linkedin  linkedin.com/in/compengyassin", href: LINKS.linkedin, kind: "link" },
           { text: "github    github.com/Compzool", href: LINKS.github, kind: "link" },
           { text: "References available on request.", kind: "dim" },

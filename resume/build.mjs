@@ -1,7 +1,7 @@
 // Prints resume/resume.html to PDF with headless Edge or Chrome.
-//   public copy  -> public/Mohammad-Yassin-Resume.pdf          (served on the site, no phone number)
+//   public copy  -> public/Mohammad-Yassin-Resume.pdf          (served on the site; phone only if onPublicCv)
 //   private copy -> resume/private/Mohammad-Yassin-Resume.pdf  (for applications; only if resume/private.json exists)
-// resume/private.json (git-ignored): { "phone": "+000 0 000 000" }
+// resume/private.json (git-ignored): { "phone": "+000 0 000 000", "onPublicCv": true }
 // Usage: node resume/build.mjs
 import { execFileSync } from "node:child_process"
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
@@ -39,10 +39,11 @@ function print(html, out) {
   console.log("wrote", path.relative(root, out))
 }
 
-print(template.replaceAll("{{CONTACT_PHONE}}", ""), path.join(root, "public", "Mohammad-Yassin-Resume.pdf"))
-
 const privateFile = path.join(dir, "private.json")
-if (existsSync(privateFile)) {
-  const { phone } = JSON.parse(readFileSync(privateFile, "utf8"))
-  if (phone) print(template.replaceAll("{{CONTACT_PHONE}}", ` | ${phone}`), path.join(dir, "private", "Mohammad-Yassin-Resume.pdf"))
-}
+// strip a UTF-8 BOM (Windows editors / PowerShell add one)
+const priv = existsSync(privateFile) ? JSON.parse(readFileSync(privateFile, "utf8").replace(/^﻿/, "")) : {}
+const withPhone = (phone) => template.replaceAll("{{CONTACT_PHONE}}", phone ? ` | ${phone}` : "")
+
+// public copy carries the phone only when private.json sets "onPublicCv": true
+print(withPhone(priv.onPublicCv ? priv.phone : ""), path.join(root, "public", "Mohammad-Yassin-Resume.pdf"))
+if (priv.phone) print(withPhone(priv.phone), path.join(dir, "private", "Mohammad-Yassin-Resume.pdf"))

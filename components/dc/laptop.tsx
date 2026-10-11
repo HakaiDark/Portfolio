@@ -226,9 +226,9 @@ export function Laptop({ animate, onOpen, highlighted }: { animate: boolean; onO
             emissive="#ffffff"
             emissiveMap={screenTex}
             emissiveIntensity={highlighted || hover ? 1.6 : 1.25}
-            roughness={0.5}
+            roughness={0.9}
             metalness={0}
-            envMapIntensity={0.03}
+            envMapIntensity={0}
             toneMapped={false}
           />
         </mesh>
@@ -236,7 +236,7 @@ export function Laptop({ animate, onOpen, highlighted }: { animate: boolean; onO
       {/* USB-serial adapter where the console cable lands */}
       <mesh position={LAPTOP.consolePort}>
         <boxGeometry args={[0.03, 0.009, 0.016]} />
-        <meshStandardMaterial color="#d9dadc" roughness={0.5} />
+        <meshStandardMaterial color="#d9dadc" roughness={0.9} />
       </mesh>
     </group>
   )

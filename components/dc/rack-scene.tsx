@@ -17,6 +17,7 @@ import { RackCabling } from "./rack-cabling"
 import { Room } from "./room"
 import { InfoCard } from "./info-card"
 import { Laptop } from "./laptop"
+import { Mug } from "./mug"
 import { AccessPoint } from "./access-point"
 import { TerminalOverlay } from "./terminal-overlay"
 import { PhotoMode, type PhotoStatus } from "./photo-mode"
@@ -57,7 +58,7 @@ function useStops(): Stop[] {
     const [ax, ay, az] = ACCESS_POINT.position
     stops.push({ id: "wireless", label: "Wi-Fi", position: [0.2, 2.42, 1.42], target: [ax, ay - 0.05, az], cardId: ACCESS_POINT.cardId, lookUp: true })
     const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
-    stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.08, ly + 0.1, 0.42], target: [lx, ly - 0.02, lz], fit: 0.21, terminal: true })
+    stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true })
     return stops
   }, [])
 }
@@ -128,6 +129,11 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
     w.__rack = {
       setStop,
       setTraffic,
+      lookAt(px: number, py: number, pz: number, tx: number, ty: number, tz: number) {
+        const c = get().controls as unknown as CameraControlsImpl | null
+        c?.setFocalOffset(0, 0, 0, false)
+        c?.setLookAt(px, py, pz, tx, ty, tz, false)
+      },
       render(frames = 1) {
         for (let i = 0; i < frames; i++) get().advance(performance.now() + i * 16)
       },
@@ -246,6 +252,32 @@ function CameraRig({
   )
 }
 
+/** Mounted once everything inside Suspense has loaded: precompile shaders so the first frame doesn't hitch. */
+function SceneReady({ onAssets, onReady }: { onAssets: () => void; onReady: () => void }) {
+  const gl = useThree((s) => s.gl)
+  const scene = useThree((s) => s.scene)
+  const camera = useThree((s) => s.camera)
+  useEffect(() => {
+    onAssets()
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      // next frame, or a timer if frames are paused (background tab)
+      const t = setTimeout(onReady, 120)
+      requestAnimationFrame(() => {
+        clearTimeout(t)
+        onReady()
+      })
+    }
+    gl.compileAsync(scene, camera).then(finish, finish)
+    const t = setTimeout(finish, 8000) // never hold the loading screen forever
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return null
+}
+
 function HotspotButton({ label, active, glyph = "+", onClick }: { label: string; active: boolean; glyph?: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-label={label} className="group relative flex h-11 w-11 items-center justify-center">
@@ -300,6 +332,8 @@ function Scene({
   cardOpen,
   photoEnabled,
   onPhotoStatus,
+  onAssets,
+  onReady,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -314,6 +348,8 @@ function Scene({
   cardOpen: boolean
   photoEnabled: boolean
   onPhotoStatus: (s: PhotoStatus) => void
+  onAssets: () => void
+  onReady: () => void
 }) {
   return (
     <>
@@ -328,9 +364,11 @@ function Scene({
         <OpenRack slots={heroRack} lowRes={quality === "low"}>
           <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} />
           <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
+          <Mug />
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
         <Hotspots activeStop={stop.id} onStop={onStop} />
+        <SceneReady onAssets={onAssets} onReady={onReady} />
       </Suspense>
       {quality === "high" ? (
         <EffectComposer multisampling={4} enableNormalPass={false}>
@@ -351,17 +389,30 @@ function Scene({
 // ---------------------------------------------------------------------------
 // DOM wrapper
 
-function Loader() {
-  const { active, progress } = useProgress()
-  if (!active) return null
-  return (
-    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div className="font-mono text-[11px] tracking-[0.3em] text-white/60 uppercase">Racking equipment… {Math.round(progress)}%</div>
-    </div>
-  )
+
+export interface RackSceneSignals {
+  onEngine?: () => void
+  onProgress?: (progress: number) => void
+  onAssets?: () => void
+  onReady?: () => void
 }
 
-export default function RackScene({ quality, reducedMotion }: { quality: "high" | "low"; reducedMotion: boolean }) {
+export default function RackScene({
+  quality,
+  reducedMotion,
+  signals,
+}: {
+  quality: "high" | "low"
+  reducedMotion: boolean
+  signals?: RackSceneSignals
+}) {
+  const { progress } = useProgress()
+  const sigRef = useRef(signals)
+  sigRef.current = signals
+  useEffect(() => sigRef.current?.onEngine?.(), [])
+  useEffect(() => sigRef.current?.onProgress?.(progress), [progress])
+  const onAssets = useCallback(() => sigRef.current?.onAssets?.(), [])
+  const onReady = useCallback(() => sigRef.current?.onReady?.(), [])
   const stops = useStops()
   const [stopId, setStopId] = useState("overview")
   const [cardOpen, setCardOpen] = useState(false)
@@ -438,10 +489,10 @@ export default function RackScene({ quality, reducedMotion }: { quality: "high" 
           cardOpen={!!card}
           photoEnabled={photoOn && !traffic && !terminalOpen}
           onPhotoStatus={setPhoto}
+          onAssets={onAssets}
+          onReady={onReady}
         />
       </Canvas>
-
-      <Loader />
 
       {/* view toggles */}
       <div className="absolute right-4 top-4 z-20 flex flex-col items-end gap-2">

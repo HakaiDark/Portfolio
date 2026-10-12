@@ -6,6 +6,7 @@ import { RoundedBox, useTexture } from "@react-three/drei"
 import * as THREE from "three"
 import { BODY_WIDTH, PANEL_WIDTH, RACK_UNITS, U, devices, unitY, type DeviceConfig, type RackSlot } from "@/lib/dc/devices"
 import { FACE_Z, faceSize, slotCenterY } from "@/lib/dc/layout"
+import { KvmDrawer } from "./kvm-drawer"
 import {
   brushedRoughness,
   cableManagerFront,
@@ -524,7 +525,7 @@ export function OpenRack({
   slots: RackSlot[]
   managers?: boolean
   lowRes?: boolean
-  /** mounted-device key (e.g. "proliant-dl360@20") currently pulled out on its rails */
+  /** mounted-device key (e.g. "proliant-dl360@20") currently pulled out on its rails, or "kvm" */
   extendedKey?: string
   children?: React.ReactNode
 }) {
@@ -582,6 +583,8 @@ export function OpenRack({
             return <Shelf key={i} u={s.u} />
           case "ups":
             return <Ups key={i} u={s.u} units={s.units} />
+          case "kvm":
+            return <KvmDrawer key={i} u={s.u} open={extendedKey === "kvm"} />
         }
       })}
       <Screws slots={slots} />

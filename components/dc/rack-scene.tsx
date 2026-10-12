@@ -9,7 +9,7 @@ import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
 import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js"
 import { ACCESS_POINT, U, heroRack } from "@/lib/dc/devices"
-import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
+import { FACE_Z, facePoint, mountedDevices, slotCenterY } from "@/lib/dc/layout"
 import { LAPTOP_SCREEN_CENTER } from "@/lib/dc/laptop"
 import { rackCards } from "@/content/rack-cards"
 import { OpenRack } from "./rack-hardware"
@@ -25,6 +25,7 @@ import { HA_PRIMARY, HA_TIMELINE, haBadges, haView, type BadgeTone, type HaPhase
 import { FailoverPanel } from "./failover-panel"
 import { MONITORS, MonitorWall } from "./monitor-wall"
 import { RearPower } from "./rear-power"
+import { KVM } from "./kvm-drawer"
 import { DeskProps } from "./desk-props"
 
 const { ACTION } = CameraControlsImpl
@@ -87,6 +88,21 @@ function useStops(): Stop[] {
       })
     const [ax, ay, az] = ACCESS_POINT.position
     stops.push({ id: "wireless", label: "Wi-Fi", position: [0.2, 2.42, 1.42], target: [ax, ay - 0.05, az], cardId: ACCESS_POINT.cardId, lookUp: true })
+    // rack console drawer: look down at the screen and keyboard once it's out
+    const kvmSlot = heroRack.find((x) => x.kind === "kvm")
+    if (kvmSlot) {
+      const ky = slotCenterY(kvmSlot.u, 1)
+      stops.push({
+        id: "kvm",
+        label: "Automation",
+        position: [0.14, ky + 0.3, 1.0],
+        target: [0, ky + 0.1, 0.14],
+        cardId: "automation",
+        fit: 0.26,
+        extend: true,
+        minDistance: 0.3,
+      })
+    }
     // the two monitors on the next rack: look at them square-on
     const { position: mp, rotationY: mr, tops } = MONITORS
     const mt: [number, number, number] = [mp[0] + Math.sin(mr) * 0.045, (tops[0] + tops[1]) / 2, mp[2] + Math.cos(mr) * 0.045]
@@ -554,6 +570,12 @@ function HaBadges({ phase }: { phase: HaPhase }) {
   )
 }
 
+// right side of the console drawer's front panel (the ProLiant above it has its button on the left)
+const KVM_HOTSPOT: [number, number, number] | null = (() => {
+  const k = heroRack.find((x) => x.kind === "kvm")
+  return k ? [0.15, slotCenterY(k.u, 1), FACE_Z + 0.03] : null
+})()
+
 // top-left corner of the upper monitor (left of the FortiAnalyzer title bar)
 const MONITOR_HOTSPOT: [number, number, number] = (() => {
   const { position: p, rotationY: r, tops, width, height } = MONITORS
@@ -596,6 +618,12 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
       <Html position={[ax, ay - 0.06, az]} center zIndexRange={[30, 0]}>
         <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
       </Html>
+      {KVM_HOTSPOT && (
+        // travels out with the drawer when it's open
+        <Html position={[KVM_HOTSPOT[0], KVM_HOTSPOT[1], KVM_HOTSPOT[2] + (activeStop === "kvm" ? KVM.slide : 0)]} center zIndexRange={[30, 0]}>
+          <HotspotButton label="Open the rack console" glyph=">_" active={activeStop === "kvm"} onClick={() => onStop("kvm")} />
+        </Html>
+      )}
       <Html position={MONITOR_HOTSPOT} center zIndexRange={[30, 0]}>
         <HotspotButton label="About the monitoring screens" active={activeStop === "monitoring"} onClick={() => onStop("monitoring")} />
       </Html>

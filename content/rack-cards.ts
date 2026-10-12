@@ -68,6 +68,17 @@ export const rackCards: Record<string, RackCard> = {
     ],
     tags: ["Python", "Flask", "MongoDB", "Docker", "OpenCV", "Flutter"],
   },
+  automation: {
+    eyebrow: "Automation · Edmonton Catholic Schools",
+    title: "PowerShell for the network team",
+    summary:
+      "Built PowerShell automation for configuration validation, reporting and routine network operations, cutting repetitive manual work for the team.",
+    points: [
+      "Also writes automation scripts in Python and Bash",
+      "The run on this console is a simulation of that kind of job",
+    ],
+    tags: ["PowerShell", "Python", "Bash", "Network automation"],
+  },
   monitoring: {
     eyebrow: "Monitoring & visibility",
     title: "FortiAnalyzer + AirWave",

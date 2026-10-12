@@ -334,6 +334,8 @@ export type RackSlot =
   /** cantilever shelf; `laptop` puts the engineer's laptop on it, consoled into the FortiGate */
   | { kind: "shelf"; u: number; laptop?: boolean }
   | { kind: "ups"; u: number; units: number }
+  /** 1U rack console drawer (screen + keyboard) that pulls out on its stop */
+  | { kind: "kvm"; u: number }
 
 export const RACK_UNITS = 42
 
@@ -355,7 +357,9 @@ export const heroRack: RackSlot[] = [
   { kind: "device", id: "proliant-dl360", u: 20 },
   { kind: "device", id: "proliant-dl360", u: 19, hotspot: false },
   { kind: "device", id: "proliant-dl360", u: 18, hotspot: false },
-  { kind: "blank", u: 15, units: 3 },
+  { kind: "blank", u: 17, units: 1 },
+  { kind: "kvm", u: 16 },
+  { kind: "blank", u: 15, units: 1 },
   { kind: "server", u: 13, units: 2, variant: 0 },
   { kind: "blank", u: 4, units: 9 },
   { kind: "ups", u: 1, units: 3 },

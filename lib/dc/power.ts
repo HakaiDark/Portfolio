@@ -31,6 +31,7 @@ function slotPower(s: RackSlot): { centerY: number; depth: number } | null {
   }
   if (s.kind === "server") return { centerY: slotCenterY(s.u, s.units), depth: 0.72 }
   if (s.kind === "ups") return { centerY: slotCenterY(s.u, s.units), depth: 0.66 }
+  if (s.kind === "kvm") return { centerY: slotCenterY(s.u, 1), depth: 0.55 }
   return null
 }
 

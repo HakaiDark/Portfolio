@@ -1,7 +1,7 @@
 # Mohammad Yassin — portfolio (3D data-centre rack)
 
 Live: https://mohammadyassin.vercel.app — Vercel project `portfolio` (team `engcompyassin-7906s-projects`), deploys from GitHub **HakaiDark/Portfolio** `main` (PUBLIC repo).
-Status (2026-10-12): **LIVE**, with the 2026-10-12 session's work (see "Session log") pushed to `main`. The redesign was merged onto `main` on 2026-10-11 with `-s ours` over the old site (old history kept as a parent).
+Status (2026-10-12, end of session): **LIVE** at commit `db19acb` on `main` (= `redesign`); everything from the 2026-10-12 session (see "Session log") is deployed. The redesign was merged onto `main` on 2026-10-11 with `-s ours` over the old site (old history kept as a parent).
 Work: local branch `feature/redesign-rack` tracks the remote. `git push origin feature/redesign-rack:main` = **production deploy**; push to `:redesign` first for a private preview (behind Vercel login): https://portfolio-git-redesign-engcompyassin-7906s-projects.vercel.app
 
 ## Stack & commands
@@ -62,10 +62,11 @@ Composite review trick: draw the canvas snapshot plus DOM rects (cards, hotspots
 - Photo mode (three-gpu-pathtracer) was built and then removed (grainy/dark, GPU busy while scrolling) — in git history (`ec5325b`) if ever needed.
 
 ## Session log 2026-10-12 (all live)
-Phone hotspots zig-zag and avoid logos; two-finger = zoom only; iOS Safari pinch fix; loading-screen name-card flash fixed; wheel/trackpad/pinch zoom toward the cursor with safe limits; HA failover demo; server slide-out; ambient sound (quiet, off by default); focus pull; left rack of real gear (Aruba CX, PowerEdge, BlueCat, PowerVault, APC) from photos the user supplied; monitor wall (FortiAnalyzer + AirWave styles, sharp, glass); SFP+ DACs, dust plugs, pull-tabs, cable labels; rear A/B PDUs; shelf clutter + sticky note; MacBook laptop + MacBook-style console drawer with a PowerShell validation run; Cisco 8800 desk phone + Contact stop (WhatsApp/email); hero card hides while exploring; Wi-Fi ceiling fix; grouped phone nav; final desktop + phone review.
+Phone hotspots zig-zag and avoid logos; two-finger = zoom only; iOS Safari pinch fix; loading-screen name-card flash fixed; wheel/trackpad/pinch zoom toward the cursor with safe limits; HA failover demo; server slide-out; ambient sound (quiet, off by default); focus pull; left rack of real gear (Aruba CX, PowerEdge, BlueCat, PowerVault, APC) from photos the user supplied; monitor wall (FortiAnalyzer + AirWave styles, sharp, glass); SFP+ DACs, dust plugs, pull-tabs, cable labels; rear A/B PDUs; shelf clutter + sticky note; MacBook laptop + MacBook-style console drawer with a PowerShell validation run; Cisco 8800 desk phone + Contact stop (WhatsApp/email); hero card hides while exploring; Wi-Fi ceiling fix; grouped phone nav; final desktop + phone review. After going live: phones got one-finger SIDEWAYS look-around (he wants to move around; vertical swipes still scroll) and a tighter portrait overview (no ceiling); the yellow fibre-tray downspout (`FibreDownspout` in `room.tsx`, `SPOUT` in `cables.ts`) now has a flared bell the fibres pour out of.
 - The user supplies vendor/product photos for hardware; he said not to worry about photo rights. `bluecat.jpg` (his original) sits untracked in the repo root.
 
 ## Possible next steps
 - The user reviews the live site on his phone and desktop; act on his feedback (preview on `redesign` first, then `main`).
-- Ideas discussed but not built: more photo hardware for the left rack, a thermal-camera view and floor reflections (both GPU-heavy: desktop/high tier only).
+- Ideas discussed but not built: more photo hardware for the left rack, a thermal-camera view and floor reflections (both GPU-heavy: desktop/high tier only); an open U-profile fibre tray with couplers/hangers (judged low value: barely visible, skipped).
+- Recommended next: real-iPhone feel (swipe speed, card sheet), strengthen the text sections below the hero, first-load speed on a mid-range Android.
 - Optional: make `terminal.ts` and `rack-cards.ts` read from `content/profile.ts` (single source).

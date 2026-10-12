@@ -25,6 +25,7 @@ import { HA_PRIMARY, HA_TIMELINE, haBadges, haView, type BadgeTone, type HaPhase
 import { FailoverPanel } from "./failover-panel"
 import { MONITORS, MonitorWall } from "./monitor-wall"
 import { RearPower } from "./rear-power"
+import { DeskProps } from "./desk-props"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -655,6 +656,7 @@ function Scene({
           <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
           <Mug />
           <RearPower />
+          <DeskProps />
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
         <MonitorWall state={{ phase: haPhase, haLog }} quality={quality} />

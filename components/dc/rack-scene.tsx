@@ -323,7 +323,10 @@ function CameraRig({
       const fit = stop.fit / (aspect * free * Math.tan(THREE.MathUtils.degToRad(fov) / 2))
       offset.setLength(Math.max(offset.length(), fit))
     } else {
-      offset.multiplyScalar(pull)
+      // portrait overview: fit the rack (with its cable managers) to the screen width, no wider,
+      // so phones don't back off far enough to show the ceiling
+      if (portrait && stop.id === "overview") offset.setLength(0.44 / (aspect * Math.tan(THREE.MathUtils.degToRad(fov) / 2)))
+      else offset.multiplyScalar(pull)
     }
     if (stop.fitH) {
       // tall subjects (the monitor pair): back off until they fit the free height too
@@ -365,12 +368,14 @@ function CameraRig({
   const minAz = shiftedLeft ? -SHIFTED_AZIMUTH_LIMIT : -AZIMUTH_LIMIT
   const maxAz = shiftedRight ? SHIFTED_AZIMUTH_LIMIT : AZIMUTH_LIMIT
 
-  // Phones: one finger always scrolls the page (no fight between scrolling and turning);
-  // two fingers only zoom (no turning). Mouse/trackpad devices keep one-finger/drag orbit.
+  // Phones: a one-finger SIDEWAYS swipe turns around the rack; up/down swipes stay with the page
+  // (the canvas is touch-action: pan-y, and polar rotation is off on touch, so a vertical swipe
+  // never tilts the camera instead of scrolling); two fingers zoom. Mouse keeps drag-to-orbit.
+  const coarsePointer = useMemo(() => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches, [])
   const touchActions = useMemo(() => {
     const coarse = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
     return coarse
-      ? { one: ACTION.NONE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
+      ? { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
       : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
   }, [])
 
@@ -471,6 +476,9 @@ function CameraRig({
       dollyToCursor
       mouseButtons={{ left: ACTION.ROTATE, middle: ACTION.DOLLY, right: ACTION.NONE, wheel: ACTION.NONE }}
       touches={touchActions}
+      polarRotateSpeed={coarsePointer ? 0 : 1}
+      // a thumb swipe across the screen turns ~30°, not the whole arc
+      azimuthRotateSpeed={coarsePointer ? 0.45 : 1}
     />
   )
 }
@@ -1122,7 +1130,7 @@ export default function RackScene({
             Drag to look around · scroll to zoom · tap <span className="text-[#00ffe7]">+</span> for details
           </p>
           <p className="pointer-events-none absolute bottom-[5.1rem] left-4 z-10 max-w-[55%] font-mono text-[9px] leading-relaxed tracking-[0.18em] text-white/65 uppercase md:hidden">
-            Pinch to zoom · tap <span className="text-[#00ffe7]">+</span> for details
+            Swipe sideways to look around · pinch to zoom · tap <span className="text-[#00ffe7]">+</span>
           </p>
         </>
       )}

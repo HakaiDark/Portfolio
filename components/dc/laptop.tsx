@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useFrame } from "@react-three/fiber"
-import { RoundedBox } from "@react-three/drei"
+import { RoundedBox, useTexture } from "@react-three/drei"
 import * as THREE from "three"
 import { LAPTOP } from "@/lib/dc/laptop"
 import { AUTO_SESSION, PROMPT } from "@/lib/dc/terminal"
@@ -139,34 +139,23 @@ function useTerminalTexture(animate: boolean) {
   return texture
 }
 
-function keyboardTexture() {
-  const c = document.createElement("canvas")
-  c.width = 1024
-  c.height = 420
-  const ctx = c.getContext("2d")!
-  ctx.fillStyle = "#1c1e21"
-  ctx.fillRect(0, 0, c.width, c.height)
-  const rows = [14, 14, 13, 12, 11]
-  const kw = 62
-  rows.forEach((n, r) => {
-    const off = (14 - n) * (kw / 2)
-    for (let i = 0; i < n; i++) {
-      ctx.fillStyle = "#0c0d0f"
-      ctx.fillRect(70 + off + i * (kw + 4), 30 + r * 68, kw, 60)
-      ctx.fillStyle = "#16181b"
-      ctx.fillRect(72 + off + i * (kw + 4), 32 + r * 68, kw - 4, 54)
-    }
-  })
-  ctx.fillStyle = "#0c0d0f"
-  ctx.fillRect(330, 30 + 5 * 68, 360, 50) // space bar
-  const t = new THREE.CanvasTexture(c)
-  t.colorSpace = THREE.SRGBColorSpace
-  return t
+/** Space-grey aluminium, shared with the console drawer's MacBook-style deck. */
+export const ALUMINIUM = { color: "#6d6c6a", metalness: 0.75, roughness: 0.38 }
+
+/** Keyboard + trackpad deck flattened from a photo of a MacBook Pro (tools/warp-faceplate.mjs). */
+export function useMacDeck() {
+  const tex = useTexture("/3d/devices/macbook-deck.webp")
+  useLayoutEffect(() => {
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = 8
+    tex.needsUpdate = true
+  }, [tex])
+  return tex
 }
 
 export function Laptop({ animate, onOpen, highlighted }: { animate: boolean; onOpen: () => void; highlighted: boolean }) {
   const screenTex = useTerminalTexture(animate)
-  const keys = useMemo(() => keyboardTexture(), [])
+  const deck = useMacDeck()
   const [hover, setHover] = useState(false)
   const { w, d, h } = LAPTOP.size
   const { screen } = LAPTOP
@@ -180,7 +169,6 @@ export function Laptop({ animate, onOpen, highlighted }: { animate: boolean; onO
     }
   }, [hover])
 
-  const shell = { color: "#2b2d31", metalness: 0.35, roughness: 0.5 }
 
   return (
     <group
@@ -194,33 +182,36 @@ export function Laptop({ animate, onOpen, highlighted }: { animate: boolean; onO
       }}
       onPointerOut={() => setHover(false)}
     >
-      {/* base */}
-      <RoundedBox args={[w, h, d]} radius={0.004} smoothness={3} position={[bx, by, bz]} castShadow receiveShadow>
-        <meshStandardMaterial {...shell} />
+      {/* MacBook Pro-style base: space-grey aluminium, deck from a real photo */}
+      <RoundedBox args={[w, h, d]} radius={0.005} smoothness={4} position={[bx, by, bz]} castShadow receiveShadow>
+        <meshStandardMaterial {...ALUMINIUM} />
       </RoundedBox>
-      {/* keyboard deck */}
-      <mesh position={[bx, by + h / 2 + 0.0004, bz - 0.03]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[w * 0.88, d * 0.42]} />
-        <meshStandardMaterial map={keys} roughness={0.7} />
+      <mesh position={[bx, by + h / 2 + 0.0003, bz]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[w * 0.975, d * 0.97]} />
+        <meshStandardMaterial map={deck} metalness={0.35} roughness={0.5} />
       </mesh>
-      {/* trackpad */}
-      <mesh position={[bx, by + h / 2 + 0.0004, bz + 0.07]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[0.1, 0.06]} />
-        <meshStandardMaterial color="#323439" roughness={0.35} metalness={0.2} />
+      {/* hinge */}
+      <mesh position={[hx, hy - 0.002, hz + 0.003]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.0035, 0.0035, w * 0.8, 16]} />
+        <meshStandardMaterial color="#26272a" metalness={0.6} roughness={0.4} />
       </mesh>
       {/* lid */}
       <group position={[hx, hy, hz]} rotation={[-screen.tilt, 0, 0]}>
-        <RoundedBox args={[screen.w, screen.h, 0.006]} radius={0.003} smoothness={3} position={[0, screen.h / 2, -0.003]} castShadow>
-          <meshStandardMaterial {...shell} />
+        <RoundedBox args={[screen.w, screen.h, 0.005]} radius={0.0025} smoothness={4} position={[0, screen.h / 2, -0.0025]} castShadow>
+          <meshStandardMaterial {...ALUMINIUM} />
         </RoundedBox>
-        {/* bezel */}
+        {/* black glass front, thin bezels and the camera notch */}
         <mesh position={[0, screen.h / 2, 0.0002]}>
-          <planeGeometry args={[screen.w - 0.006, screen.h - 0.006]} />
-          <meshStandardMaterial color="#0b0c0e" roughness={0.3} />
+          <planeGeometry args={[screen.w - 0.003, screen.h - 0.003]} />
+          <meshStandardMaterial color="#050506" roughness={0.12} metalness={0.2} />
+        </mesh>
+        <mesh position={[0, screen.h - 0.0075, 0.0009]}>
+          <planeGeometry args={[0.03, 0.0065]} />
+          <meshStandardMaterial color="#020203" roughness={0.3} />
         </mesh>
         {/* display: emissive panel with glossy glass, so the room reflects in it */}
-        <mesh position={[0, screen.h / 2 + 0.004, 0.0006]}>
-          <planeGeometry args={[screen.w - 0.026, screen.h - 0.034]} />
+        <mesh position={[0, screen.h / 2 - 0.0005, 0.0006]}>
+          <planeGeometry args={[screen.w - 0.011, screen.h - 0.016]} />
           <meshStandardMaterial
             color="#000000"
             emissive="#ffffff"

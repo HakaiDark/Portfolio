@@ -6,6 +6,17 @@ import { rng } from "./textures"
 
 export const SCREEN_W = 1024
 export const SCREEN_H = 576
+/** canvases are allocated at this multiple of the layout size, so text stays crisp up close */
+export const SCREEN_SCALE = 1.6
+
+/** Backlight falloff + faint vignette, drawn last, so the panel reads as a lit LCD, not a sticker. */
+export function panelFinish(ctx: CanvasRenderingContext2D) {
+  const g = ctx.createRadialGradient(SCREEN_W / 2, SCREEN_H * 0.45, SCREEN_H * 0.2, SCREEN_W / 2, SCREEN_H / 2, SCREEN_W * 0.62)
+  g.addColorStop(0, "rgba(255,255,255,0.025)")
+  g.addColorStop(1, "rgba(0,0,0,0.16)")
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, SCREEN_W, SCREEN_H)
+}
 
 const SIGS = [
   "HTTP.URI.SQL.Injection",

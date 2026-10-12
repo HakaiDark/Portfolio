@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef } from "react"
 import { useFrame } from "@react-three/fiber"
+import { RoundedBox } from "@react-three/drei"
 import * as THREE from "three"
-import { drawAirWave, drawFortiAnalyzer, SCREEN_H, SCREEN_W, type ScreenState } from "@/lib/dc/noc-screens"
+import { drawAirWave, drawFortiAnalyzer, panelFinish, SCREEN_H, SCREEN_SCALE, SCREEN_W, type ScreenState } from "@/lib/dc/noc-screens"
 
 /** Where the pair of monitors hangs: in front of the neighbouring rack on the right. */
 export const MONITORS = {
@@ -21,12 +22,19 @@ const POWDER = { color: "#141518", roughness: 0.55, metalness: 0.45 }
 function useScreen(draw: (ctx: CanvasRenderingContext2D, t: number, s: ScreenState) => void) {
   return useMemo(() => {
     const canvas = document.createElement("canvas")
-    canvas.width = SCREEN_W
-    canvas.height = SCREEN_H
+    canvas.width = Math.round(SCREEN_W * SCREEN_SCALE)
+    canvas.height = Math.round(SCREEN_H * SCREEN_SCALE)
     const tex = new THREE.CanvasTexture(canvas)
     tex.colorSpace = THREE.SRGBColorSpace
-    tex.anisotropy = 8
-    return { canvas, ctx: canvas.getContext("2d")!, tex, draw }
+    tex.anisotropy = 16
+    const ctx = canvas.getContext("2d")!
+    // layout code works in SCREEN_W x SCREEN_H units; the canvas is denser for sharp text
+    const render = (t: number, s: ScreenState) => {
+      ctx.setTransform(SCREEN_SCALE, 0, 0, SCREEN_SCALE, 0, 0)
+      draw(ctx, t, s)
+      panelFinish(ctx)
+    }
+    return { canvas, ctx, tex, render }
   }, [draw])
 }
 
@@ -47,7 +55,7 @@ export function MonitorWall({ state, quality }: { state: ScreenState; quality: "
     if (t < next.current) return
     next.current = t + (quality === "high" ? 0.5 : 1)
     for (const s of screens) {
-      s.draw(s.ctx, t, stateRef.current)
+      s.render(t, stateRef.current)
       s.tex.needsUpdate = true
     }
   })
@@ -86,17 +94,25 @@ export function MonitorWall({ state, quality }: { state: ScreenState; quality: "
               <boxGeometry args={[0.1, 0.1, 0.03]} />
               <meshStandardMaterial {...POWDER} />
             </mesh>
-            {/* body + glass */}
-            <mesh castShadow>
-              <boxGeometry args={[w, h, 0.028]} />
-              <meshStandardMaterial color="#0d0e10" roughness={0.45} metalness={0.3} />
+            {/* slim front frame, tapered back housing */}
+            <RoundedBox args={[w, h, 0.012]} radius={0.003} smoothness={3} castShadow>
+              <meshStandardMaterial color="#0c0d0f" roughness={0.4} metalness={0.35} />
+            </RoundedBox>
+            <RoundedBox args={[w * 0.78, h * 0.74, 0.028]} radius={0.01} smoothness={3} position={[0, -0.01, -0.016]} castShadow>
+              <meshStandardMaterial color="#17181b" roughness={0.55} metalness={0.2} />
+            </RoundedBox>
+            {/* lit panel: thin bezels, slightly wider chin */}
+            <mesh position={[0, 0.0025, 0.0062]}>
+              <planeGeometry args={[w - 0.011, h - 0.016]} />
+              <meshBasicMaterial map={screens[i].tex} toneMapped={false} color={[0.95, 0.95, 0.95]} />
             </mesh>
-            <mesh position={[0, 0.004, 0.0145]}>
-              <planeGeometry args={[w - 0.014, h - 0.024]} />
-              <meshBasicMaterial map={screens[i].tex} toneMapped={false} color={[0.92, 0.92, 0.92]} />
+            {/* cover glass: dark, glossy, catches the room's lights and racks */}
+            <mesh position={[0, 0, 0.0066]}>
+              <planeGeometry args={[w - 0.002, h - 0.002]} />
+              <meshStandardMaterial color="#000000" metalness={1} roughness={0.07} transparent opacity={0.13} envMapIntensity={1.4} depthWrite={false} />
             </mesh>
             {/* power LED */}
-            <mesh position={[w / 2 - 0.02, -h / 2 + 0.006, 0.0145]}>
+            <mesh position={[w / 2 - 0.02, -h / 2 + 0.004, 0.0066]}>
               <planeGeometry args={[0.004, 0.0025]} />
               <meshBasicMaterial color={[0.6, 2.2, 3]} toneMapped={false} />
             </mesh>

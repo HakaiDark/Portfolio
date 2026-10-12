@@ -54,6 +54,8 @@ export function TerminalOverlay({ open, onClose, onAction }: { open: boolean; on
       }`}
       onClick={onClose}
       aria-hidden={!open}
+      // closed: not just transparent but unreachable by Tab / screen readers
+      inert={!open}
     >
       <div
         role="dialog"

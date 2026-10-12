@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 import { BODY_WIDTH, PANEL_WIDTH, U } from "@/lib/dc/devices"
 import { FACE_Z, slotCenterY } from "@/lib/dc/layout"
+import { ALUMINIUM, useMacDeck } from "./laptop"
 
 /** How far the drawer travels out of the rack, and where its lid hinges (from the drawer front). */
 // lid stays under 0.23 m so the raised screen clears the laptop shelf above (U22)
@@ -24,33 +25,6 @@ const SCRIPT: { text: string; color?: string }[] = [
   { text: "PS C:\\ops> _", color: "#ffffff" },
 ]
 
-/** Keyboard + touchpad on the drawer tray. */
-function keyboardTexture() {
-  const c = document.createElement("canvas")
-  c.width = 512
-  c.height = 200
-  const ctx = c.getContext("2d")!
-  ctx.fillStyle = "#16171a"
-  ctx.fillRect(0, 0, 512, 200)
-  const rows = [14, 14, 13, 12, 10]
-  rows.forEach((n, r) => {
-    const w = 420 / 14
-    const x0 = 46 + (14 - n) * w * 0.5
-    for (let i = 0; i < n; i++) {
-      ctx.fillStyle = "#2a2c31"
-      ctx.fillRect(x0 + i * w + 2, 14 + r * 26, w - 4, 22)
-    }
-  })
-  ctx.fillStyle = "#2a2c31"
-  ctx.fillRect(166, 144, 180, 20) // space bar
-  ctx.fillStyle = "#202226"
-  ctx.fillRect(206, 170, 100, 26) // touchpad (cut off at the edge, sits nearer the front)
-  const t = new THREE.CanvasTexture(c)
-  t.colorSpace = THREE.SRGBColorSpace
-  t.anisotropy = 8
-  return t
-}
-
 /**
  * 1U rack console (KVM drawer). Closed it's a slim black panel; on its stop the tray slides out,
  * the screen flips up and a PowerShell config-validation run types itself out.
@@ -60,7 +34,7 @@ export function KvmDrawer({ u, open }: { u: number; open: boolean }) {
   const h = U - 0.0008
   const trayH = 0.016
   const depth = 0.55
-  const keyboard = useMemo(() => keyboardTexture(), [])
+  const deck = useMacDeck()
   const screen = useMemo(() => {
     const c = document.createElement("canvas")
     c.width = 768
@@ -140,24 +114,28 @@ export function KvmDrawer({ u, open }: { u: number; open: boolean }) {
         </mesh>
         {mounted && (
           <>
-            {/* tray with keyboard */}
+            {/* tray: MacBook-style aluminium deck with a real keyboard + trackpad */}
             <mesh position={[0, -h / 2 + trayH / 2 + 0.002, FACE_Z - depth / 2]} castShadow receiveShadow>
               <boxGeometry args={[BODY_WIDTH - 0.01, trayH, depth]} />
-              <meshStandardMaterial color="#1a1b1e" metalness={0.4} roughness={0.55} />
+              <meshStandardMaterial {...ALUMINIUM} />
             </mesh>
-            <mesh position={[0, -h / 2 + trayH + 0.0025, FACE_Z - 0.11]} rotation={[-Math.PI / 2, 0, 0]}>
-              <planeGeometry args={[0.41, 0.16]} />
-              <meshStandardMaterial map={keyboard} roughness={0.7} />
+            <mesh position={[0, -h / 2 + trayH + 0.0025, FACE_Z - KVM.hingeBack / 2 - 0.004]} rotation={[-Math.PI / 2, 0, 0]}>
+              <planeGeometry args={[0.38, KVM.hingeBack - 0.012]} />
+              <meshStandardMaterial map={deck} metalness={0.35} roughness={0.5} />
             </mesh>
             {/* screen lid, hinged behind the keyboard */}
             <group ref={lid} position={[0, -h / 2 + trayH + 0.003, FACE_Z - KVM.hingeBack]}>
-              <mesh position={[0, 0.006, KVM.lidDepth / 2]} castShadow>
-                <boxGeometry args={[0.42, 0.012, KVM.lidDepth]} />
-                <meshStandardMaterial color="#141518" metalness={0.4} roughness={0.5} />
+              <mesh position={[0, 0.003, KVM.lidDepth / 2]} castShadow>
+                <boxGeometry args={[0.39, 0.006, KVM.lidDepth]} />
+                <meshStandardMaterial {...ALUMINIUM} />
               </mesh>
-              {/* LCD on the lid's underside: faces the visitor once the lid is up */}
-              <mesh position={[0, -0.0005, KVM.lidDepth / 2 + 0.004]} rotation={[Math.PI / 2, 0, 0]}>
-                <planeGeometry args={[0.36, 0.197]} />
+              {/* black glass with thin bezels, then the LCD: faces the visitor once the lid is up */}
+              <mesh position={[0, -0.0003, KVM.lidDepth / 2]} rotation={[Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[0.386, KVM.lidDepth - 0.003]} />
+                <meshStandardMaterial color="#050506" roughness={0.12} metalness={0.2} />
+              </mesh>
+              <mesh position={[0, -0.0008, KVM.lidDepth / 2 + 0.002]} rotation={[Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[0.372, 0.207]} />
                 <meshBasicMaterial map={screen.tex} toneMapped={false} color={[0.95, 0.95, 0.95]} />
               </mesh>
             </group>

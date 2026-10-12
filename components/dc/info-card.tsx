@@ -20,6 +20,7 @@ export function InfoCard({ card: current, onClose, children }: { card: RackCard 
       role="dialog"
       aria-modal="false"
       aria-hidden={!card}
+      inert={!card}
       aria-label={card?.title}
       className={`absolute z-30 border-white/10 bg-[#0b1014]/90 text-white shadow-2xl backdrop-blur-xl transition-all duration-500 ease-out
         max-md:inset-x-0 max-md:bottom-0 max-md:max-h-[58%] max-md:overflow-y-auto max-md:rounded-t-2xl max-md:border-t max-md:pb-[env(safe-area-inset-bottom)]

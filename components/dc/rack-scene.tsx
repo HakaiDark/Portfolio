@@ -26,6 +26,8 @@ import { FailoverPanel } from "./failover-panel"
 import { MONITORS, MonitorWall } from "./monitor-wall"
 import { RearPower } from "./rear-power"
 import { KVM } from "./kvm-drawer"
+import { DeskPhone, PHONE } from "./desk-phone"
+import { ContactPanel } from "./contact-panel"
 import { DeskProps } from "./desk-props"
 
 const { ACTION } = CameraControlsImpl
@@ -53,6 +55,8 @@ interface Stop {
   extend?: boolean
   /** closest zoom for this stop (default MIN_DISTANCE) */
   minDistance?: number
+  /** half-height (m) that must fit in the free part of the screen (above the phone sheet) */
+  fitH?: number
 }
 
 function useStops(): Stop[] {
@@ -113,8 +117,25 @@ function useStops(): Stop[] {
       target: mt,
       cardId: "monitoring",
       fit: 0.34,
+      fitH: 0.37,
       minDistance: 0.4,
     })
+    // the NOC desk phone on the right rack's shelf
+    {
+      const [phx, phy, phz] = PHONE.position
+      const r = PHONE.rotationY
+      const t: [number, number, number] = [phx + Math.sin(r) * 0.01, phy + 0.08, phz + Math.cos(r) * 0.01]
+      stops.push({
+        id: "contact",
+        label: "Contact",
+        // only slightly above the phone, so the eye line clears the gear above the shelf
+        position: [t[0] + Math.sin(r) * 0.62, t[1] + 0.2, t[2] + Math.cos(r) * 0.62],
+        target: t,
+        cardId: "contact",
+        fit: 0.2,
+        minDistance: 0.3,
+      })
+    }
     const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
     stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true, minDistance: 0.24 })
     return stops
@@ -254,14 +275,22 @@ function CameraRig({
   onInteract,
   instant = false,
   cardOpen,
+  reframe = 0,
+  onZoomed,
 }: {
   stop: Stop
   autoRotate: boolean
   onInteract: () => void
   instant?: boolean
   cardOpen: boolean
+  /** bump to re-apply the current stop's framing (e.g. "back to overview" after zooming) */
+  reframe?: number
+  /** the visitor zoomed in from the overview (true) or back out (false) */
+  onZoomed?: (zoomed: boolean) => void
 }) {
   const ref = useRef<CameraControlsImpl>(null)
+  const baseDist = useRef(2.6)
+  const zoomed = useRef(false)
   const size = useThree((s) => s.size)
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
   const aspect = size.width / Math.max(1, size.height)
@@ -296,6 +325,12 @@ function CameraRig({
     } else {
       offset.multiplyScalar(pull)
     }
+    if (stop.fitH) {
+      // tall subjects (the monitor pair): back off until they fit the free height too
+      const freeH = portrait && cardOpen && stop.cardId ? 0.4 : 0.86
+      offset.setLength(Math.max(offset.length(), stop.fitH / (freeH * Math.tan(THREE.MathUtils.degToRad(fov) / 2))))
+    }
+    baseDist.current = offset.length()
     const p = target.clone().add(offset)
     // the overview is as far out as it goes, so scrolling down there moves the page straight away
     setMaxDist(stop.id === "overview" ? offset.length() + 0.005 : Math.max(MAX_DISTANCE, offset.length()))
@@ -311,7 +346,7 @@ function CameraRig({
     const heroCard = stop.id === "overview" && !portrait && aspect > 1.2
     const ox = sideCard ? 0.19 * visW : heroCard ? -0.14 * visW : 0
     c.setFocalOffset(ox, oy, 0, !instant)
-  }, [stop, pull, instant, aspect, portrait, fov, cardOpen])
+  }, [stop, pull, instant, aspect, portrait, fov, cardOpen, reframe])
 
   useEffect(() => {
     const c = ref.current
@@ -389,6 +424,17 @@ function CameraRig({
 
   // Up close, narrow the arc you can turn through so the camera can't swing into the rack's
   // side (cable managers stick out) — full arc from ~1.1 m out, about half of it at the closest.
+  // report zooming in from the overview, so the hero card can step aside
+  useFrame(() => {
+    const c = ref.current
+    if (!c || !onZoomed) return
+    const z = stop.id === "overview" && c.distance < baseDist.current * 0.8
+    if (z !== zoomed.current) {
+      zoomed.current = z
+      onZoomed(z)
+    }
+  })
+
   useFrame(() => {
     const c = ref.current
     if (!c || captureFreeCamera) return
@@ -416,7 +462,8 @@ function CameraRig({
       smoothTime={0.55}
       minAzimuthAngle={minAz}
       maxAzimuthAngle={maxAz}
-      minPolarAngle={THREE.MathUtils.degToRad(58)}
+      // looking up at the ceiling AP the camera stays below it, so it can never rise through the ceiling
+      minPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 96 : 58)}
       maxPolarAngle={THREE.MathUtils.degToRad(stop.lookUp ? 150 : 100)}
       minDistance={stop.minDistance ?? MIN_DISTANCE}
       maxDistance={maxDist}
@@ -508,6 +555,9 @@ function AmbienceDriver({ ambience, on }: { ambience: Ambience; on: boolean }) {
   return null
 }
 
+// 3D buttons and badges stay under the view bar and toggles (z-20) and the info card (z-30)
+const HOTSPOT_Z: [number, number] = [19, 10]
+
 // constant so React re-renders never re-apply it over the animated focus
 const DOF_TARGET: [number, number, number] = [0, 1.35, -0.1]
 
@@ -559,7 +609,7 @@ function HaBadges({ phase }: { phase: HaPhase }) {
           const b = badges[d.key]
           const y = d.key === HA_PRIMARY ? d.centerY + U : d.centerY - U
           return (
-            <Html key={d.key} position={[0.1, y, FACE_Z + 0.01]} center zIndexRange={[29, 0]} style={{ pointerEvents: "none" }}>
+            <Html key={d.key} position={[0.1, y, FACE_Z + 0.01]} center zIndexRange={HOTSPOT_Z} style={{ pointerEvents: "none" }}>
               <div className={`whitespace-nowrap rounded-full border bg-black/70 px-2 py-0.5 font-mono text-[9px] tracking-[0.12em] uppercase backdrop-blur ${BADGE_TONE[b.tone]}`}>
                 {b.name} · {b.role}
               </div>
@@ -574,6 +624,15 @@ function HaBadges({ phase }: { phase: HaPhase }) {
 const KVM_HOTSPOT: [number, number, number] | null = (() => {
   const k = heroRack.find((x) => x.kind === "kvm")
   return k ? [0.15, slotCenterY(k.u, 1), FACE_Z + 0.03] : null
+})()
+
+// above the desk phone's screen module
+const PHONE_HOTSPOT: [number, number, number] = (() => {
+  const [x, y, z] = PHONE.position
+  const r = PHONE.rotationY
+  const lx = 0.07
+  const lz = -0.03
+  return [x + Math.cos(r) * lx + Math.sin(r) * lz, y + 0.2, z - Math.sin(r) * lx + Math.cos(r) * lz]
 })()
 
 // top-left corner of the upper monitor (left of the FortiAnalyzer title bar)
@@ -606,28 +665,33 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
     <>
       {mountedDevices()
         .filter((d) => d.hotspot && d.cfg.hotspot)
+        // the open console drawer's screen rises in front of the servers: hide their button meanwhile
+        .filter((d) => !(activeStop === "kvm" && d.cfg.slide))
         .map((d) => {
           const [x, y] = facePoint(d.cfg, d.cfg.hotspot!.u, d.cfg.hotspot!.v)
           return (
             // a server pulled out on its rails takes its button with it
-            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03 + (activeStop === d.key ? (d.cfg.slide ?? 0) : 0)]} center zIndexRange={[30, 0]}>
+            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03 + (activeStop === d.key ? (d.cfg.slide ?? 0) : 0)]} center zIndexRange={HOTSPOT_Z}>
               <HotspotButton label={`About ${d.cfg.name}`} active={activeStop === d.key} onClick={() => onStop(d.key)} />
             </Html>
           )
         })}
-      <Html position={[ax, ay - 0.06, az]} center zIndexRange={[30, 0]}>
+      <Html position={[ax, ay - 0.06, az]} center zIndexRange={HOTSPOT_Z}>
         <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
       </Html>
       {KVM_HOTSPOT && (
         // travels out with the drawer when it's open
-        <Html position={[KVM_HOTSPOT[0], KVM_HOTSPOT[1], KVM_HOTSPOT[2] + (activeStop === "kvm" ? KVM.slide : 0)]} center zIndexRange={[30, 0]}>
+        <Html position={[KVM_HOTSPOT[0], KVM_HOTSPOT[1], KVM_HOTSPOT[2] + (activeStop === "kvm" ? KVM.slide : 0)]} center zIndexRange={HOTSPOT_Z}>
           <HotspotButton label="Open the rack console" glyph=">_" active={activeStop === "kvm"} onClick={() => onStop("kvm")} />
         </Html>
       )}
-      <Html position={MONITOR_HOTSPOT} center zIndexRange={[30, 0]}>
+      <Html position={PHONE_HOTSPOT} center zIndexRange={HOTSPOT_Z}>
+        <HotspotButton label="Contact Mohammad" active={activeStop === "contact"} onClick={() => onStop("contact")} />
+      </Html>
+      <Html position={MONITOR_HOTSPOT} center zIndexRange={HOTSPOT_Z}>
         <HotspotButton label="About the monitoring screens" active={activeStop === "monitoring"} onClick={() => onStop("monitoring")} />
       </Html>
-      <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={[30, 0]}>
+      <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={HOTSPOT_Z}>
         <HotspotButton label="Open the console terminal" glyph=">_" active={activeStop === "terminal"} onClick={() => onStop("terminal")} />
       </Html>
     </>
@@ -651,6 +715,8 @@ function Scene({
   ha,
   haPhase,
   haLog,
+  reframe,
+  onZoomed,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -668,6 +734,8 @@ function Scene({
   ha: HaView
   haPhase: HaPhase
   haLog: NonNullable<HaStep["log"]>[]
+  reframe: number
+  onZoomed: (zoomed: boolean) => void
 }) {
   return (
     <>
@@ -675,7 +743,15 @@ function Scene({
       <fog attach="fog" args={[BG, 5, 15]} />
       <Environment />
       <Lights quality={quality} />
-      <CameraRig stop={stop} autoRotate={autoRotate && !capture} onInteract={onInteract} instant={capture} cardOpen={cardOpen} />
+      <CameraRig
+        stop={stop}
+        autoRotate={autoRotate && !capture}
+        onInteract={onInteract}
+        instant={capture}
+        cardOpen={cardOpen}
+        reframe={reframe}
+        onZoomed={onZoomed}
+      />
       {capture && <CaptureHook setStop={setStop} setTraffic={setTraffic} />}
       <Suspense fallback={null}>
         <Room quality={quality} />
@@ -688,6 +764,7 @@ function Scene({
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
         <MonitorWall state={{ phase: haPhase, haLog }} quality={quality} />
+        <DeskPhone />
         <Hotspots activeStop={stop.id} onStop={onStop} />
         {stop.id === HA_PRIMARY && <HaBadges phase={haPhase} />}
         <SceneReady onAssets={onAssets} onReady={onReady} />
@@ -714,6 +791,8 @@ export interface RackSceneSignals {
   onEngine?: () => void
   /** the visitor started exploring (stop, hotspot or camera gesture) */
   onExplore?: () => void
+  /** a view is open or the camera is zoomed in (true), or back at the overview (false) */
+  onFocus?: (focused: boolean) => void
   onProgress?: (progress: number) => void
   onAssets?: () => void
   onReady?: () => void
@@ -724,12 +803,15 @@ export default function RackScene({
   reducedMotion,
   signals,
   active = true,
+  resetNonce = 0,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
   signals?: RackSceneSignals
   /** false while the hero is scrolled out of view: the render loop pauses */
   active?: boolean
+  /** bump to return to the overview framing (closes any view, undoes zoom) */
+  resetNonce?: number
 }) {
   const { progress } = useProgress()
   const sigRef = useRef(signals)
@@ -802,6 +884,17 @@ export default function RackScene({
   useEffect(() => () => clearTimeout(terminalTimer.current), [])
 
   const card = cardOpen && stop.cardId ? rackCards[stop.cardId] : null
+
+  // "focused" = a view is open or the camera is zoomed in: the hero card steps aside meanwhile
+  const [zoomedIn, setZoomedIn] = useState(false)
+  const [reframe, setReframe] = useState(0)
+  const focused = stopId !== "overview" || zoomedIn || terminalOpen
+  useEffect(() => sigRef.current?.onFocus?.(focused), [focused])
+  useEffect(() => {
+    if (!resetNonce) return
+    close()
+    setReframe((n) => n + 1)
+  }, [resetNonce, close])
 
   // HA failover demo: scripted timeline, traffic view on while it runs
   const [haPhase, setHaPhase] = useState<HaPhase>("idle")
@@ -879,6 +972,8 @@ export default function RackScene({
           ha={haViewNow}
           haPhase={haPhase}
           haLog={haLog}
+          reframe={reframe}
+          onZoomed={setZoomedIn}
         />
       </Canvas>
 
@@ -916,22 +1011,25 @@ export default function RackScene({
       {/* camera stops */}
       <nav
         aria-label="Rack views"
-        className={`absolute inset-x-0 bottom-0 z-20 flex gap-2 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity md:bottom-4 md:justify-center ${
+        className={`absolute inset-x-0 bottom-0 z-20 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity [scrollbar-width:none] md:bottom-4 ${
           card || terminalOpen ? "max-md:pointer-events-none max-md:opacity-0" : "opacity-100"
         }`}
       >
+        {/* w-max + mx-auto: centred when the chips fit, scrolls from the first chip when they don't */}
+        <div className="mx-auto flex w-max gap-1.5">
         {stops.map((s) => (
           <button
             key={s.id}
             type="button"
             onClick={() => goTo(s.id)}
-            className={`shrink-0 rounded-full border px-4 py-2 font-mono text-[11px] tracking-[0.12em] uppercase backdrop-blur-md transition-colors ${
+            className={`shrink-0 rounded-full border px-3.5 py-2 font-mono text-[11px] tracking-[0.1em] uppercase backdrop-blur-md transition-colors ${
               stop.id === s.id ? "border-[#00ffe7] bg-[#00ffe7] text-black" : "border-white/15 bg-black/45 text-white/80 hover:border-white/40"
             }`}
           >
             {s.label}
           </button>
         ))}
+        </div>
       </nav>
 
       {!interacted && (
@@ -947,6 +1045,7 @@ export default function RackScene({
 
       <InfoCard card={card} onClose={close}>
         {stop.id === HA_PRIMARY && <FailoverPanel running={haRunning} log={haLog} onRun={runFailover} />}
+        {stop.id === "contact" && <ContactPanel />}
       </InfoCard>
       <TerminalOverlay open={terminalOpen} onClose={close} onAction={runFailover} />
     </div>

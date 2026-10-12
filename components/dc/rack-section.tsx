@@ -56,8 +56,11 @@ export function RackSection({ className = "", overlay }: { className?: string; o
     io.observe(el)
     return () => io.disconnect()
   }, [])
-  // phones: the name card slides away once the visitor starts exploring the rack
+  // phones: the name card slides away once the visitor starts exploring the rack;
+  // every screen: it also steps aside while a view is open or the camera is zoomed in
   const [exploring, setExploring] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const [resetNonce, setResetNonce] = useState(0)
   const [boot, setBoot] = useState<BootSignals>({ engine: false, progress: 0, assets: false, ready: false })
   const reducedMotion = useReducedMotion()
 
@@ -87,6 +90,7 @@ export function RackSection({ className = "", overlay }: { className?: string; o
     () => ({
       onEngine: () => setBoot((b) => ({ ...b, engine: true })),
       onExplore: () => setExploring(true),
+      onFocus: setFocused,
       onProgress: (progress) => setBoot((b) => ({ ...b, progress })),
       onAssets: () => setBoot((b) => ({ ...b, assets: true, progress: 100 })),
       onReady: () => setBoot((b) => ({ ...b, ready: true })),
@@ -108,7 +112,7 @@ export function RackSection({ className = "", overlay }: { className?: string; o
         <StaticRack />
       ) : visible && quality ? (
         <WebGLBoundary onError={onError}>
-          <RackScene quality={quality} reducedMotion={reducedMotion} signals={signals} active={onScreen} />
+          <RackScene quality={quality} reducedMotion={reducedMotion} signals={signals} active={onScreen} resetNonce={resetNonce} />
         </WebGLBoundary>
       ) : (
         <div className="h-full w-full bg-[#0b0e11]" />
@@ -119,7 +123,11 @@ export function RackSection({ className = "", overlay }: { className?: string; o
           className={`hero-overlay pointer-events-none absolute inset-x-0 top-0 z-[35] transition-[opacity,transform] duration-300 ease-out ${
             overlayPending ? "invisible opacity-0" : ""
           } ${
-            exploring ? "max-md:-translate-y-6 max-md:opacity-0 max-md:[&_*]:pointer-events-none" : ""
+            focused
+              ? "-translate-y-6 opacity-0 [&_*]:pointer-events-none"
+              : exploring
+                ? "max-md:-translate-y-6 max-md:opacity-0 max-md:[&_*]:pointer-events-none"
+                : ""
           }`}
         >
           {overlay}
@@ -129,11 +137,16 @@ export function RackSection({ className = "", overlay }: { className?: string; o
           </noscript>
         </div>
       )}
-      {overlay && exploring && (
+      {overlay && (focused || exploring) && (
         <button
           type="button"
-          onClick={() => setExploring(false)}
-          className="absolute top-3 left-3 z-[36] flex items-center gap-2 rounded-full border border-white/15 bg-[#0b0e11]/80 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md md:hidden"
+          onClick={() => {
+            setExploring(false)
+            // inside a view or zoomed in: take the visitor back to the overview, card and all
+            if (focused) setResetNonce((n) => n + 1)
+          }}
+          aria-label="Back to the overview and the intro card"
+          className={`absolute top-3 left-3 z-[36] flex items-center gap-2 rounded-full border border-white/15 bg-[#0b0e11]/80 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md ${focused ? "" : "md:hidden"}`}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-[#3ee07a]" aria-hidden />
           Mohammad Yassin

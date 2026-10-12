@@ -310,8 +310,9 @@ const RIGHT_RACK: RackSlot[] = [
   { kind: "server", u: 30, units: 2, variant: 0 },
   { kind: "blank", u: 28, units: 2 },
   { kind: "server", u: 26, units: 2, variant: 1 },
-  { kind: "server", u: 24, units: 2, variant: 1 },
-  { kind: "blank", u: 22, units: 2 },
+  // U20-U25 left open over the shelf so the desk phone has headroom and can be seen
+  // shelf for the NOC desk phone, under the monitor pair
+  { kind: "shelf", u: 19 },
 ]
 
 export function Room({ quality }: { quality: "high" | "low" }) {

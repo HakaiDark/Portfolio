@@ -68,6 +68,12 @@ export const rackCards: Record<string, RackCard> = {
     ],
     tags: ["Python", "Flask", "MongoDB", "Docker", "OpenCV", "Flutter"],
   },
+  contact: {
+    eyebrow: "Speed dial",
+    title: "Get in touch",
+    summary: "The quickest way to reach me is WhatsApp; email works too. References available on request.",
+    tags: ["Open to roles in UAE, KSA & Qatar", "Ready to relocate"],
+  },
   automation: {
     eyebrow: "Automation · Edmonton Catholic Schools",
     title: "PowerShell for the network team",

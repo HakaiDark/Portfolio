@@ -6,6 +6,7 @@ import * as THREE from "three"
 import type { RackSlot } from "@/lib/dc/devices"
 import { assetLabel, cabinetInterior, floorTile, perforationAlpha } from "@/lib/dc/textures"
 import { OpenRack } from "./rack-hardware"
+import { SPOUT } from "@/lib/dc/cables"
 
 const CAB_W = 0.6
 const CAB_H = 2.0
@@ -173,6 +174,46 @@ function Floor({ quality }: { quality: "high" | "low" }) {
   )
 }
 
+/**
+ * Downspout from the yellow fibre tray: a collar on the tray, a straight tube, and a flared bell
+ * with a rolled lip at the bottom, where the fibre bundle pours out toward the rack.
+ */
+function FibreDownspout() {
+  const bell = useMemo(() => {
+    const h = SPOUT.topY - SPOUT.bellY
+    // profile from the rolled lip up to the tray (radius, height)
+    const pts = [
+      [0.05, 0.004],
+      [0.058, 0.0],
+      [0.061, 0.006],
+      [0.056, 0.014],
+      [0.046, 0.03],
+      [0.039, 0.055],
+      [0.036, 0.09],
+      [0.035, h],
+    ].map(([r, y]) => new THREE.Vector2(r, y))
+    return new THREE.LatheGeometry(pts, 40)
+  }, [])
+  const yellow = { color: "#e8b90f", roughness: 0.45, metalness: 0.05 }
+  return (
+    <group position={[SPOUT.x, SPOUT.bellY, SPOUT.z]}>
+      <mesh geometry={bell}>
+        <meshStandardMaterial {...yellow} side={THREE.DoubleSide} />
+      </mesh>
+      {/* dark interior, so the opening reads as a hole the fibres come out of */}
+      <mesh position={[0, 0.03, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.044, 32]} />
+        <meshStandardMaterial color="#3a3006" roughness={0.9} />
+      </mesh>
+      {/* square collar where it clips onto the tray */}
+      <mesh position={[0, SPOUT.topY - SPOUT.bellY - 0.012, 0]}>
+        <boxGeometry args={[0.1, 0.024, 0.1]} />
+        <meshStandardMaterial {...yellow} />
+      </mesh>
+    </group>
+  )
+}
+
 function Overhead({ quality }: { quality: "high" | "low" }) {
   const rungRef = useRef<THREE.InstancedMesh>(null)
   const rungs = useMemo(() => {
@@ -254,10 +295,7 @@ function Overhead({ quality }: { quality: "high" | "low" }) {
         <boxGeometry args={[16, 0.1, 0.3]} />
         <meshStandardMaterial color="#e8b90f" roughness={0.5} />
       </mesh>
-      <mesh position={[0.29, 2.45, -0.05]}>
-        <cylinderGeometry args={[0.035, 0.05, 0.26, 16, 1, true]} />
-        <meshStandardMaterial color="#e8b90f" roughness={0.5} side={THREE.DoubleSide} />
-      </mesh>
+      <FibreDownspout />
       {/* threaded rods holding the runner */}
       {fixtures.map((x) => (
         <mesh key={`rod${x}`} position={[x + 1.2, 2.88, -0.05]}>

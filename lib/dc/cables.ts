@@ -19,6 +19,9 @@ export const CABLE_COLORS = {
 } as const
 export type CableColor = keyof typeof CABLE_COLORS
 
+/** Fibre-tray downspout above the hero rack's right-hand bundle (drawn in room.tsx). */
+export const SPOUT = { x: 0.3, z: 0.035, bellY: 2.3, topY: 2.57 }
+
 const COPPER_R = 0.0029
 const FIBER_R = 0.0016
 const QSFP_R = 0.0024
@@ -239,8 +242,10 @@ function createHeroCables(quality: "high" | "low"): CableSet {
             v((x + 0.26) / 2, y - 0.03 - r() * 0.02, 0.1),
             v(0.27, y + 0.01, 0.075),
             v(bx, y + 0.12, bz),
-            v(bx, 2.02, bz - 0.02),
-            v(bx * 0.9, 2.34, -0.2),
+            v(bx, 2.02, bz),
+            // gather into the downspout's bell and run up inside it into the overhead tray
+            v(SPOUT.x + (bx - 0.305) * 0.45, SPOUT.bellY - 0.01, SPOUT.z + (bz - 0.035) * 0.45),
+            v(SPOUT.x + (bx - 0.305) * 0.3, SPOUT.topY + 0.03, SPOUT.z + (bz - 0.035) * 0.3),
           ],
           0.1
         ),

@@ -282,17 +282,23 @@ function Overhead({ quality }: { quality: "high" | "low" }) {
   )
 }
 
+// Real gear on display (photo faceplates, no buttons): an Aruba CX access stack, Dell compute
+// and storage, and a pair of APC UPSs (A/B feeds) under them.
 const LEFT_RACK: RackSlot[] = [
-  { kind: "patch-panel", u: 38, ports: 24 },
-  { kind: "patch-panel", u: 37, ports: 24 },
-  { kind: "cable-manager", u: 36 },
-  { kind: "patch-panel", u: 35, ports: 24 },
-  { kind: "patch-panel", u: 34, ports: 24 },
-  { kind: "cable-manager", u: 33 },
-  { kind: "blank", u: 30, units: 3 },
-  { kind: "server", u: 26, units: 2, variant: 1 },
-  { kind: "server", u: 24, units: 2, variant: 1 },
-  { kind: "blank", u: 20, units: 4 },
+  { kind: "patch-panel", u: 39, ports: 24 },
+  { kind: "cable-manager", u: 38 },
+  { kind: "device", id: "aruba-6300m", u: 37 },
+  { kind: "device", id: "aruba-6300m", u: 36 },
+  { kind: "cable-manager", u: 35 },
+  { kind: "device", id: "poweredge-2u", u: 33 },
+  { kind: "device", id: "poweredge-2u", u: 31 },
+  { kind: "blank", u: 30, units: 1 },
+  { kind: "device", id: "powervault-me5024", u: 28 },
+  { kind: "device", id: "powervault-me5024", u: 26 },
+  { kind: "blank", u: 25, units: 1 },
+  { kind: "device", id: "apc-srt-2u", u: 23 },
+  { kind: "device", id: "apc-srt-2u", u: 21 },
+  { kind: "blank", u: 15, units: 6 },
 ]
 
 const RIGHT_RACK: RackSlot[] = [
@@ -315,10 +321,10 @@ export function Room({ quality }: { quality: "high" | "low" }) {
       <Cabinets quality={quality} />
       <Overhead quality={quality} />
       <group position={[-0.74, 0, 0]}>
-        <OpenRack slots={LEFT_RACK} managers={false} />
+        <OpenRack slots={LEFT_RACK} managers={false} lowRes={quality === "low"} />
       </group>
       <group position={[0.74, 0, 0]}>
-        <OpenRack slots={RIGHT_RACK} managers={false} />
+        <OpenRack slots={RIGHT_RACK} managers={false} lowRes={quality === "low"} />
       </group>
     </group>
   )

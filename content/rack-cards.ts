@@ -68,6 +68,17 @@ export const rackCards: Record<string, RackCard> = {
     ],
     tags: ["Python", "Flask", "MongoDB", "Docker", "OpenCV", "Flutter"],
   },
+  monitoring: {
+    eyebrow: "Monitoring & visibility",
+    title: "FortiAnalyzer + AirWave",
+    summary: "Investigated threats and analyzed logs in FortiAnalyzer, and monitored and troubleshot Aruba wireless through AirWave.",
+    points: [
+      "Log analysis and threat investigation across the Fortinet fabric",
+      "Aruba wireless deployed and managed through AirWave",
+      "These screens are a simulation with made-up data; try the FortiGate failover and watch them react",
+    ],
+    tags: ["FortiAnalyzer", "AirWave", "Logs", "Threat investigation", "Wireless"],
+  },
   wireless: {
     eyebrow: "Wireless & access control",
     title: "Aruba AP + ClearPass",

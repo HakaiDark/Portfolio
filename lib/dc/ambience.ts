@@ -15,7 +15,8 @@ export class Ambience {
     const ctx = this.ctx!
     void ctx.resume()
     this.master!.gain.cancelScheduledValues(ctx.currentTime)
-    this.master!.gain.setTargetAtTime(0.9, ctx.currentTime, 0.35)
+    // ambience should sit well under speech or music: ~ -30 dBFS overall
+    this.master!.gain.setTargetAtTime(0.35, ctx.currentTime, 0.35)
   }
 
   stop() {
@@ -43,7 +44,7 @@ export class Ambience {
   setProximity(p: number) {
     const ctx = this.ctx
     if (!ctx || !this.fan || !this.fanFilter) return
-    this.fan.gain.setTargetAtTime(0.025 + p * 0.11, ctx.currentTime, 0.25)
+    this.fan.gain.setTargetAtTime(0.02 + p * 0.08, ctx.currentTime, 0.25)
     this.fanFilter.frequency.setTargetAtTime(1500 + p * 1600, ctx.currentTime, 0.3)
   }
 

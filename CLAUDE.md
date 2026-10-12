@@ -20,7 +20,9 @@ Next 16 (Turbopack, App Router), React 19, @react-three/fiber 9, drei 10, three 
   - `lib/dc/quality.ts` tiers: high / low (phones, weak GPUs: no AO, no rain) / static (no WebGL).
   - `lib/dc/cables.ts` (cached; routing, sag, HA + console cables; each path has an `owner` = device key / "ha" / "console"), `textures.ts` (procedural canvas textures, tiled grain), `laptop.ts`, `contact.ts`.
   - Wow features (no perf cost): **HA failover demo** (`lib/dc/ha.ts` timeline + per-phase LED states / paused cable owners / role badges; button in the FortiGate card via `failover-panel.tsx`; terminal `execute ha failover set 1`; the passive FGT-02 never shows traffic in normal operation). **Server slide-out** (`slide` in `devices.ts`: the ProLiant pulls out on rails with the lid off, internals only mounted while out). **Ambient sound** (`lib/dc/ambience.ts`, Web Audio, no files, off by default, fans louder up close). **Focus pull** (`FocusPull` in `rack-scene.tsx`: one DoF effect animated, never rebuilt).
-- `tools/capture-receiver.mjs`, `tools/crop-faceplates.mjs` — see below.
+- Side racks (`components/dc/room.tsx`): LEFT_RACK = display-only photo gear (Aruba CX 6300M ×2, Dell PowerEdge 2U ×2, PowerVault ME5024 ×2, APC SRT 2U ×2; configs at the end of `devices.ts`). The right rack carries the **monitor wall** (`monitor-wall.tsx` + `lib/dc/noc-screens.ts`: FortiAnalyzer-style + AirWave-style canvases redrawn at 2 Hz, react to the HA demo; stop `monitoring`, card `monitoring`). Only tools in his profile get branded screens (no PRTG).
+- Pending: a BlueCat appliance photo (user sent one in chat, but it never reached the disk) is meant to replace the second PowerEdge in LEFT_RACK.
+- `tools/capture-receiver.mjs`, `tools/crop-faceplates.mjs`, `tools/warp-faceplate.mjs` (perspective-flattens an angled product photo: 4 corners -> WebP).
 
 ## Content rules (non-negotiable)
 - Never list Fortinet NSE or Cisco CCNA as certifications. No invented metrics, titles or dates. `Flappy_Bird_DeepLearning` is a fork — never present it as his work.

@@ -23,6 +23,7 @@ import { TerminalOverlay } from "./terminal-overlay"
 import { Ambience } from "@/lib/dc/ambience"
 import { HA_PRIMARY, HA_TIMELINE, haBadges, haView, type BadgeTone, type HaPhase, type HaStep, type HaView } from "@/lib/dc/ha"
 import { FailoverPanel } from "./failover-panel"
+import { MONITORS, MonitorWall } from "./monitor-wall"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -84,6 +85,18 @@ function useStops(): Stop[] {
       })
     const [ax, ay, az] = ACCESS_POINT.position
     stops.push({ id: "wireless", label: "Wi-Fi", position: [0.2, 2.42, 1.42], target: [ax, ay - 0.05, az], cardId: ACCESS_POINT.cardId, lookUp: true })
+    // the two monitors on the next rack: look at them square-on
+    const { position: mp, rotationY: mr, tops } = MONITORS
+    const mt: [number, number, number] = [mp[0] + Math.sin(mr) * 0.045, (tops[0] + tops[1]) / 2, mp[2] + Math.cos(mr) * 0.045]
+    stops.push({
+      id: "monitoring",
+      label: "Monitoring",
+      position: [mt[0] + Math.sin(mr) * 1.15, mt[1] + 0.03, mt[2] + Math.cos(mr) * 1.15],
+      target: mt,
+      cardId: "monitoring",
+      fit: 0.34,
+      minDistance: 0.4,
+    })
     const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
     stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true, minDistance: 0.24 })
     return stops
@@ -527,6 +540,14 @@ function HaBadges({ phase }: { phase: HaPhase }) {
   )
 }
 
+// top-left corner of the upper monitor (left of the FortiAnalyzer title bar)
+const MONITOR_HOTSPOT: [number, number, number] = (() => {
+  const { position: p, rotationY: r, tops, width, height } = MONITORS
+  const lx = -width / 2 + 0.03
+  const lz = 0.045 + 0.03
+  return [p[0] + Math.cos(r) * lx + Math.sin(r) * lz, tops[0] + height / 2 - 0.035, p[2] - Math.sin(r) * lx + Math.cos(r) * lz]
+})()
+
 function HotspotButton({ label, active, glyph = "+", onClick }: { label: string; active: boolean; glyph?: string; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} aria-label={label} className="group relative flex h-11 w-11 items-center justify-center">
@@ -561,6 +582,9 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
       <Html position={[ax, ay - 0.06, az]} center zIndexRange={[30, 0]}>
         <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
       </Html>
+      <Html position={MONITOR_HOTSPOT} center zIndexRange={[30, 0]}>
+        <HotspotButton label="About the monitoring screens" active={activeStop === "monitoring"} onClick={() => onStop("monitoring")} />
+      </Html>
       <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={[30, 0]}>
         <HotspotButton label="Open the console terminal" glyph=">_" active={activeStop === "terminal"} onClick={() => onStop("terminal")} />
       </Html>
@@ -584,6 +608,7 @@ function Scene({
   onReady,
   ha,
   haPhase,
+  haLog,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -600,6 +625,7 @@ function Scene({
   onReady: () => void
   ha: HaView
   haPhase: HaPhase
+  haLog: NonNullable<HaStep["log"]>[]
 }) {
   return (
     <>
@@ -617,6 +643,7 @@ function Scene({
           <Mug />
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
+        <MonitorWall state={{ phase: haPhase, haLog }} quality={quality} />
         <Hotspots activeStop={stop.id} onStop={onStop} />
         {stop.id === HA_PRIMARY && <HaBadges phase={haPhase} />}
         <SceneReady onAssets={onAssets} onReady={onReady} />
@@ -807,6 +834,7 @@ export default function RackScene({
           onReady={onReady}
           ha={haViewNow}
           haPhase={haPhase}
+          haLog={haLog}
         />
       </Canvas>
 

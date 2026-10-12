@@ -15,6 +15,7 @@ export const CABLE_COLORS = {
   aqua: "#1cbcc4", // OM4 multimode fibre
   fiberYellow: "#f0c419", // single-mode fibre
   console: "#79b8e3", // light-blue rollover cable
+  dac: "#141517", // passive twinax direct-attach copper (SFP+ DAC)
 } as const
 export type CableColor = keyof typeof CABLE_COLORS
 
@@ -34,11 +35,24 @@ export interface Sleeve {
   quaternion: THREE.Quaternion
 }
 
+/** Printed label-maker flag on a cable, near its connector. */
+export interface CableLabel {
+  position: THREE.Vector3
+  text: string
+  /** which side of the cable the flag sticks out to */
+  side: 1 | -1
+}
+
 export interface CableSet {
   tubes: { color: CableColor; geometry: THREE.BufferGeometry }[]
   plugs: Plug[]
   ties: [number, number, number][]
   sleeves: Sleeve[]
+  /** rubber dust plugs in empty SFP cages */
+  dust: [number, number, number][]
+  /** coloured bail / pull-tabs under optics and DAC heads (beige = multimode, blue = single-mode, black = DAC) */
+  tabs: { position: [number, number, number]; color: string }[]
+  labels: CableLabel[]
   /** cable paths, used by the packet-flow view; `owner` is the device key, "ha" or "console" */
   paths: { curve: THREE.CatmullRomCurve3; kind: "copper" | "fiber" | "console"; owner: string }[]
 }
@@ -89,6 +103,9 @@ function createHeroCables(quality: "high" | "low"): CableSet {
   const ties: [number, number, number][] = []
   const sleeves: Sleeve[] = []
   const paths: CableSet["paths"] = []
+  const dust: CableSet["dust"] = []
+  const tabs: CableSet["tabs"] = []
+  const labels: CableLabel[] = []
 
   let owner = ""
   const addCable = (color: CableColor, pts: THREE.Vector3[], radius: number, kind: "copper" | "fiber" | "console", sleeveEnds: boolean) => {
@@ -168,6 +185,10 @@ function createHeroCables(quality: "high" | "low"): CableSet {
         }
         // drop down and out to the nearest side, then down the vertical manager
         const side: 1 | -1 = x >= 0 ? 1 : -1
+        const labelText =
+          dev.cfg.id === "fortigate-601f" && quality === "high"
+            ? `${dev.u === 34 ? "FGT01" : "FGT02"} P${p.col + 1 + p.row * 8} → CORE-${dev.u === 34 ? "A" : "B"} ${p.col + 1}`
+            : null
         const [bx, bz] = bundleSlot(side, sideCount[side]++)
         const yMgr = below - 0.012 - r() * 0.01
         highestDrop = Math.max(highestDrop, yMgr - 0.09)
@@ -189,6 +210,13 @@ function createHeroCables(quality: "high" | "low"): CableSet {
           "copper",
           true
         )
+        if (labelText) {
+          // label-maker flag wrapped round the cable 5-11 cm from the plug: where it lands on the core.
+          // Neighbouring cables are ~15 mm apart, so flags step down and alternate sides.
+          const c = paths[paths.length - 1].curve
+          const n = labels.length
+          labels.push({ position: c.getPointAt(Math.min(0.5, (0.05 + (n % 3) * 0.03) / c.getLength())), text: labelText, side: n % 2 ? -1 : 1 })
+        }
         continue
       }
 
@@ -196,7 +224,10 @@ function createHeroCables(quality: "high" | "low"): CableSet {
       const qsfp = p.kind === "qsfp"
       const color: CableColor = qsfp ? "aqua" : r() > 0.3 ? "aqua" : "fiberYellow"
       plugs.push({ kind: qsfp ? "qsfp" : "sfp", color, position: [x, y, FACE_Z + 0.008] })
-      if (!qsfp) plugs.push({ kind: "lc", color, position: [x, y, FACE_Z + 0.03] })
+      if (!qsfp) {
+        plugs.push({ kind: "lc", color, position: [x, y, FACE_Z + 0.03] })
+        tabs.push({ position: [x, y - 0.0052, FACE_Z + 0.018], color: color === "fiberYellow" ? "#2f6fd6" : "#d8cfb2" })
+      }
       const [bx, bz] = bundleSlot(1, 40 + fiberCount++)
       const z0 = FACE_Z + (qsfp ? 0.03 : 0.042)
       addCable(
@@ -268,6 +299,50 @@ function createHeroCables(quality: "high" | "low"): CableSet {
     )
   }
 
+  // SFP+ DACs: stiff black twinax with metal heads. One from the FortiSwitch's spare uplink to
+  // FGT-01, one between the FortiGates as a second HA heartbeat. Remaining empty cages get dust plugs.
+  const freeSfp = new Map(mounted.map((m) => [m.key, m.ports.filter((p) => p.kind === "sfp" && !p.patched).sort((a, b) => b.x - a.x || a.row - b.row)]))
+  const take = (key: string) => freeSfp.get(key)?.shift()
+  const fsw = mounted.find((m) => m.cfg.id === "fortiswitch-448e")
+  const fgts = mounted.filter((m) => m.cfg.id === "fortigate-601f")
+  const dac = (a: (typeof mounted)[number]["ports"][number], b: (typeof mounted)[number]["ports"][number], who: string) => {
+    owner = who
+    for (const q of [a, b]) {
+      plugs.push({ kind: "sfp", color: "dac", position: [q.x, q.wy, FACE_Z + 0.008] })
+      tabs.push({ position: [q.x, q.wy - 0.0052, FACE_Z + 0.02], color: "#1b1c1f" })
+    }
+    const z0 = FACE_Z + 0.03
+    const dy = a.wy - b.wy
+    // twinax barely sags: a wide, smooth loop out in front of the faceplates
+    addCable(
+      "dac",
+      [
+        v(a.x, a.wy, z0),
+        v(a.x + 0.006, a.wy - 0.004, z0 + 0.04),
+        v((a.x + b.x) / 2 + 0.035, (a.wy + b.wy) / 2, z0 + 0.075 + Math.abs(dy) * 0.12),
+        v(b.x + 0.006, b.wy + 0.004, z0 + 0.04),
+        v(b.x, b.wy, z0),
+      ],
+      0.0031,
+      "copper",
+      false
+    )
+  }
+  if (fsw && fgts[0]) {
+    const a = take(fsw.key)
+    const b = take(fgts[0].key)
+    if (a && b) dac(a, b, fgts[0].key)
+  }
+  if (fgts.length === 2) {
+    const a = take(fgts[0].key)
+    const b = freeSfp.get(fgts[1].key)?.find((q) => a && Math.abs(q.x - a.x) < 0.001)
+    if (a && b) {
+      freeSfp.get(fgts[1].key)!.splice(freeSfp.get(fgts[1].key)!.indexOf(b), 1)
+      dac(a, b, "ha")
+    }
+  }
+  for (const list of freeSfp.values()) for (const q of list) dust.push([q.x, q.wy, FACE_Z + 0.0035])
+
   // velcro ties on the vertical bundles, from the floor up to the highest drop
   const tieStep = quality === "high" ? 0.2 : 0.32
   const top = highestDrop - 0.05
@@ -282,5 +357,5 @@ function createHeroCables(quality: "high" | "low"): CableSet {
     geos.forEach((g) => g.dispose())
     return { color, geometry: merged }
   })
-  return { tubes, plugs, ties, sleeves, paths }
+  return { tubes, plugs, ties, sleeves, paths, dust, tabs, labels }
 }

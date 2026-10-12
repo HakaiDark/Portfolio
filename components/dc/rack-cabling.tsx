@@ -3,10 +3,11 @@
 import { useLayoutEffect, useMemo, useRef } from "react"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
-import { buildHeroCables, CABLE_COLORS, type CableColor, type CableSet, type Plug } from "@/lib/dc/cables"
+import { buildHeroCables, CABLE_COLORS, type CableColor, type CableLabel, type CableSet, type Plug } from "@/lib/dc/cables"
 import { FACE_Z, facePoint, mountedDevices } from "@/lib/dc/layout"
 import { Leds, type LedPoint } from "./leds"
 import { timed } from "@/lib/dc/perf"
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js"
 import type { LedState } from "@/lib/dc/ha"
 
 const PLUG_GEO: Record<Plug["kind"], THREE.BufferGeometry> = {
@@ -77,6 +78,90 @@ function Sleeves({ sleeves }: { sleeves: CableSet["sleeves"] }) {
     <instancedMesh ref={ref} args={[sleeveGeo, undefined, sleeves.length]}>
       <meshStandardMaterial color="#eeeeea" roughness={0.45} side={THREE.DoubleSide} />
     </instancedMesh>
+  )
+}
+
+const dustGeo = new THREE.BoxGeometry(0.0128, 0.0082, 0.006)
+const tabGeo = new THREE.BoxGeometry(0.0085, 0.0016, 0.011)
+
+/** Black rubber dust plugs in every empty SFP cage. */
+function DustPlugs({ points }: { points: CableSet["dust"] }) {
+  const ref = useRef<THREE.InstancedMesh>(null)
+  const matrices = useMemo(() => points.map((p) => new THREE.Matrix4().makeTranslation(...p)), [points])
+  useInstanceMatrices(ref, matrices)
+  if (points.length === 0) return null
+  return (
+    <instancedMesh ref={ref} args={[dustGeo, undefined, points.length]}>
+      <meshStandardMaterial color="#0b0b0c" roughness={0.85} />
+    </instancedMesh>
+  )
+}
+
+/** Bail / pull-tabs under each optic and DAC head, coloured by type. */
+function PullTabs({ tabs }: { tabs: CableSet["tabs"] }) {
+  const ref = useRef<THREE.InstancedMesh>(null)
+  const matrices = useMemo(() => tabs.map((t) => new THREE.Matrix4().makeTranslation(...t.position)), [tabs])
+  useInstanceMatrices(ref, matrices)
+  useLayoutEffect(() => {
+    const mesh = ref.current
+    if (!mesh) return
+    tabs.forEach((t, i) => mesh.setColorAt(i, new THREE.Color(t.color)))
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true
+  }, [tabs])
+  if (tabs.length === 0) return null
+  return (
+    <instancedMesh ref={ref} args={[tabGeo, undefined, tabs.length]}>
+      <meshStandardMaterial roughness={0.5} />
+    </instancedMesh>
+  )
+}
+
+const LABEL_W = 0.026
+const LABEL_H = 0.0075
+
+/**
+ * Label-maker flags (white tape, black print) on the FortiGate cables. All texts share one
+ * canvas atlas; each flag is a tiny plane whose UVs pick its row, merged into one mesh.
+ */
+function LabelFlags({ labels }: { labels: CableLabel[] }) {
+  const { geometry, texture } = useMemo(() => {
+    const rowH = 40
+    const canvas = document.createElement("canvas")
+    canvas.width = 512
+    canvas.height = THREE.MathUtils.ceilPowerOfTwo(Math.max(1, labels.length) * rowH)
+    const ctx = canvas.getContext("2d")!
+    labels.forEach((l, i) => {
+      ctx.fillStyle = "#f4f3ee"
+      ctx.fillRect(0, i * rowH, 512, rowH)
+      ctx.fillStyle = "#111"
+      ctx.font = "bold 26px ui-monospace, Consolas, monospace"
+      ctx.textBaseline = "middle"
+      ctx.fillText(l.text, 14, i * rowH + rowH / 2 + 1)
+    })
+    const tex = new THREE.CanvasTexture(canvas)
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = 8
+    const geos = labels.map((l, i) => {
+      const g = new THREE.PlaneGeometry(LABEL_W, LABEL_H)
+      const uv = g.attributes.uv as THREE.BufferAttribute
+      const v0 = 1 - ((i + 1) * rowH) / canvas.height
+      const v1 = 1 - (i * rowH) / canvas.height
+      for (let k = 0; k < uv.count; k++) uv.setY(k, uv.getY(k) > 0.5 ? v1 : v0)
+      // flag hangs off the cable, slightly turned so it reads from the usual viewing angle
+      g.rotateY(-0.25 * l.side)
+      // the tape wraps the cable and sticks out to one side as a flag
+      g.translate(l.position.x + l.side * (LABEL_W / 2 + 0.0025), l.position.y, l.position.z + 0.001)
+      return g
+    })
+    const merged = geos.length ? mergeGeometries(geos)! : new THREE.BufferGeometry()
+    geos.forEach((g) => g.dispose())
+    return { geometry: merged, texture: tex }
+  }, [labels]) // labels come from the page-lifetime cable cache, so this is built once
+  if (labels.length === 0) return null
+  return (
+    <mesh geometry={geometry}>
+      <meshStandardMaterial map={texture} roughness={0.6} side={THREE.DoubleSide} />
+    </mesh>
   )
 }
 
@@ -183,7 +268,7 @@ export function RackCabling({
         <mesh key={t.color} geometry={t.geometry} castShadow={quality === "high"}>
           <meshStandardMaterial
             color={CABLE_COLORS[t.color]}
-            roughness={t.color === "aqua" || t.color === "fiberYellow" ? 0.35 : 0.55}
+            roughness={t.color === "aqua" || t.color === "fiberYellow" ? 0.35 : t.color === "dac" ? 0.4 : 0.55}
             metalness={0}
             transparent={traffic}
             opacity={traffic ? 0.55 : 1}
@@ -195,6 +280,9 @@ export function RackCabling({
       ))}
       <Ties ties={cables.ties} />
       <Sleeves sleeves={cables.sleeves} />
+      <DustPlugs points={cables.dust} />
+      <PullTabs tabs={cables.tabs} />
+      <LabelFlags labels={cables.labels} />
       {(Object.keys(LED_COLORS) as (keyof typeof LED_COLORS)[]).map((c) => (
         <Leds key={c} points={leds[c]} color={LED_COLORS[c]} animate={animate} states={ledStates} />
       ))}

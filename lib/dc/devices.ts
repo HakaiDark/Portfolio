@@ -359,10 +359,11 @@ export const heroRack: RackSlot[] = [
   { kind: "device", id: "proliant-dl360", u: 18, hotspot: false },
   { kind: "blank", u: 17, units: 1 },
   { kind: "kvm", u: 16 },
-  { kind: "blank", u: 15, units: 1 },
-  { kind: "server", u: 13, units: 2, variant: 0 },
-  { kind: "blank", u: 4, units: 9 },
-  { kind: "ups", u: 1, units: 3 },
+  // UPS right under the console drawer: in view on phones and desktop (not down at the floor)
+  { kind: "ups", u: 13, units: 3 },
+  { kind: "blank", u: 12, units: 1 },
+  { kind: "server", u: 10, units: 2, variant: 0 },
+  { kind: "blank", u: 1, units: 9 },
 ]
 
 /** Rack-unit index to height (metres) of the bottom of that unit, above the floor. */

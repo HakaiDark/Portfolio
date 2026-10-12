@@ -328,7 +328,7 @@ function CameraRig({
     } else {
       // portrait overview: fit the rack (with its cable managers) to the screen width, no wider,
       // so phones don't back off far enough to show the ceiling
-      if (portrait && stop.id === "overview") offset.setLength(0.44 / (aspect * Math.tan(THREE.MathUtils.degToRad(fov) / 2)))
+      if (portrait && stop.id === "overview") offset.setLength(0.4 / (aspect * Math.tan(THREE.MathUtils.degToRad(fov) / 2)))
       else offset.multiplyScalar(pull)
     }
     if (stop.fitH) {
@@ -447,6 +447,28 @@ function CameraRig({
 
   // Up close, narrow the arc you can turn through so the camera can't swing into the rack's
   // side (cable managers stick out) — full arc from ~1.1 m out, about half of it at the closest.
+  // Phone overview: the two-finger slide range depends on zoom, so the picture's edges stop at
+  // the rack top (not the fibres rising out of it) and around the lowest server (not the floor).
+  // Zoomed all the way out there is almost nothing to slide; zoomed in there is more rack to see.
+  const lastFence = useRef("")
+  useFrame(() => {
+    const c = ref.current
+    if (!c || !portrait || stop.id !== "overview" || captureFreeCamera) return
+    const half = c.distance * Math.tan(THREE.MathUtils.degToRad(fov) / 2)
+    // picture edges: bottom no lower than the lowest server (~0.5 m), top no higher than the
+    // rack top (~2 m); the overview's own 1.35 m always stays allowed, so zoomed fully out the
+    // framing never moves
+    const home = stop.target[1]
+    let lo = Math.min(home, 0.5 + half * 0.9)
+    let hi = Math.max(home, 2.0 - half * 0.9)
+    if (lo > hi) lo = hi = home
+    const key = `${lo.toFixed(2)}:${hi.toFixed(2)}`
+    if (key === lastFence.current) return
+    lastFence.current = key
+    const [, , tz] = stop.target
+    c.setBoundary(new THREE.Box3(new THREE.Vector3(-0.25, lo, tz - 0.3), new THREE.Vector3(0.25, hi, tz + 0.3)))
+  })
+
   // report zooming in from the overview, so the hero card can step aside
   useFrame(() => {
     const c = ref.current

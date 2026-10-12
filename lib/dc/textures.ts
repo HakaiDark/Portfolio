@@ -404,7 +404,7 @@ export function cableManagerFront() {
 export function upsFront(units: number) {
   const w = 1024
   const h = Math.round((w * units * 0.04445) / 0.4826)
-  const lcd = { x: w * 0.06, y: h * 0.28, w: w * 0.2, h: h * 0.3 }
+  const lcd = { x: w * 0.055, y: h * 0.27, w: w * 0.235, h: h * 0.34 }
   const color = canvasTex(`ups-${units}`, w, h, (ctx) => {
     ctx.fillStyle = "#121315"
     ctx.fillRect(0, 0, w, h)
@@ -432,9 +432,14 @@ export function upsFront(units: number) {
     ctx.fillStyle = "#000"
     ctx.fillRect(0, 0, w, h)
     ctx.fillStyle = "#4fa3ff"
-    ctx.font = "bold 22px monospace"
-    ctx.fillText("ONLINE  LOAD 38%", lcd.x + 10, lcd.y + 30)
-    ctx.fillText("BATT 100%  14 min", lcd.x + 10, lcd.y + 60)
+    // size the readout to the LCD so it never spills past its edge
+    const lines = ["ONLINE  LOAD 38%", "BATT 100%  14 min"]
+    let size = 22
+    ctx.font = `bold ${size}px monospace`
+    const widest = Math.max(...lines.map((l) => ctx.measureText(l).width))
+    size = Math.min(size, Math.floor((size * (lcd.w - 20)) / widest))
+    ctx.font = `bold ${size}px monospace`
+    lines.forEach((l, i) => ctx.fillText(l, lcd.x + 10, lcd.y + lcd.h * (0.4 + i * 0.36)))
     ctx.fillStyle = "#33ff66"
     ctx.beginPath()
     ctx.arc(w * 0.08, h * 0.74, 5, 0, Math.PI * 2)

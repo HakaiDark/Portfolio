@@ -282,8 +282,8 @@ function Overhead({ quality }: { quality: "high" | "low" }) {
   )
 }
 
-// Real gear on display (photo faceplates, no buttons): an Aruba CX access stack, Dell compute
-// and storage, and a pair of APC UPSs (A/B feeds) under them.
+// Real gear on display (photo faceplates, no buttons): an Aruba CX access stack, Dell compute,
+// a BlueCat DNS/DHCP/IPAM appliance, Dell storage, and a pair of APC UPSs (A/B feeds).
 const LEFT_RACK: RackSlot[] = [
   { kind: "patch-panel", u: 39, ports: 24 },
   { kind: "cable-manager", u: 38 },
@@ -291,8 +291,8 @@ const LEFT_RACK: RackSlot[] = [
   { kind: "device", id: "aruba-6300m", u: 36 },
   { kind: "cable-manager", u: 35 },
   { kind: "device", id: "poweredge-2u", u: 33 },
-  { kind: "device", id: "poweredge-2u", u: 31 },
-  { kind: "blank", u: 30, units: 1 },
+  { kind: "device", id: "bluecat-1u", u: 32 },
+  { kind: "blank", u: 30, units: 2 },
   { kind: "device", id: "powervault-me5024", u: 28 },
   { kind: "device", id: "powervault-me5024", u: 26 },
   { kind: "blank", u: 25, units: 1 },

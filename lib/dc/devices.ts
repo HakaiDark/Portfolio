@@ -272,6 +272,18 @@ export const devices: Record<string, DeviceConfig> = {
     chassisColor: "#b9bcc0",
     ports: [],
   },
+  "bluecat-1u": {
+    id: "bluecat-1u",
+    name: "BlueCat DNS/DHCP/IPAM appliance",
+    short: "BlueCat",
+    vendor: "BlueCat",
+    rackUnits: 1,
+    depth: 0.6,
+    textures: { front: "/3d/devices/bluecat-1u-front.webp", frontLow: "/3d/devices/bluecat-1u-front-1k.webp" },
+    faceIncludesEars: true,
+    chassisColor: "#b9bcc0",
+    ports: [],
+  },
   "powervault-me5024": {
     id: "powervault-me5024",
     name: "Dell PowerVault ME5024",

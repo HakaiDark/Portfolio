@@ -455,11 +455,12 @@ function CameraRig({
     const c = ref.current
     if (!c || !portrait || stop.id !== "overview" || captureFreeCamera) return
     const half = c.distance * Math.tan(THREE.MathUtils.degToRad(fov) / 2)
-    // picture edges: bottom no lower than the lowest server (~0.5 m), top no higher than the
-    // rack top (~2 m); the overview's own 1.35 m always stays allowed, so zoomed fully out the
-    // framing never moves
+    // picture edges: bottom no lower than ~0.35 m, which is just enough to lift the console drawer
+    // and UPS clear of the view bar (that covers the bottom ~16% of the screen and hides what's
+    // below, so no floor shows); top no higher than the rack top (~2 m). The overview's own
+    // 1.35 m always stays allowed, so zoomed fully out the framing never moves
     const home = stop.target[1]
-    let lo = Math.min(home, 0.5 + half * 0.9)
+    let lo = Math.min(home, 0.35 + half * 0.9)
     let hi = Math.max(home, 2.0 - half * 0.9)
     if (lo > hi) lo = hi = home
     const key = `${lo.toFixed(2)}:${hi.toFixed(2)}`
@@ -706,6 +707,31 @@ function HotspotButton({ label, active, glyph = "+", onClick }: { label: string;
   )
 }
 
+/**
+ * A 3D hotspot that hides itself while it sits under the bottom UI (phones: the view bar and the
+ * Live traffic / Sound row; desktop: the view row), where it would be untappable and messy.
+ */
+function Spot({ position, children }: { position: [number, number, number]; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const camera = useThree((s) => s.camera)
+  const size = useThree((s) => s.size)
+  const v = useMemo(() => new THREE.Vector3(), [])
+  useFrame(() => {
+    const el = ref.current
+    if (!el) return
+    v.set(...position).project(camera)
+    const y = ((1 - v.y) / 2) * size.height
+    const zone = size.width < size.height ? 130 : 72
+    const want = y > size.height - zone ? "hidden" : "visible"
+    if (el.style.visibility !== want) el.style.visibility = want
+  })
+  return (
+    <Html position={position} center zIndexRange={HOTSPOT_Z}>
+      <div ref={ref}>{children}</div>
+    </Html>
+  )
+}
+
 function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: string) => void }) {
   const [ax, ay, az] = ACCESS_POINT.position
   const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
@@ -719,29 +745,29 @@ function Hotspots({ activeStop, onStop }: { activeStop: string; onStop: (id: str
           const [x, y] = facePoint(d.cfg, d.cfg.hotspot!.u, d.cfg.hotspot!.v)
           return (
             // a server pulled out on its rails takes its button with it
-            <Html key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03 + (activeStop === d.key ? (d.cfg.slide ?? 0) : 0)]} center zIndexRange={HOTSPOT_Z}>
+            <Spot key={d.key} position={[x, d.centerY + y, FACE_Z + 0.03 + (activeStop === d.key ? (d.cfg.slide ?? 0) : 0)]}>
               <HotspotButton label={`About ${d.cfg.name}`} active={activeStop === d.key} onClick={() => onStop(d.key)} />
-            </Html>
+            </Spot>
           )
         })}
-      <Html position={[ax, ay - 0.06, az]} center zIndexRange={HOTSPOT_Z}>
+      <Spot position={[ax, ay - 0.06, az]}>
         <HotspotButton label="About the Aruba access point" active={activeStop === "wireless"} onClick={() => onStop("wireless")} />
-      </Html>
+      </Spot>
       {KVM_HOTSPOT && (
         // travels out with the drawer when it's open
-        <Html position={[KVM_HOTSPOT[0], KVM_HOTSPOT[1], KVM_HOTSPOT[2] + (activeStop === "kvm" ? KVM.slide : 0)]} center zIndexRange={HOTSPOT_Z}>
+        <Spot position={[KVM_HOTSPOT[0], KVM_HOTSPOT[1], KVM_HOTSPOT[2] + (activeStop === "kvm" ? KVM.slide : 0)]}>
           <HotspotButton label="Open the rack console" glyph=">_" active={activeStop === "kvm"} onClick={() => onStop("kvm")} />
-        </Html>
+        </Spot>
       )}
-      <Html position={PHONE_HOTSPOT} center zIndexRange={HOTSPOT_Z}>
+      <Spot position={PHONE_HOTSPOT}>
         <HotspotButton label="Contact Mohammad" active={activeStop === "contact"} onClick={() => onStop("contact")} />
-      </Html>
-      <Html position={MONITOR_HOTSPOT} center zIndexRange={HOTSPOT_Z}>
+      </Spot>
+      <Spot position={MONITOR_HOTSPOT}>
         <HotspotButton label="About the monitoring screens" active={activeStop === "monitoring"} onClick={() => onStop("monitoring")} />
-      </Html>
-      <Html position={[lx - 0.13, ly + 0.08, lz + 0.03]} center zIndexRange={HOTSPOT_Z}>
+      </Spot>
+      <Spot position={[lx - 0.13, ly + 0.08, lz + 0.03]}>
         <HotspotButton label="Open the console terminal" glyph=">_" active={activeStop === "terminal"} onClick={() => onStop("terminal")} />
-      </Html>
+      </Spot>
     </>
   )
 }

@@ -1,5 +1,7 @@
 // Decide how much 3D the visitor's device can handle.
-//   "high"   – desktop / strong phones: shadows, ambient occlusion, full textures
+//   "high"   – desktops and capable phones (iPhones, Android with >= 6 GB / 8 cores): shadows,
+//              ambient occlusion, glow, depth of field, full textures. Phones skip the reflective
+//              floor and cap the pixel ratio; if the frame rate drops they shed sharpness, then AO.
 //   "low"    – weaker devices: no AO, cheaper shadows, smaller textures, fewer background racks
 //   "static" – no WebGL or a very weak device: show the pre-rendered image instead
 
@@ -37,6 +39,12 @@ export function detectQuality(): Quality {
 
   const touch = window.matchMedia("(pointer: coarse)").matches
   const small = Math.min(window.innerWidth, window.innerHeight) < 600
-  if (mem <= 4 || cores <= 4 || (touch && small)) return "low"
+  if (touch && small) {
+    // phones: visits are short, so capable ones get the full look. iOS hides memory and core
+    // counts but every iPhone that runs WebGL2 well reports "Apple GPU"; Android needs real specs.
+    const iphone = /apple gpu/i.test(renderer) || /iphone|ipad/i.test(navigator.userAgent)
+    return iphone || (mem >= 6 && cores >= 8) ? "high" : "low"
+  }
+  if (mem <= 4 || cores <= 4) return "low"
   return "high"
 }

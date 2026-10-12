@@ -791,6 +791,8 @@ function Scene({
   haLog,
   reframe,
   onZoomed,
+  ao,
+  coarse,
 }: {
   quality: "high" | "low"
   reducedMotion: boolean
@@ -810,6 +812,8 @@ function Scene({
   haLog: NonNullable<HaStep["log"]>[]
   reframe: number
   onZoomed: (zoomed: boolean) => void
+  ao: boolean
+  coarse: boolean
 }) {
   return (
     <>
@@ -828,7 +832,8 @@ function Scene({
       />
       {capture && <CaptureHook setStop={setStop} setTraffic={setTraffic} />}
       <Suspense fallback={null}>
-        <Room quality={quality} />
+        {/* the reflective floor renders the scene twice: desktop only (barely visible in phone framing) */}
+        <Room quality={quality} reflections={quality === "high" && !coarse} />
         <OpenRack slots={heroRack} lowRes={quality === "low"} extendedKey={stop.extend ? stop.id : undefined}>
           <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} ledStates={ha.leds} paused={ha.paused} />
           <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
@@ -845,7 +850,7 @@ function Scene({
       </Suspense>
       {quality === "high" ? (
         <EffectComposer multisampling={4} enableNormalPass={false}>
-          <N8AO halfRes aoRadius={0.35} distanceFalloff={0.6} intensity={2.2} color="#000000" />
+          {ao ? <N8AO halfRes aoRadius={0.35} distanceFalloff={0.6} intensity={2.2} color="#000000" /> : <></>}
           <FocusPull stop={stop} />
           <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={traffic ? 0.9 : 0.55} />
           <Noise opacity={0.025} blendFunction={BlendFunction.OVERLAY} />
@@ -1004,7 +1009,12 @@ export default function RackScene({
     setSound(!sound)
   }
   const [interacted, setInteracted] = useState(false)
-  const [dpr, setDpr] = useState(quality === "high" ? 1.75 : 1.25)
+  // phones on the high tier cap the pixel ratio at 1.5 (plenty on a small screen); if the frame
+  // rate drops, the first decline lowers sharpness, the second drops ambient occlusion
+  const coarse = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
+  const [dpr, setDpr] = useState(quality === "high" ? (coarse ? 1.5 : 1.75) : 1.25)
+  const [ao, setAo] = useState(true)
+  const declines = useRef(0)
   const capture = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("capture")
   const terminalTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -1110,7 +1120,13 @@ export default function RackScene({
         className="rack-canvas"
         resize={capture ? { polyfill: ImmediateResizeObserver, debounce: 0 } : undefined}
       >
-        <PerformanceMonitor onDecline={() => setDpr(1)} />
+        <PerformanceMonitor
+          onDecline={() => {
+            declines.current += 1
+            if (declines.current === 1) setDpr(1)
+            else setAo(false)
+          }}
+        />
         <AmbienceDriver ambience={ambience} on={sound} />
         <Scene
           quality={quality}
@@ -1131,6 +1147,8 @@ export default function RackScene({
           haLog={haLog}
           reframe={reframe}
           onZoomed={setZoomedIn}
+          ao={ao}
+          coarse={coarse}
         />
       </Canvas>
 

@@ -126,7 +126,7 @@ function Cabinets({ quality }: { quality: "high" | "low" }) {
   )
 }
 
-function Floor({ quality }: { quality: "high" | "low" }) {
+function Floor({ reflections }: { reflections: boolean }) {
   const plain = useMemo(() => {
     const t = floorTile(false).clone()
     t.wrapS = t.wrapT = THREE.RepeatWrapping
@@ -145,7 +145,7 @@ function Floor({ quality }: { quality: "high" | "low" }) {
     <group>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
         <planeGeometry args={[18, 18]} />
-        {quality === "high" ? (
+        {reflections ? (
           // satin vinyl tiles: soft, blurred reflections of the racks and lights
           <MeshReflectorMaterial
             map={plain}
@@ -353,10 +353,10 @@ const RIGHT_RACK: RackSlot[] = [
   { kind: "shelf", u: 19 },
 ]
 
-export function Room({ quality }: { quality: "high" | "low" }) {
+export function Room({ quality, reflections = quality === "high" }: { quality: "high" | "low"; reflections?: boolean }) {
   return (
     <group>
-      <Floor quality={quality} />
+      <Floor reflections={reflections} />
       <Cabinets quality={quality} />
       <Overhead quality={quality} />
       <group position={[-0.74, 0, 0]}>

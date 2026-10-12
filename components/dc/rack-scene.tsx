@@ -226,6 +226,7 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
         captureFreeCamera = true
         const c = get().controls as unknown as CameraControlsImpl | null
         if (c) {
+          c.setBoundary()
           c.minAzimuthAngle = -Infinity
           c.maxAzimuthAngle = Infinity
         }
@@ -290,6 +291,8 @@ function CameraRig({
 }) {
   const ref = useRef<CameraControlsImpl>(null)
   const baseDist = useRef(2.6)
+  const stopRef = useRef(stop)
+  stopRef.current = stop
   const zoomed = useRef(false)
   const size = useThree((s) => s.size)
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
@@ -337,6 +340,13 @@ function CameraRig({
     const p = target.clone().add(offset)
     // the overview is as far out as it goes, so scrolling down there moves the page straight away
     setMaxDist(stop.id === "overview" ? offset.length() + 0.005 : Math.max(MAX_DISTANCE, offset.length()))
+    // fence the orbit point: two-finger drags and cursor zooms can slide the view around this
+    // stop, but never off into empty space (overview: floor-to-top of the rack)
+    const fence =
+      stop.id === "overview"
+        ? new THREE.Box3(new THREE.Vector3(-0.6, 0.35, tz - 0.3), new THREE.Vector3(0.6, 2.15, tz + 0.3))
+        : new THREE.Box3(new THREE.Vector3(tx - 0.3, ty - 0.3, tz - 0.25), new THREE.Vector3(tx + 0.3, ty + 0.3, tz + 0.25))
+    c.setBoundary(fence)
     c.setLookAt(p.x, p.y, p.z, tx, ty, tz, !instant)
     const visH = 2 * offset.length() * Math.tan(THREE.MathUtils.degToRad(fov) / 2)
     const visW = visH * aspect
@@ -370,13 +380,14 @@ function CameraRig({
 
   // Phones: a one-finger SIDEWAYS swipe turns around the rack; up/down swipes stay with the page
   // (the canvas is touch-action: pan-y, and polar rotation is off on touch, so a vertical swipe
-  // never tilts the camera instead of scrolling); two fingers zoom. Mouse keeps drag-to-orbit.
+  // never tilts the camera instead of scrolling); two fingers pinch to zoom and drag to slide the
+  // view (e.g. down the rack), fenced in by the stop's boundary. Mouse keeps drag-to-orbit.
   const coarsePointer = useMemo(() => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches, [])
   const touchActions = useMemo(() => {
     const coarse = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches
     return coarse
-      ? { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
-      : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY, three: ACTION.NONE }
+      ? { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY_TRUCK, three: ACTION.NONE }
+      : { one: ACTION.TOUCH_ROTATE, two: ACTION.TOUCH_DOLLY_TRUCK, three: ACTION.NONE }
   }, [])
 
   // Touch: a two-finger gesture on the rack belongs to the 3D view. Without this, iOS Safari
@@ -421,6 +432,13 @@ function CameraRig({
       const y = -((e.clientY - r.top) / r.height) * 2 + 1
       const step = THREE.MathUtils.clamp(dy, -120, 120) / (pinch ? 6 : 30)
       ;(c as unknown as { _dollyInternal: (delta: number, x: number, y: number) => void })._dollyInternal(step, x, y)
+      if (step > 0) {
+        // zooming out eases the orbit point back to the stop's own centre, so scrolling all the
+        // way out after a cursor zoom ends on the normal framing, not an off-centre one
+        const t = c.getTarget(new THREE.Vector3())
+        const home = new THREE.Vector3(...stopRef.current.target)
+        if (t.distanceToSquared(home) > 1e-6) c.moveTo(...t.lerp(home, 0.3).toArray(), true)
+      }
       onInteract()
     }
     el.addEventListener("wheel", onWheel, { passive: false })
@@ -1129,8 +1147,9 @@ export default function RackScene({
           <p className="pointer-events-none absolute inset-x-0 bottom-[5.5rem] z-10 px-6 text-center font-mono text-[10px] tracking-[0.25em] text-white/60 uppercase max-md:hidden">
             Drag to look around · scroll to zoom · tap <span className="text-[#00ffe7]">+</span> for details
           </p>
-          <p className="pointer-events-none absolute bottom-[5.1rem] left-4 z-10 max-w-[55%] font-mono text-[9px] leading-relaxed tracking-[0.18em] text-white/65 uppercase md:hidden">
-            Swipe sideways to look around · pinch to zoom · tap <span className="text-[#00ffe7]">+</span>
+          {/* left of the Live traffic / Sound toggles, a strip no 3D button ever reaches */}
+          <p className="pointer-events-none absolute bottom-[4.75rem] left-4 z-10 w-[calc(100%-16.5rem)] font-mono text-[8.5px] leading-snug tracking-[0.1em] text-white/70 uppercase md:hidden">
+            Swipe to turn · two fingers zoom &amp; move
           </p>
         </>
       )}

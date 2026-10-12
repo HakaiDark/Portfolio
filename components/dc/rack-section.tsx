@@ -142,8 +142,8 @@ export function RackSection({ className = "", overlay }: { className?: string; o
           type="button"
           onClick={() => {
             setExploring(false)
-            // inside a view or zoomed in: take the visitor back to the overview, card and all
-            if (focused) setResetNonce((n) => n + 1)
+            // back to the overview framing too (after a view, a zoom, a turn or a two-finger slide)
+            setResetNonce((n) => n + 1)
           }}
           aria-label="Back to the overview and the intro card"
           className={`absolute top-3 left-3 z-[36] flex items-center gap-2 rounded-full border border-white/15 bg-[#0b0e11]/80 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md ${focused ? "" : "md:hidden"}`}

@@ -231,7 +231,7 @@ export const devices: Record<string, DeviceConfig> = {
   "proliant-dl360": {
     id: "proliant-dl360",
     name: "HPE ProLiant DL360 Gen10",
-    short: "Servers",
+    short: "ProLiant",
     vendor: "HPE",
     rackUnits: 1,
     depth: 0.7,

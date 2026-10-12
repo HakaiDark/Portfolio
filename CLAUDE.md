@@ -1,7 +1,7 @@
 # Mohammad Yassin — portfolio (3D data-centre rack)
 
 Live: https://mohammadyassin.vercel.app — Vercel project `portfolio` (team `engcompyassin-7906s-projects`), deploys from GitHub **HakaiDark/Portfolio** `main` (PUBLIC repo).
-Status (2026-10-11): **LIVE.** The redesign is on `main` (merged with `-s ours` over the old site, old history kept as a parent).
+Status (2026-10-12): **LIVE**, with the 2026-10-12 session's work (see "Session log") pushed to `main`. The redesign was merged onto `main` on 2026-10-11 with `-s ours` over the old site (old history kept as a parent).
 Work: local branch `feature/redesign-rack` tracks the remote. `git push origin feature/redesign-rack:main` = **production deploy**; push to `:redesign` first for a private preview (behind Vercel login): https://portfolio-git-redesign-engcompyassin-7906s-projects.vercel.app
 
 ## Stack & commands
@@ -26,6 +26,7 @@ Next 16 (Turbopack, App Router), React 19, @react-three/fiber 9, drei 10, three 
 - Cisco 8800 desk phone (`desk-phone.tsx`, photo cut out with a border flood-fill so black keys stay solid; 3D handset + coiled cord; own speed-dial screen) on a shelf at U19 of the right rack; stop `contact` + card `contact` + `contact-panel.tsx` (WhatsApp message button + email, no call buttons).
 - Hero card hides on every screen while "focused" (any stop open, zoomed in at the overview, or terminal open: `onFocus` signal); the top-left "Mohammad Yassin ▾" tab then returns to the overview (`resetNonce`). Phones still also hide it on first exploration.
 - Wi-Fi stop: minPolar 96° so the camera stays below the AP and never rises through the ceiling. Monitor stop uses `fitH` (fits height above the phone sheet too). 3D buttons/badges use `HOTSPOT_Z` [19,10] so they stay under the view bar (z-20) and cards (z-30). Hidden overlays are `inert`.
+- View navigation: desktop shows every stop in one row (`nav`, `w-max mx-auto` so it never clips the first chip); phones get `PhoneNav`: 5 equal buttons (Overview · Network ▾ · Servers ▾ · Ops ▾ · Contact), groups open a menu above the bar (`stopGroup()` in `rack-scene.tsx`; the open menu lifts the bar to z-25 over the view toggles).
 - Capture: `__rack.lookAt` frees the camera (lifts the close-up arc narrowing) until the next `setStop`; `__rack.pose()` returns camera/target/azimuth.
 - `tools/capture-receiver.mjs`, `tools/crop-faceplates.mjs`, `tools/warp-faceplate.mjs` (perspective-flattens an angled product photo: 4 corners -> WebP).
 
@@ -43,7 +44,8 @@ Hidden tabs don't run requestAnimationFrame/ResizeObserver, so normal screenshot
 3. In the page: `window.__rack.setStop(id)`, `.setTraffic(bool)`, `.orbit(deg)`, `.lookAt(px,py,pz,tx,ty,tz)`, `.render(frames)`, `.snapshot()`.
 4. Save stills: run `node tools/capture-receiver.mjs` in the background (port 3999 → `.shots/`), then `fetch('http://127.0.0.1:3999/save?name=x.webp',{method:'POST',body:__rack.snapshot()})` and Read the file.
 DOM overlays (cards, terminal, hero) do show in normal screenshots. Perf: `performance.getEntriesByType('measure')` entries named `dc:*`. Measure perf on a production build (`npx next build` + `npx next start -p 3001`), not dev.
-Stop IDs: `overview`, `<deviceId>@<u>` (e.g. `fortigate-601f@34`), `wireless`, `terminal`.
+Stop IDs: `overview`, `<deviceId>@<u>` (e.g. `fortigate-601f@34`, `proliant-dl360@20`), `kvm`, `wireless`, `monitoring`, `contact`, `terminal`.
+Composite review trick: draw the canvas snapshot plus DOM rects (cards, hotspots, nav) onto one canvas and POST it to the receiver; CSS transitions don't run in the hidden pane, so read card state from `aria-hidden`, not computed opacity.
 
 ## Deploy flow
 - Preview: `git push origin feature/redesign-rack:redesign`; production: `...:main` (GitHub creds cached in Windows Credential Manager; if a sign-in is needed the user must run the push in their own terminal — this shell can't show the prompt).
@@ -54,10 +56,16 @@ Stop IDs: `overview`, `<deviceId>@<u>` (e.g. `fortigate-601f@34`), `wireless`, `
 - npm `overrides` for a package that is also a direct dependency must use `"$pkg"`, else `npm ci` fails (EOVERRIDE) — only fresh installs (Vercel) catch it.
 - PowerShell: `Set-Content -Encoding utf8` writes a BOM; `git`/`npm` stderr shows as red errors even on success (check exit codes); here-strings with quotes break native args → use `git commit -F file`.
 - camera-controls sets `touch-action:none`; the `.rack-canvas` CSS rule (`app/globals.css`) forces `pan-y` so phones can scroll past the hero. Wheel, trackpad and pinch zoom toward the cursor / pinch point (`dollyToCursor`; the wheel handler calls camera-controls' `_dollyInternal`). Closest zoom: `MIN_DISTANCE` 0.32 m (overview 0.55, it orbits a point behind the rack face); the turning arc narrows to half when close so the camera cannot swing into the rack. The wheel zooms the rack only while the page is at the top (scrollY ≤ 40); fully zoomed out (the overview framing is the max), scrolling down hands over to the page (custom `wheel` handler in `CameraRig`; camera-controls wheel stays NONE).
+- Phones: the info card is a bottom sheet (~58% height), so stops lift the subject with a focal offset (+0.24·visH) and tall subjects use `fitH`; check every new stop on a 375×812 and a 360 px viewport.
 - Phones (`pointer: coarse`): one finger never orbits — it always scrolls the page; two fingers only zoom, no turning; two-finger touches and Safari `gesture*` events on the canvas are preventDefault-ed so iOS Safari never pinch-zooms the page instead (user asked: thumb scrolling fought with orbiting, then dropped two-finger turning too). Hotspots zig-zag left/right down the rack on all screens, placed on plain panel, never over vendor logos/labels (`hotspot` in `devices.ts`). The hero name card slides away on phones once the visitor explores (`onExplore` signal → `rack-section.tsx`); a corner tab restores it.
 - Git for Windows may rewrite files to CRLF (e.g. after `git stash`); normalize `\r\n` before string-replacing in scripts.
 - Photo mode (three-gpu-pathtracer) was built and then removed (grainy/dark, GPU busy while scrolling) — in git history (`ec5325b`) if ever needed.
 
+## Session log 2026-10-12 (all live)
+Phone hotspots zig-zag and avoid logos; two-finger = zoom only; iOS Safari pinch fix; loading-screen name-card flash fixed; wheel/trackpad/pinch zoom toward the cursor with safe limits; HA failover demo; server slide-out; ambient sound (quiet, off by default); focus pull; left rack of real gear (Aruba CX, PowerEdge, BlueCat, PowerVault, APC) from photos the user supplied; monitor wall (FortiAnalyzer + AirWave styles, sharp, glass); SFP+ DACs, dust plugs, pull-tabs, cable labels; rear A/B PDUs; shelf clutter + sticky note; MacBook laptop + MacBook-style console drawer with a PowerShell validation run; Cisco 8800 desk phone + Contact stop (WhatsApp/email); hero card hides while exploring; Wi-Fi ceiling fix; grouped phone nav; final desktop + phone review.
+- The user supplies vendor/product photos for hardware; he said not to worry about photo rights. `bluecat.jpg` (his original) sits untracked in the repo root.
+
 ## Possible next steps
-- User is testing the live site on his phone; act on his feedback (preview on `redesign` first, then `main`).
+- The user reviews the live site on his phone and desktop; act on his feedback (preview on `redesign` first, then `main`).
+- Ideas discussed but not built: more photo hardware for the left rack, a thermal-camera view and floor reflections (both GPU-heavy: desktop/high tier only).
 - Optional: make `terminal.ts` and `rack-cards.ts` read from `content/profile.ts` (single source).

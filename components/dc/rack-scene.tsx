@@ -341,7 +341,7 @@ function CameraRig({
     // desktop: the card sits on the right, so slide the subject left
     // phone overview: the compact hero card covers the top, so frame the rack a little lower
     const phoneHero = stop.id === "overview" && portrait
-    const oy = portrait && cardOpen && stop.cardId ? (stop.lookUp ? -0.22 : 0.24) * visH : phoneHero ? -0.1 * visH : 0
+    const oy = portrait && cardOpen && stop.cardId ? 0.24 * visH : phoneHero ? -0.1 * visH : 0
     // desktop overview: the hero card sits on the left, so push the rack right
     const heroCard = stop.id === "overview" && !portrait && aspect > 1.2
     const ox = sideCard ? 0.19 * visW : heroCard ? -0.14 * visW : 0
@@ -786,6 +786,89 @@ function Scene({
 // ---------------------------------------------------------------------------
 // DOM wrapper
 
+type StopGroup = "network" | "servers" | "ops"
+const GROUP_LABEL: Record<StopGroup, string> = { network: "Network", servers: "Servers", ops: "Ops" }
+
+/** Which phone-menu group a stop lives in; overview and contact stay as direct buttons. */
+function stopGroup(s: Stop): StopGroup | null {
+  if (s.id === "overview" || s.id === "contact") return null
+  if (s.id === "kvm" || s.extend) return "servers"
+  if (s.id === "wireless" || s.id === "monitoring" || s.terminal) return "ops"
+  return "network"
+}
+
+const CHIP = "shrink-0 rounded-full border px-3.5 py-2 font-mono text-[11px] tracking-[0.1em] uppercase backdrop-blur-md transition-colors"
+// bar buttons share the width equally; text a touch smaller so five fit a 360 px phone
+const BAR_CHIP = "min-w-0 truncate rounded-full border px-1 py-2.5 text-center font-mono text-[10px] tracking-[0.06em] uppercase backdrop-blur-md transition-colors"
+const chipTone = (on: boolean) => (on ? "border-[#00ffe7] bg-[#00ffe7] text-black" : "border-white/15 bg-black/55 text-white/85")
+
+/**
+ * Phones: five equal buttons that fit a 360 px screen (Overview, Network ▾, Servers ▾, Ops ▾,
+ * Contact). A group opens a small menu above the bar; the group lights up while one of its
+ * views is open.
+ */
+function PhoneNav({ stops, current, onPick, hidden }: { stops: Stop[]; current: string; onPick: (id: string) => void; hidden: boolean }) {
+  const [open, setOpen] = useState<StopGroup | null>(null)
+  useEffect(() => setOpen(null), [current, hidden])
+  const curGroup = stopGroup(stops.find((s) => s.id === current) ?? stops[0])
+  const items: ({ kind: "stop"; stop: Stop } | { kind: "group"; group: StopGroup })[] = []
+  for (const s of stops) {
+    const g = stopGroup(s)
+    if (!g) items.push({ kind: "stop", stop: s })
+    else if (!items.some((i) => i.kind === "group" && i.group === g)) items.push({ kind: "group", group: g })
+  }
+  // contact last, after the groups
+  items.sort((a, b) => Number(a.kind === "stop" && a.stop.id === "contact") - Number(b.kind === "stop" && b.stop.id === "contact"))
+  return (
+    <nav
+      aria-label="Rack views"
+      // while a menu is open the bar rises above the view toggles (also z-20) so taps can't collide
+      className={`absolute inset-x-0 bottom-0 px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity md:hidden ${open ? "z-[25]" : "z-20"} ${
+        hidden ? "pointer-events-none opacity-0" : "opacity-100"
+      }`}
+    >
+      {open && (
+        <>
+          {/* tap anywhere else to close the menu */}
+          <button type="button" aria-label="Close menu" className="fixed inset-0 -z-10 cursor-default" onClick={() => setOpen(null)} />
+          <div className="mb-2 flex flex-wrap justify-center gap-1.5 rounded-2xl border border-white/10 bg-[#0b0e11]/90 p-2 shadow-2xl backdrop-blur-md" role="menu" aria-label={GROUP_LABEL[open]}>
+            {stops
+              .filter((s) => stopGroup(s) === open)
+              .map((s) => (
+                <button key={s.id} type="button" role="menuitem" onClick={() => onPick(s.id)} className={`${CHIP} ${chipTone(current === s.id)}`}>
+                  {s.label}
+                </button>
+              ))}
+          </div>
+        </>
+      )}
+      <div className="grid grid-cols-5 gap-1">
+        {items.map((it) =>
+          it.kind === "stop" ? (
+            <button key={it.stop.id} type="button" onClick={() => onPick(it.stop.id)} className={`${BAR_CHIP} ${chipTone(current === it.stop.id)}`}>
+              {it.stop.id === "overview" ? "Overview" : it.stop.label}
+            </button>
+          ) : (
+            <button
+              key={it.group}
+              type="button"
+              aria-expanded={open === it.group}
+              aria-haspopup="menu"
+              onClick={() => setOpen((o) => (o === it.group ? null : it.group))}
+              className={`${BAR_CHIP} ${chipTone(curGroup === it.group)} ${open === it.group ? "ring-1 ring-[#00ffe7]/70" : ""}`}
+            >
+              {GROUP_LABEL[it.group]}
+              <span aria-hidden className="ml-0.5 opacity-70">
+                {open === it.group ? "▴" : "▾"}
+              </span>
+            </button>
+          )
+        )}
+      </div>
+    </nav>
+  )
+}
+
 
 export interface RackSceneSignals {
   onEngine?: () => void
@@ -1008,10 +1091,11 @@ export default function RackScene({
       </div>
 
 
-      {/* camera stops */}
+      {/* camera stops: desktop shows every view in one row; phones group them (see PhoneNav) */}
+      <PhoneNav stops={stops} current={stop.id} onPick={goTo} hidden={!!card || terminalOpen} />
       <nav
         aria-label="Rack views"
-        className={`absolute inset-x-0 bottom-0 z-20 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity [scrollbar-width:none] md:bottom-4 ${
+        className={`absolute inset-x-0 bottom-0 z-20 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity [scrollbar-width:none] max-md:hidden md:bottom-4 ${
           card || terminalOpen ? "max-md:pointer-events-none max-md:opacity-0" : "opacity-100"
         }`}
       >

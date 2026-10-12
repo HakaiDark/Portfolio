@@ -24,6 +24,7 @@ import { Ambience } from "@/lib/dc/ambience"
 import { HA_PRIMARY, HA_TIMELINE, haBadges, haView, type BadgeTone, type HaPhase, type HaStep, type HaView } from "@/lib/dc/ha"
 import { FailoverPanel } from "./failover-panel"
 import { MONITORS, MonitorWall } from "./monitor-wall"
+import { RearPower } from "./rear-power"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -162,12 +163,18 @@ function Lights({ quality }: { quality: "high" | "low" }) {
  * Dev aid (only with ?capture in the URL): lets tooling render frames on demand and grab
  * stills, e.g. to produce the static fallback image. Works even when the tab is hidden.
  */
+/** set by the capture hook's lookAt so stills can be framed anywhere */
+let captureFreeCamera = false
+
 function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; setTraffic: (on: boolean) => void }) {
   const get = useThree((s) => s.get)
   useEffect(() => {
     const w = window as unknown as Record<string, unknown>
     w.__rack = {
-      setStop,
+      setStop(id: string) {
+        captureFreeCamera = false
+        setStop(id)
+      },
       setTraffic,
       /** orbit like a user drag (degrees); the controls clamp to their limits */
       orbit(deg: number) {
@@ -176,8 +183,14 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
         c?.update(0)
         return c ? THREE.MathUtils.radToDeg(c.azimuthAngle) : null
       },
+      /** free camera for stills: also lifts the close-up arc narrowing until the next setStop */
       lookAt(px: number, py: number, pz: number, tx: number, ty: number, tz: number) {
+        captureFreeCamera = true
         const c = get().controls as unknown as CameraControlsImpl | null
+        if (c) {
+          c.minAzimuthAngle = -Infinity
+          c.maxAzimuthAngle = Infinity
+        }
         c?.setFocalOffset(0, 0, 0, false)
         c?.setLookAt(px, py, pz, tx, ty, tz, false)
       },
@@ -361,7 +374,7 @@ function CameraRig({
   // side (cable managers stick out) — full arc from ~1.1 m out, about half of it at the closest.
   useFrame(() => {
     const c = ref.current
-    if (!c) return
+    if (!c || captureFreeCamera) return
     const k = THREE.MathUtils.smoothstep(c.distance, 0.4, 1.1)
     const f = 0.5 + 0.5 * k
     c.minAzimuthAngle = minAz * f
@@ -641,6 +654,7 @@ function Scene({
           <RackCabling quality={quality} animate={!reducedMotion} traffic={traffic} ledStates={ha.leds} paused={ha.paused} />
           <Laptop animate={!reducedMotion} onOpen={() => onStop("terminal")} highlighted={stop.id === "terminal"} />
           <Mug />
+          <RearPower />
         </OpenRack>
         <AccessPoint lowRes={quality === "low"} />
         <MonitorWall state={{ phase: haPhase, haLog }} quality={quality} />

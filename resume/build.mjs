@@ -43,7 +43,7 @@ const privateFile = path.join(dir, "private.json")
 // strip a UTF-8 BOM (Windows editors / PowerShell add one)
 const rawPriv = existsSync(privateFile) ? readFileSync(privateFile, "utf8") : ""
 const priv = rawPriv ? JSON.parse(rawPriv.charCodeAt(0) === 0xfeff ? rawPriv.slice(1) : rawPriv) : {}
-const withPhone = (phone) => template.replaceAll("{{CONTACT_PHONE}}", phone ? ` | WhatsApp: ${phone}` : "")
+const withPhone = (phone) => template.replaceAll("{{CONTACT_PHONE}}", phone ? ` | WhatsApp: <a href="https://wa.me/${phone.replace(/\D/g, "")}">${phone}</a>` : "")
 
 // public copy carries the phone only when private.json sets "onPublicCv": true
 print(withPhone(priv.onPublicCv ? priv.phone : ""), path.join(root, "public", "Mohammad-Yassin-Resume.pdf"))

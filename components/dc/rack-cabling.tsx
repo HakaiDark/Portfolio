@@ -266,13 +266,30 @@ export function RackCabling({
     <group>
       {cables.tubes.map((t) => (
         <mesh key={t.color} geometry={t.geometry} castShadow={quality === "high"}>
-          <meshStandardMaterial
-            color={CABLE_COLORS[t.color]}
-            roughness={t.color === "aqua" || t.color === "fiberYellow" ? 0.35 : t.color === "dac" ? 0.4 : 0.55}
-            metalness={0}
-            transparent={traffic}
-            opacity={traffic ? 0.55 : 1}
-          />
+          {quality === "high" ? (
+            // real patch leads: a soft PVC body under a thin glossy skin that catches the lights
+            <meshPhysicalMaterial
+              color={CABLE_COLORS[t.color]}
+              roughness={t.color === "aqua" || t.color === "fiberYellow" ? 0.42 : t.color === "dac" ? 0.45 : 0.6}
+              metalness={0}
+              clearcoat={t.color === "dac" ? 0.5 : 0.85}
+              clearcoatRoughness={0.28}
+              sheen={0.25}
+              sheenRoughness={0.6}
+              sheenColor="#ffffff"
+              envMapIntensity={1.25}
+              transparent={traffic}
+              opacity={traffic ? 0.55 : 1}
+            />
+          ) : (
+            <meshStandardMaterial
+              color={CABLE_COLORS[t.color]}
+              roughness={t.color === "aqua" || t.color === "fiberYellow" ? 0.35 : t.color === "dac" ? 0.4 : 0.55}
+              metalness={0}
+              transparent={traffic}
+              opacity={traffic ? 0.55 : 1}
+            />
+          )}
         </mesh>
       ))}
       {plugGroups.map(([key, plugs]) => (

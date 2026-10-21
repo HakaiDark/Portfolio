@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import { CameraControls, CameraControlsImpl, Html, PerformanceMonitor, useProgress } from "@react-three/drei"
-import { Bloom, DepthOfField, EffectComposer, N8AO, Noise, ToneMapping, Vignette } from "@react-three/postprocessing"
+import { Bloom, ChromaticAberration, DepthOfField, EffectComposer, N8AO, Noise, ToneMapping, Vignette } from "@react-three/postprocessing"
 import { BlendFunction, ToneMappingMode, type DepthOfFieldEffect } from "postprocessing"
 import * as THREE from "three"
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js"
@@ -31,9 +31,11 @@ import { ContactPanel } from "./contact-panel"
 import { DeskProps } from "./desk-props"
 import { PacketJourney, TracePanel } from "./packet-journey"
 import { TRACE_POSE } from "@/lib/dc/journey"
+import { realityShot, type RealityLayout, type RealityShot } from "@/lib/dc/reality"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
+const LENS_FRINGE = new THREE.Vector2(0.0009, 0.0006)
 const AZIMUTH_LIMIT = THREE.MathUtils.degToRad(75)
 /** limit on the side a desktop framing offset shifts the camera toward */
 const SHIFTED_AZIMUTH_LIMIT = THREE.MathUtils.degToRad(48)
@@ -249,6 +251,15 @@ function CaptureHook({ setStop, setTraffic }: { setStop: (id: string) => void; s
         if (!c) return null
         const r = (v: THREE.Vector3) => [v.x, v.y, v.z].map((n) => Math.round(n * 1000) / 1000)
         return { camera: r(c.getPosition(new THREE.Vector3())), target: r(c.getTarget(new THREE.Vector3())), azimuth: Math.round(THREE.MathUtils.radToDeg(c.azimuthAngle)) }
+      },
+      /** the rendered camera (focal offset included): position, a point 1 m ahead, vertical fov */
+      view() {
+        const cam = get().camera as THREE.PerspectiveCamera
+        cam.updateMatrixWorld()
+        const p = cam.getWorldPosition(new THREE.Vector3())
+        const t = p.clone().add(cam.getWorldDirection(new THREE.Vector3()))
+        const r = (v: THREE.Vector3) => [v.x, v.y, v.z].map((n) => Math.round(n * 10000) / 10000)
+        return { position: r(p), target: r(t), fov: cam.fov }
       },
       render(frames = 1) {
         for (let i = 0; i < frames; i++) get().advance(performance.now() + i * 16)
@@ -859,12 +870,101 @@ function Scene({
           {ao ? <N8AO halfRes aoRadius={0.35} distanceFalloff={0.6} intensity={2.2} color="#000000" /> : <></>}
           <FocusPull stop={stop} />
           <Bloom mipmapBlur luminanceThreshold={1} luminanceSmoothing={0.2} intensity={traffic ? 0.9 : 0.55} />
-          <Noise opacity={0.025} blendFunction={BlendFunction.OVERLAY} />
+          {/* a real lens: faint colour fringing toward the edges, plus film grain */}
+          <ChromaticAberration offset={LENS_FRINGE} radialModulation modulationOffset={0.3} />
+          <Noise opacity={0.035} blendFunction={BlendFunction.OVERLAY} />
           <Vignette offset={0.32} darkness={0.5} />
           <ToneMapping mode={ToneMappingMode.AGX} />
         </EffectComposer>
       ) : null}
     </>
+  )
+}
+
+/**
+ * Reality layer, in-canvas half: once the camera rests at a stop that has a photograph, glide
+ * the last few millimetres onto the photo's exact camera, then tell the DOM to show it. Any
+ * drag, zoom or stop change hides it again; after the visitor moves the camera it stays 3D
+ * until the next stop (the camera is never pulled back against them).
+ */
+function RealityDriver({ stop, cardOpen, enabled, onShow }: { stop: Stop; cardOpen: boolean; enabled: boolean; onShow: (s: RealityShot | null) => void }) {
+  const get = useThree((s) => s.get)
+  const size = useThree((s) => s.size)
+  const aspect = size.width / Math.max(1, size.height)
+  const layout: RealityLayout | null = !cardOpen || !stop.cardId ? null : aspect < 1 ? "phone" : aspect > 1.2 ? "desktop" : null
+  const shot = enabled ? realityShot(stop.id, layout, aspect) : null
+  // a resize re-frames the stop (CameraRig), so it re-arms the photo too (phones resize while
+  // scrolling as the address bar hides)
+  const sizeKey = `${size.width}x${size.height}`
+
+  useEffect(() => {
+    onShow(null)
+    const c = get().controls as unknown as CameraControlsImpl | null
+    if (!c || !shot) return
+    const img = new Image()
+    img.src = shot.src
+    let loaded = false
+    img.decode().then(
+      () => (loaded = true),
+      () => {}
+    )
+    const pos = new THREE.Vector3(...shot.position)
+    const dir = new THREE.Vector3(...shot.target).sub(pos).normalize()
+    // orbit point: where the photo's view ray passes the stop's subject (keeps it inside the stop's fence)
+    const tgt = pos.clone().addScaledVector(dir, new THREE.Vector3(...stop.target).sub(pos).dot(dir))
+    const cam = get().camera
+    const atShot = () => cam.position.distanceTo(pos) < 0.004
+    let phase: "arriving" | "gliding" | "shown" | "off" = "arriving"
+    const show = () => {
+      if (phase !== "gliding" || !atShot()) return
+      if (!loaded) return void setTimeout(show, 150)
+      phase = "shown"
+      onShow(shot)
+    }
+    const onRest = () => {
+      if (phase === "arriving") {
+        phase = "gliding"
+        c.setFocalOffset(0, 0, 0, true)
+        void c.setLookAt(pos.x, pos.y, pos.z, tgt.x, tgt.y, tgt.z, true)
+        // already there: no movement, so no second rest event
+        setTimeout(show, 80)
+      } else show()
+    }
+    const off = () => {
+      phase = "off"
+      onShow(null)
+    }
+    // wheel zoom goes around camera-controls' gestures: hide once the camera leaves the photo's pose
+    const onUpdate = () => phase === "shown" && !atShot() && off()
+    c.addEventListener("rest", onRest)
+    c.addEventListener("controlstart", off)
+    c.addEventListener("update", onUpdate)
+    return () => {
+      c.removeEventListener("rest", onRest)
+      c.removeEventListener("controlstart", off)
+      c.removeEventListener("update", onUpdate)
+      onShow(null)
+    }
+  }, [shot, stop, get, onShow, sizeKey])
+  return null
+}
+
+/** Reality layer, DOM half: the photograph, height-fitted and centred like the camera's view. */
+function RealityLayer({ shot }: { shot: RealityShot | null }) {
+  const last = useRef<RealityShot | null>(null)
+  if (shot) last.current = shot
+  const s = last.current
+  if (!s) return null
+  return (
+    <div
+      aria-hidden
+      className={`pointer-events-none absolute inset-0 z-[5] overflow-hidden transition-[opacity,filter] ease-out ${
+        shot ? "opacity-100 blur-0 duration-[900ms]" : "opacity-0 blur-sm duration-200"
+      }`}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={s.src} alt="" className="absolute top-0 left-1/2 h-full max-w-none -translate-x-1/2" style={{ aspectRatio: s.aspect }} />
+    </div>
   )
 }
 
@@ -1109,6 +1209,9 @@ export default function RackScene({
 
   // "Follow a packet": glide to the fibre ports, then the film takes over the screen; the 3D
   // render loop pauses while the film fully covers it
+  // photographs at rest (see RealityDriver); off in capture mode unless asked for with ?reality
+  const [realShot, setRealShot] = useState<RealityShot | null>(null)
+  const realityOn = !capture || (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("reality"))
   const [journeyRun, setJourneyRun] = useState(0)
   const [filmCovers, setFilmCovers] = useState(false)
   const startJourney = useCallback(() => {
@@ -1168,6 +1271,7 @@ export default function RackScene({
           }}
         />
         <AmbienceDriver ambience={ambience} on={sound} />
+        <RealityDriver stop={stop} cardOpen={!!card} enabled={realityOn && !traffic && !haRunning} onShow={setRealShot} />
         <Scene
           quality={quality}
           reducedMotion={reducedMotion}
@@ -1191,6 +1295,7 @@ export default function RackScene({
           coarse={coarse}
         />
       </Canvas>
+      <RealityLayer shot={realShot} />
 
       {/* view toggles */}
       <div className="absolute right-4 top-4 z-20 flex flex-col items-end gap-2 max-md:top-auto max-md:right-3 max-md:bottom-[4.6rem] max-md:flex-row">

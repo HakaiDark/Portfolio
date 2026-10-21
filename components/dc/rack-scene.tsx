@@ -887,19 +887,44 @@ function Scene({
  * drag, zoom or stop change hides it again; after the visitor moves the camera it stays 3D
  * until the next stop (the camera is never pulled back against them).
  */
-function RealityDriver({ stop, cardOpen, enabled, onShow }: { stop: Stop; cardOpen: boolean; enabled: boolean; onShow: (s: RealityShot | null) => void }) {
+function RealityDriver({
+  stop,
+  cardOpen,
+  enabled,
+  reframe,
+  onShow,
+  onAvailable,
+}: {
+  stop: Stop
+  cardOpen: boolean
+  enabled: boolean
+  /** "back to overview" re-arms the photo too */
+  reframe: number
+  onShow: (s: RealityShot | null) => void
+  /** whether this stop has a photo on this screen (the overview stops auto-rotating if so) */
+  onAvailable: (available: boolean) => void
+}) {
   const get = useThree((s) => s.get)
   const size = useThree((s) => s.size)
+  // the camera controls register a moment after the first render: re-run once they exist
+  const controls = useThree((s) => s.controls)
+  const frames = useRef(0)
+  useFrame(() => {
+    frames.current += 1
+  })
   const aspect = size.width / Math.max(1, size.height)
-  const layout: RealityLayout | null = !cardOpen || !stop.cardId ? null : aspect < 1 ? "phone" : aspect > 1.2 ? "desktop" : null
+  // stops are photographed with their card open; the overview with the hero card
+  const framed = stop.id === "overview" || (cardOpen && !!stop.cardId)
+  const layout: RealityLayout | null = !framed ? null : aspect < 1 ? "phone" : aspect > 1.2 ? "desktop" : null
   const shot = enabled ? realityShot(stop.id, layout, aspect) : null
+  useEffect(() => onAvailable(!!shot), [shot, onAvailable])
   // a resize re-frames the stop (CameraRig), so it re-arms the photo too (phones resize while
   // scrolling as the address bar hides)
   const sizeKey = `${size.width}x${size.height}`
 
   useEffect(() => {
     onShow(null)
-    const c = get().controls as unknown as CameraControlsImpl | null
+    const c = controls as unknown as CameraControlsImpl | null
     if (!c || !shot) return
     const img = new Image()
     img.src = shot.src
@@ -910,8 +935,18 @@ function RealityDriver({ stop, cardOpen, enabled, onShow }: { stop: Stop; cardOp
     )
     const pos = new THREE.Vector3(...shot.position)
     const dir = new THREE.Vector3(...shot.target).sub(pos).normalize()
-    // orbit point: where the photo's view ray passes the stop's subject (keeps it inside the stop's fence)
-    const tgt = pos.clone().addScaledVector(dir, new THREE.Vector3(...stop.target).sub(pos).dot(dir))
+    // Reproduce the photo's camera while orbiting the stop's own centre (always inside its fence;
+    // the phone overview pins the orbit height): the sideways/vertical part of the gap becomes a
+    // focal offset in the camera's right/up axes, the rest is the orbit distance along the view ray.
+    const tgt = new THREE.Vector3(...stop.target)
+    const gap = pos.clone().sub(tgt)
+    const shift = gap.clone().addScaledVector(dir, -gap.dot(dir))
+    const right = new THREE.Vector3().crossVectors(dir, THREE.Object3D.DEFAULT_UP).normalize()
+    const up = new THREE.Vector3().crossVectors(right, dir)
+    const base = pos.clone().sub(shift)
+    const fx = shift.dot(right)
+    // camera-controls applies the focal offset's y inverted (camera.position += up * -y)
+    const fy = -shift.dot(up)
     const cam = get().camera
     const atShot = () => cam.position.distanceTo(pos) < 0.004
     let phase: "arriving" | "gliding" | "shown" | "off" = "arriving"
@@ -921,11 +956,14 @@ function RealityDriver({ stop, cardOpen, enabled, onShow }: { stop: Stop; cardOp
       phase = "shown"
       onShow(shot)
     }
+    let glides = 0
     const onRest = () => {
-      if (phase === "arriving") {
+      // first rest, or the stop's own framing landed after our glide (first load): glide (again)
+      if (phase === "arriving" || (phase === "gliding" && !atShot() && glides < 3)) {
+        glides += 1
         phase = "gliding"
-        c.setFocalOffset(0, 0, 0, true)
-        void c.setLookAt(pos.x, pos.y, pos.z, tgt.x, tgt.y, tgt.z, true)
+        c.setFocalOffset(fx, fy, 0, true)
+        void c.setLookAt(base.x, base.y, base.z, tgt.x, tgt.y, tgt.z, true)
         // already there: no movement, so no second rest event
         setTimeout(show, 80)
       } else show()
@@ -939,13 +977,28 @@ function RealityDriver({ stop, cardOpen, enabled, onShow }: { stop: Stop; cardOp
     c.addEventListener("rest", onRest)
     c.addEventListener("controlstart", off)
     c.addEventListener("update", onUpdate)
+    // Some framings never fire "rest" (already in place on first load; the overview's per-frame
+    // limits keep the controls nominally active), so also treat "hasn't moved since last check" as rest.
+    // Only while frames are rendering: during the loading screen the loop is paused and everything
+    // looks "still" (glides queued then would be overridden by the stop framing once it starts).
+    const last = cam.position.clone()
+    let lastFrame = frames.current
+    const kick = setInterval(() => {
+      if (phase === "shown" || phase === "off" || glides >= 3) return clearInterval(kick)
+      const rendering = frames.current - lastFrame > 5
+      lastFrame = frames.current
+      const still = cam.position.distanceTo(last) < 0.0005
+      last.copy(cam.position)
+      if (rendering && (still || !c.active)) onRest()
+    }, 500)
     return () => {
+      clearInterval(kick)
       c.removeEventListener("rest", onRest)
       c.removeEventListener("controlstart", off)
       c.removeEventListener("update", onUpdate)
       onShow(null)
     }
-  }, [shot, stop, get, onShow, sizeKey])
+  }, [shot, stop, get, controls, onShow, sizeKey, reframe])
   return null
 }
 
@@ -1216,6 +1269,7 @@ export default function RackScene({
   // render loop pauses while the film fully covers it
   // photographs at rest (see RealityDriver); off in capture mode unless asked for with ?reality
   const [realShot, setRealShot] = useState<RealityShot | null>(null)
+  const [realAvailable, setRealAvailable] = useState(false)
   const realityOn = !capture || (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("reality"))
   const [journeyRun, setJourneyRun] = useState(0)
   const [filmCovers, setFilmCovers] = useState(false)
@@ -1276,12 +1330,20 @@ export default function RackScene({
           }}
         />
         <AmbienceDriver ambience={ambience} on={sound} />
-        <RealityDriver stop={stop} cardOpen={!!card} enabled={realityOn && !traffic && !haRunning} onShow={setRealShot} />
+        <RealityDriver
+          stop={stop}
+          cardOpen={!!card}
+          enabled={realityOn && !traffic && !haRunning}
+          reframe={reframe}
+          onShow={setRealShot}
+          onAvailable={setRealAvailable}
+        />
         <Scene
           quality={quality}
           reducedMotion={reducedMotion}
           stop={stop}
-          autoRotate={!reducedMotion && !interacted && !card}
+          // with a photograph of the overview, the first view rests and resolves into it instead of turning
+          autoRotate={!reducedMotion && !interacted && !card && !(stop.id === "overview" && realAvailable)}
           onInteract={onInteract}
           onStop={goTo}
           capture={capture}

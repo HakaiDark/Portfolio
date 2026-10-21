@@ -1096,6 +1096,11 @@ export default function RackScene({
   }, [])
   const stops = useStops()
   const navStops = useMemo(() => stops.filter((s) => !s.hidden), [stops])
+  // capture tooling: which stops exist (ids for lib/dc/reality.ts)
+  useEffect(() => {
+    if (!new URLSearchParams(window.location.search).has("capture")) return
+    ;(window as unknown as { __rackStops?: unknown }).__rackStops = navStops.map((s) => ({ id: s.id, label: s.label, card: !!s.cardId }))
+  }, [navStops])
   const [stopId, setStopId] = useState("overview")
   const [cardOpen, setCardOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)

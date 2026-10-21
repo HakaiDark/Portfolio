@@ -41,7 +41,29 @@ export const REALITY: RealityShot[] = [
     fov: 54,
     aspect: 1107 / 1477,
   },
+  // the rest were captured the same way (desktop 1280x800 framing rendered at 1852x800,
+  // phone 390x844 framing rendered at 633x844)
+  ...desktop("fortiswitch-448e@38", "fortiswitch", [0.3548, 1.8577, 0.747], [0.1313, 1.746, -0.2213]),
+  ...desktop("catalyst-9300@36", "catalyst", [-0.0084, 1.7688, 0.8269], [0.215, 1.6571, -0.1414]),
+  ...desktop("fortimanager-400g@30", "fortimanager", [0.0208, 1.5104, 0.8281], [0.2099, 1.4158, -0.1493]),
+  ...desktop("fortianalyzer-400e@29", "fortianalyzer", [0.3548, 1.4576, 0.747], [0.1313, 1.3459, -0.2213]),
+  ...desktop("proliant-dl360@20", "proliant", [0.4004, 1.3668, 1.0014], [0.1882, 0.9319, 0.1263]),
+  ...desktop("wireless", "wireless", [0.3478, 2.42, 1.3728], [0.1364, 3.1387, 0.7105]),
+  ...desktop("contact", "contact", [0.6386, 1.2246, 0.5629], [0.9916, 0.9175, -0.3209]),
+  ...phone("fortiswitch-448e@38", "fortiswitch", [0.2828, 1.6051, 1.2255], [0.0593, 1.4934, 0.2572]),
+  ...phone("catalyst-9300@36", "catalyst", [-0.2828, 1.5162, 1.2255], [-0.0593, 1.4045, 0.2572]),
+  ...phone("fortianalyzer-400e@29", "fortianalyzer", [0.2828, 1.2051, 1.2255], [0.0593, 1.0934, 0.2572]),
+  ...phone("wireless", "wireless", [0.1901, 2.1414, 1.3891], [-0.0213, 2.8601, 0.7267]),
+  ...phone("contact", "contact", [0.4128, 1.0876, 0.7443], [0.7658, 0.7806, -0.1395]),
 ]
+
+type V3 = [number, number, number]
+function desktop(stop: string, name: string, position: V3, target: V3): RealityShot[] {
+  return [{ stop, layout: "desktop", src: `/reality/${name}-desktop.webp`, position, target, fov: 40, aspect: 1852 / 800 }]
+}
+function phone(stop: string, name: string, position: V3, target: V3): RealityShot[] {
+  return [{ stop, layout: "phone", src: `/reality/${name}-phone.webp`, position, target, fov: 54, aspect: 633 / 844 }]
+}
 
 export function realityShot(stop: string, layout: RealityLayout | null, aspect: number): RealityShot | null {
   if (!layout) return null

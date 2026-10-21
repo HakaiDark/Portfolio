@@ -20,16 +20,83 @@ const SESSION_KEY = "dc-boot-seen"
 
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-/** Matrix-style glyph rain on a canvas. */
+// The rain drawn in a worker on an OffscreenCanvas: the 3D warm-up blocks the main thread for a
+// second or two, and a worker keeps the glyphs falling smoothly right through it.
+const RAIN_WORKER = `
+let ctx, w = 0, h = 0, cols = 0, drops = [], burst = false
+const glyphs = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}#$"
+const size = 16
+function layout(nw, nh, dpr) {
+  w = nw; h = nh
+  ctx.canvas.width = w * dpr; ctx.canvas.height = h * dpr
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+  cols = Math.ceil(w / size)
+  drops = Array.from({ length: cols }, () => Math.random() * -50)
+}
+function tick() {
+  if (!ctx) return
+  ctx.fillStyle = burst ? "rgba(2,8,6,0.18)" : "rgba(2,8,6,0.1)"
+  ctx.fillRect(0, 0, w, h)
+  ctx.font = size + "px ui-monospace, Consolas, monospace"
+  for (let i = 0; i < cols; i++) {
+    const y = drops[i] * size
+    ctx.fillStyle = Math.random() > 0.975 ? "#d8ffe8" : burst ? "#5dffa8" : "#1fd46f"
+    ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], i * size, y)
+    if (y > h && Math.random() > 0.975) drops[i] = 0
+    drops[i] += burst ? 1.6 : 1
+  }
+}
+setInterval(tick, 33)
+onmessage = (e) => {
+  const m = e.data
+  if (m.canvas) { ctx = m.canvas.getContext("2d"); layout(m.w, m.h, m.dpr) }
+  if (m.resize) layout(m.w, m.h, m.dpr)
+  if ("burst" in m) burst = m.burst
+}
+`
+
+/** Matrix-style glyph rain on a canvas (in a worker where supported). */
 function MatrixRain({ burst, paused }: { burst: boolean; paused: boolean }) {
-  const ref = useRef<HTMLCanvasElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const burstRef = useRef(burst)
   burstRef.current = burst
   const pausedRef = useRef(paused)
   pausedRef.current = paused
+  const workerRef = useRef<Worker | null>(null)
+  const [offThread, setOffThread] = useState(false)
   useEffect(() => {
-    const c = ref.current
-    if (!c) return
+    workerRef.current?.postMessage({ burst })
+  }, [burst])
+  useEffect(() => {
+    const box = ref.current
+    if (!box) return
+    // a fresh canvas per run: control of a canvas can be handed to a worker only once
+    // (React runs effects twice in development)
+    const c = document.createElement("canvas")
+    c.className = "absolute inset-0 h-full w-full"
+    box.appendChild(c)
+    const dpr = Math.min(devicePixelRatio, 1.5)
+    if (typeof c.transferControlToOffscreen === "function" && typeof Worker !== "undefined") {
+      try {
+        const url = URL.createObjectURL(new Blob([RAIN_WORKER], { type: "text/javascript" }))
+        const worker = new Worker(url)
+        URL.revokeObjectURL(url)
+        const off = c.transferControlToOffscreen()
+        worker.postMessage({ canvas: off, w: c.clientWidth, h: c.clientHeight, dpr, burst: burstRef.current }, [off])
+        const onResize = () => worker.postMessage({ resize: true, w: c.clientWidth, h: c.clientHeight, dpr })
+        window.addEventListener("resize", onResize)
+        workerRef.current = worker
+        setOffThread(true)
+        return () => {
+          window.removeEventListener("resize", onResize)
+          worker.terminate()
+          workerRef.current = null
+          c.remove()
+        }
+      } catch {
+        /* fall back to drawing on the main thread below */
+      }
+    }
     const ctx = c.getContext("2d")!
     const glyphs = "アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF<>/{}#$"
     const size = 16
@@ -65,10 +132,13 @@ function MatrixRain({ burst, paused }: { burst: boolean; paused: boolean }) {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener("resize", resize)
+      c.remove()
     }
   }, [])
-  // fades out (on the compositor, so it stays smooth) while the GPU warm-up blocks the main thread
-  return <canvas ref={ref} className={`absolute inset-0 h-full w-full transition-opacity duration-300 ${paused ? "opacity-0" : "opacity-35"}`} aria-hidden />
+  // main-thread fallback only: fades out (on the compositor, so it stays smooth) while the GPU
+  // warm-up blocks the main thread; the worker version keeps raining straight through it
+  const hide = paused && !offThread
+  return <div ref={ref} className={`absolute inset-0 transition-opacity duration-300 ${hide ? "opacity-0" : "opacity-35"}`} aria-hidden />
 }
 
 /**

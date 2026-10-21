@@ -126,6 +126,28 @@
 
 /* 3D hero: vertical swipes scroll the page, horizontal swipes orbit the camera.
    camera-controls writes touch-action:none inline on connect, hence !important. */
+/* packet film: the scan line that sweeps down as the 3D view turns into a photograph */
+@keyframes journey-scan {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+@keyframes journey-cap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .rack-canvas,
 .rack-canvas canvas {
   touch-action: pan-y !important;

@@ -1,6 +1,7 @@
 import { ArrowDown, Download, Github, Mail } from "lucide-react"
 import { profile } from "@/content/profile"
 import { PhoneActions } from "./phone-actions"
+import { TraceHeroButton } from "@/components/dc/packet-journey"
 
 const outline =
   "inline-flex items-center gap-1.5 rounded-full border border-white/20 px-3 py-1.5 text-xs text-white/90 transition-colors hover:border-white/60 md:gap-2 md:px-4 md:py-2 md:text-sm"
@@ -26,6 +27,7 @@ export function HeroOverlay() {
             <Download className="h-3.5 w-3.5 md:h-4 md:w-4" aria-hidden />
             Download CV
           </a>
+          <TraceHeroButton className="inline-flex items-center gap-1.5 rounded-full border border-[#00ffe7]/60 px-3 py-1.5 text-xs text-[#00ffe7] transition-colors hover:bg-[#00ffe7] hover:text-black md:gap-2 md:px-4 md:py-2 md:text-sm" />
           <PhoneActions size="sm" />
           <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" className={outline}>
             LinkedIn

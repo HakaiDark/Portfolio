@@ -29,6 +29,8 @@ import { KVM } from "./kvm-drawer"
 import { DeskPhone, PHONE } from "./desk-phone"
 import { ContactPanel } from "./contact-panel"
 import { DeskProps } from "./desk-props"
+import { PacketJourney, TracePanel } from "./packet-journey"
+import { TRACE_POSE } from "@/lib/dc/journey"
 
 const { ACTION } = CameraControlsImpl
 const BG = "#2a3036"
@@ -57,6 +59,8 @@ interface Stop {
   minDistance?: number
   /** half-height (m) that must fit in the free part of the screen (above the phone sheet) */
   fitH?: number
+  /** not offered in the view bar (the packet film's hand-off framing) */
+  hidden?: boolean
 }
 
 function useStops(): Stop[] {
@@ -138,6 +142,8 @@ function useStops(): Stop[] {
     }
     const [lx, ly, lz] = LAPTOP_SCREEN_CENTER
     stops.push({ id: "terminal", label: "Terminal", position: [lx + 0.12, ly + 0.1, 0.42], target: [lx + 0.06, ly - 0.03, lz], fit: 0.27, terminal: true, minDistance: 0.24 })
+    // close on the FortiGate's fibre ports: the packet film's first frame matches this view
+    stops.push({ id: "trace", label: "Trace", position: TRACE_POSE.position, target: TRACE_POSE.target, hidden: true, minDistance: 0.2 })
     return stops
   }, [])
 }
@@ -989,6 +995,7 @@ export default function RackScene({
     sigRef.current?.onReady?.()
   }, [])
   const stops = useStops()
+  const navStops = useMemo(() => stops.filter((s) => !s.hidden), [stops])
   const [stopId, setStopId] = useState("overview")
   const [cardOpen, setCardOpen] = useState(false)
   const [terminalOpen, setTerminalOpen] = useState(false)
@@ -1100,11 +1107,44 @@ export default function RackScene({
     )
   }, [goTo])
 
+  // "Follow a packet": glide to the fibre ports, then the film takes over the screen; the 3D
+  // render loop pauses while the film fully covers it
+  const [journeyRun, setJourneyRun] = useState(0)
+  const [filmCovers, setFilmCovers] = useState(false)
+  const startJourney = useCallback(() => {
+    if (haRunningRef.current) return
+    goTo("trace")
+    setJourneyRun((n) => n + 1)
+  }, [goTo])
+  const onFilmCovers = useCallback(
+    (covers: boolean) => {
+      setFilmCovers(covers)
+      // fading out: back to the overview underneath, so the film lands on the whole rack
+      if (!covers) {
+        close()
+        setReframe((n) => n + 1)
+      }
+    },
+    [close]
+  )
+  // the hero card's play button lives outside this component: it talks to us through window events
+  useEffect(() => {
+    const w = window as unknown as { __dcTrace?: boolean }
+    w.__dcTrace = true
+    window.dispatchEvent(new Event("dc:trace-ready"))
+    const onTrace = () => startJourney()
+    window.addEventListener("dc:trace", onTrace)
+    return () => {
+      delete w.__dcTrace
+      window.removeEventListener("dc:trace", onTrace)
+    }
+  }, [startJourney])
+
   return (
     <div className="relative h-full w-full overflow-hidden" style={{ background: BG }}>
       <Canvas
         dpr={[1, dpr]}
-        frameloop={running && active ? "always" : "never"}
+        frameloop={running && active && !filmCovers ? "always" : "never"}
         shadows="percentage"
         camera={{ fov: 40, near: 0.02, far: 40, position: [0.78, 1.62, 1.85] }}
         gl={{
@@ -1184,7 +1224,7 @@ export default function RackScene({
 
 
       {/* camera stops: desktop shows every view in one row; phones group them (see PhoneNav) */}
-      <PhoneNav stops={stops} current={stop.id} onPick={goTo} hidden={!!card || terminalOpen} />
+      <PhoneNav stops={navStops} current={stop.id} onPick={goTo} hidden={!!card || terminalOpen} />
       <nav
         aria-label="Rack views"
         className={`absolute inset-x-0 bottom-0 z-20 overflow-x-auto px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 transition-opacity [scrollbar-width:none] max-md:hidden md:bottom-4 ${
@@ -1193,7 +1233,7 @@ export default function RackScene({
       >
         {/* w-max + mx-auto: centred when the chips fit, scrolls from the first chip when they don't */}
         <div className="mx-auto flex w-max gap-1.5">
-        {stops.map((s) => (
+        {navStops.map((s) => (
           <button
             key={s.id}
             type="button"
@@ -1221,10 +1261,12 @@ export default function RackScene({
       )}
 
       <InfoCard card={card} onClose={close}>
+        {stop.id === HA_PRIMARY && <TracePanel onRun={startJourney} disabled={haRunning} />}
         {stop.id === HA_PRIMARY && <FailoverPanel running={haRunning} log={haLog} onRun={runFailover} />}
         {stop.id === "contact" && <ContactPanel />}
       </InfoCard>
-      <TerminalOverlay open={terminalOpen} onClose={close} onAction={runFailover} />
+      <TerminalOverlay open={terminalOpen} onClose={close} onAction={(a) => (a === "trace" ? startJourney() : runFailover())} />
+      <PacketJourney run={journeyRun} onCovered={onFilmCovers} />
     </div>
   )
 }

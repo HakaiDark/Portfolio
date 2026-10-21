@@ -58,13 +58,14 @@ const HELP: TermLine[] = [
   { text: "ping linkedin       open my LinkedIn" },
   { text: "get system status   the box you're consoled into" },
   { text: "execute ha failover set 1   pull the plug on this firewall (HA demo)" },
+  { text: "diagnose debug flow trace   follow a packet through this firewall (short film)" },
   { text: "clear / exit" },
 ]
 
 /** Commands shown as tap-to-run chips on phones. */
 export const QUICK_COMMANDS = ["whoami", "show experience", "get skills", "show projects", "contact"]
 
-export type CommandResult = { lines: TermLine[]; open?: string; clear?: boolean; exit?: boolean; action?: "failover" }
+export type CommandResult = { lines: TermLine[]; open?: string; clear?: boolean; exit?: boolean; action?: "failover" | "trace" }
 
 export function runCommand(raw: string): CommandResult {
   const cmd = raw.trim().replace(/\s+/g, " ").toLowerCase()
@@ -170,6 +171,19 @@ export function runCommand(raw: string): CommandResult {
           { text: "Forcing failover · watch the rack", kind: "accent" },
         ],
         action: "failover",
+        exit: true,
+      }
+    case "diagnose debug flow trace":
+    case "diagnose debug flow trace start":
+    case "trace packet":
+    case "trace":
+    case "traceroute":
+      return {
+        lines: [
+          { text: "id=20085 trace_id=1 msg=\"vd-root:0 received a packet(proto=6, 203.0.113.24:51334->10.20.0.15:443)\"", kind: "dim" },
+          { text: "Following the packet · hold on", kind: "accent" },
+        ],
+        action: "trace",
         exit: true,
       }
     case "sudo hire-me":

@@ -1,7 +1,7 @@
 # Mohammad Yassin — portfolio (3D data-centre rack)
 
 Live: https://mohammadyassin.vercel.app — Vercel project `portfolio` (team `engcompyassin-7906s-projects`), deploys from GitHub **HakaiDark/Portfolio** `main` (PUBLIC repo).
-Status (2026-10-12, end of session): **LIVE**; `main` = `redesign` = local `feature/redesign-rack`; everything from the 2026-10-12 session (see "Session log") is deployed. The redesign was merged onto `main` on 2026-10-11 with `-s ours` over the old site (old history kept as a parent).
+Status (2026-10-21, end of session): **LIVE**; `main` = `redesign` = local `feature/redesign-rack` (76d1059). Deployed this session: CV with clickable links, the packet film, the reality layer on the overview + 8 stops (desktop and phones), glossier cables and lens finish. Spend so far on ElevenLabs ≈ 92k credits (≈ $17); one Seedance video clip of the planned budget is still unspent. The redesign was merged onto `main` on 2026-10-11 with `-s ours` over the old site (old history kept as a parent).
 Work: local branch `feature/redesign-rack` tracks the remote. `git push origin feature/redesign-rack:main` = **production deploy**; push to `:redesign` first for a private preview (behind Vercel login): https://portfolio-git-redesign-engcompyassin-7906s-projects.vercel.app
 
 ## Stack & commands
